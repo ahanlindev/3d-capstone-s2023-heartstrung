@@ -86,7 +86,7 @@ namespace Adobe.Substance
         {
             if (Application.platform == RuntimePlatform.LinuxEditor
                     || Application.platform == RuntimePlatform.LinuxPlayer
-                    || Application.platform == RuntimePlatform.CloudRendering)
+                    /*|| Application.platform == RuntimePlatform.CloudRendering*/) // note: deprecated
             {
                 return "libsubstance_ogl3_blend.so";
             }
@@ -116,7 +116,7 @@ namespace Adobe.Substance
 
                 case RuntimePlatform.LinuxPlayer:
                 case RuntimePlatform.LinuxEditor:
-                case RuntimePlatform.CloudRendering:
+                // case RuntimePlatform.CloudRendering: // note: IDE stated this was deprecated
                     return "libsbsario.so";
 
                 case RuntimePlatform.WindowsPlayer:
