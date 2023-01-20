@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     public enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput inputActions;
     private State currentState;
     private Rigidbody rbody;
-    
+
     // Emitted events
     // emits percent charge when fling is charging
     public static event Action<float> flingChargeEvent;
@@ -38,45 +39,68 @@ public class PlayerController : MonoBehaviour
 
         // fill fields
         currentState = State.IDLE;
+        rbody = GetComponent<Rigidbody>();
     }
 
     private void OnEnable() {
-        inputActions.Gameplay.Claw.performed += OnClaw;
+        inputActions.Gameplay.Claw.performed += OnPlayerClaw;
         inputActions.Gameplay.Fling.performed += OnStartFling;
         inputActions.Gameplay.Fling.canceled += OnFinishFling;
-        inputActions.Gameplay.Jump.performed += OnJump;
-        inputActions.Gameplay.Movement.performed += OnMovement;
+        inputActions.Gameplay.Jump.performed += OnPlayerJump;
     }
 
     private void OnDisable() {
-        inputActions.Gameplay.Claw.performed -= OnClaw;
+        inputActions.Gameplay.Claw.performed -= OnPlayerClaw;
         inputActions.Gameplay.Fling.performed -= OnStartFling;
         inputActions.Gameplay.Fling.canceled -= OnFinishFling;
-        inputActions.Gameplay.Jump.performed -= OnJump;
-        inputActions.Gameplay.Movement.performed -= OnMovement;
+        inputActions.Gameplay.Jump.performed -= OnPlayerJump;
+    }
+
+    // per-frame updates
+    private void FixedUpdate() {
+        // Movement needs to be done here because this is the best way to get continuous input
+        var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>() * Time.fixedDeltaTime;
+        
+        // if player can move, move them
+        if (moveVect != Vector2.zero && TryChangeState(State.MOVING)) {
+                DoMovement(moveVect);
+        }
     }
 
     // Input Event handlers
 
-    private void OnClaw(InputAction.CallbackContext context) {
-        Debug.Log("Claw");
+    // For some reason, throws an error if name it "DoClaw"
+    private void OnPlayerClaw(InputAction.CallbackContext context) {
+        Debug.Log("Clawing!");
     }
 
     private void OnStartFling(InputAction.CallbackContext context) {
-        Debug.Log("Start Fling");
+        Debug.Log("Charging Fling!");
     }
 
     private void OnFinishFling(InputAction.CallbackContext context) {
-        Debug.Log("Finish Fling");
+        Debug.Log("Flinging!");
     }
     
-    private void OnJump(InputAction.CallbackContext context) {
-        Debug.Log("Jump");
+    private void OnPlayerJump(InputAction.CallbackContext context) {
+        Debug.Log("Jumping!");
     }
 
-    private void OnMovement(InputAction.CallbackContext context) {
-        Vector2 movementVector = context.ReadValue<Vector2>();
-        Debug.Log($"Movement Vector: {movementVector}");
+    private void DoMovement(Vector2 moveInput) {       
+        // early-return if needed
+        if (moveInput == Vector2.zero) { return; }
+        
+        // account for player move speed
+        moveInput *= moveSpeed;
+
+        // find proper positon and look rotation
+        var newPos = transform.position + new Vector3(moveInput.x, 0.0f, moveInput.y);
+        var newRot = Quaternion.LookRotation(newPos, transform.up);
+
+        // set rigidbody position and rotation accordingly
+        rbody.MovePosition(newPos);
+        rbody.MoveRotation(newRot);
+        Debug.Log($"Movement Vector: {moveInput}");
     }
 
     // State management
@@ -113,7 +137,7 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("Unhandled Player State encountered!");
                 break;
         }
-
+        Debug.Log($"TryChangeState from {currentState} to {newState} result: {result}");
         return result;
     }
 
