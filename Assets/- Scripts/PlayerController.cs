@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable() {
         inputActions.Gameplay.Claw.performed -= OnClaw;
+        inputActions.Gameplay.Fling.performed -= OnStartFling;
+        inputActions.Gameplay.Fling.canceled -= OnFinishFling;
+        inputActions.Gameplay.Jump.performed -= OnJump;
+        inputActions.Gameplay.Movement.performed -= OnMovement;
     }
 
     private void OnClaw(InputAction.CallbackContext context) {
