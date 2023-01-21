@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -74,6 +75,8 @@ public class PlayerController : MonoBehaviour
         inputActions.Gameplay.Fling.performed += OnStartFling;
         inputActions.Gameplay.Fling.canceled += OnFinishFling;
         inputActions.Gameplay.Jump.performed += OnPlayerJump;
+
+        Heart.LandedEvent += OnHeartLanded;
     }
 
     private void OnDisable() {
@@ -120,13 +123,20 @@ public class PlayerController : MonoBehaviour
         currentFlingPower = Mathf.Clamp(currentFlingPower, 0f, 1f);
     }
 
-    // Input Event handlers
+    // Input handlers
 
     // For some reason, throws an error if name is "DoClaw"
     /// <summary>If the player is able to claw, does so</summary>
     /// <param name="_">Input context. Unused.</param>
     private void OnPlayerClaw(InputAction.CallbackContext context) {
-        Debug.Log("Clawing!");
+        if (!TryChangeState(State.ATTACKING)) { return; }
+        StartCoroutine(ClawTimer());
+    }
+
+    // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
+    private IEnumerator ClawTimer() {
+        yield return new WaitForSeconds(clawTime);
+        TryChangeState(State.IDLE);
     }
 
     /// <summary>If the player is able to start charging a fling, does so.</summary>
@@ -137,7 +147,7 @@ public class PlayerController : MonoBehaviour
         currentFlingPower = 0.0f;
         flingStartEvent?.Invoke();
     }
-
+    
     /// <summary>If the player is charging a fling, executes the fling.</summary>
     /// <param name="_">Input context. Unused.</param>
     private void OnFinishFling(InputAction.CallbackContext _) {
@@ -174,6 +184,11 @@ public class PlayerController : MonoBehaviour
         // set rigidbody position and rotation accordingly
         rbody.MovePosition(newPos);
         rbody.MoveRotation(newRot);
+    }
+    
+    // Other Event Handlers
+    private void OnHeartLanded() {
+        TryChangeState(State.IDLE);
     }
 
     // State management
