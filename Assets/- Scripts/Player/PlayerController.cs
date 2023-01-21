@@ -193,6 +193,11 @@ public class PlayerController : MonoBehaviour
     }
     
     // Other Event Handlers
+
+    /// <summary>
+    /// Attempts to go to Idle state when the heart lands. 
+    /// This should take the player out of Flinging state.
+    /// </summary>
     private void OnHeartLanded() {
         TryChangeState(State.IDLE);
     }
