@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
     // per-frame updates
     private void FixedUpdate() {
         // Movement needs to be done here because this is the best way to get continuous input
-        var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>() * Time.fixedDeltaTime;
+        var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>();
         
         // if player can move, move them
         if (moveVect != Vector2.zero && TryChangeState(State.MOVING)) {
@@ -72,20 +72,28 @@ public class PlayerController : MonoBehaviour
 
     // Input Event handlers
 
-    // For some reason, throws an error if name it "DoClaw"
+    // For some reason, throws an error if name is "DoClaw"
+    /// <summary>If the player is able to claw, does so</summary>
+    /// <param name="_">Input context. Unused.</param>
     private void OnPlayerClaw(InputAction.CallbackContext context) {
         Debug.Log("Clawing!");
     }
 
-    private void OnStartFling(InputAction.CallbackContext context) {
+    /// <summary>If the player is able to start charging a fling, does so.</summary>
+    /// <param name="_">Input context. Unused.</param>
+    private void OnStartFling(InputAction.CallbackContext _) {
         Debug.Log("Charging Fling!");
     }
 
-    private void OnFinishFling(InputAction.CallbackContext context) {
+    /// <summary>If the player is charging a fling, executes the fling.</summary>
+    /// <param name="_">Input context. Unused.</param>
+    private void OnFinishFling(InputAction.CallbackContext _) {
         Debug.Log("Flinging!");
     }
     
-    private void OnPlayerJump(InputAction.CallbackContext context) {
+    /// <summary>If the player is able to jump, applies an upward physics impulse.</summary>
+    /// <param name="_">Input context. Unused.</param>
+    private void OnPlayerJump(InputAction.CallbackContext _) {
         if (!TryChangeState(State.MOVING) || !IsGrounded()) { return; }
         
         Vector3 jumpVec = transform.up * jumpPower;
@@ -93,13 +101,16 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Jumping!");
     }
 
+    /// <summary>Performs per-physics-tick movement based on player movement input</summary>
+    /// <param name="moveInput">raw 2-axis input vector</param>
     private void DoMovement(Vector2 moveInput) {       
         // early-return if needed
         if (moveInput == Vector2.zero) { return; }
         var moveInput3D = new Vector3(moveInput.x, 0.0f, moveInput.y);
 
-        // account for player move speed
+        // account for player move speed and tick rate
         moveInput3D *= moveSpeed;
+        moveInput3D *= Time.fixedDeltaTime;
 
         // find proper positon and look rotation
         var newPos = transform.position + moveInput3D;
@@ -111,6 +122,10 @@ public class PlayerController : MonoBehaviour
     }
 
     // State management
+
+    /// <summary>Check if the current state has a valid transition to the desired new state.</summary>
+    /// <param name="newState">the desired new state.</param>
+    /// <returns>true if transition to newState will work, false otherwise.</returns>
     private bool CanChangeState(State newState) {
         // result may change depending on combination of current and new state
         bool result = false;
