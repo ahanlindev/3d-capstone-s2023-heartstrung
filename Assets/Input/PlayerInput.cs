@@ -224,11 +224,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Kitty"",
-            ""bindingGroup"": ""Kitty"",
-            ""devices"": []
-        },
-        {
             ""name"": ""Keyboard Mouse"",
             ""bindingGroup"": ""Keyboard Mouse"",
             ""devices"": [
@@ -369,15 +364,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
-    private int m_KittySchemeIndex = -1;
-    public InputControlScheme KittyScheme
-    {
-        get
-        {
-            if (m_KittySchemeIndex == -1) m_KittySchemeIndex = asset.FindControlSchemeIndex("Kitty");
-            return asset.controlSchemes[m_KittySchemeIndex];
-        }
-    }
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
