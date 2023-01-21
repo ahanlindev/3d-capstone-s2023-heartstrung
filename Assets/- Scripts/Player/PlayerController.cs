@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
 {
     public enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
     
-    
     // editable fields
     [Tooltip("Amount of time in seconds that the player will take when clawing")]
     [SerializeField] private float clawTime = 0.5f;
@@ -21,16 +20,33 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Player's max distance from Dodger in units")]
     [SerializeField] private float maxTetherLength = 3f;
 
+    [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
+    [Range(0f,1f)] [SerializeField] private float powerPerSecond = 0.85f;
+
     // private variables
+    // source of input events
     private PlayerInput inputActions;
+
+    // current player state
     private State currentState;
+
+    // player's rigidbody component
     private Rigidbody rbody;
+
+    // player's collider component
     private Collider coll;
-    private bool isAirborne;
+    
+    // used when charging: if true, fling power will increase next tick. Else, false
+    private bool increasingPower;
+    private float currentFlingPower;
 
     // Emitted events
-    // emits percent charge when fling is charging
-    public static event Action<float> flingChargeEvent;
+    // informs listeners that the player has started charging their fling
+    public static event Action flingStartEvent;
+    // emits percent fling power when fling is charging
+    public static event Action<float> flingPowerChangeEvent;
+    // informs listeners that the player is flinging. Parameter is final power percentage
+    public static event Action<float> flingEvent;
 
     // Setup/Teardown methods
     void Awake()
@@ -46,6 +62,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void Start() {
+        // initialize the length of the tether
         var joint = GetComponent<ConfigurableJoint>();
         var limit = joint.linearLimit;
         limit.limit = maxTetherLength;
@@ -66,15 +83,41 @@ public class PlayerController : MonoBehaviour
         inputActions.Gameplay.Jump.performed -= OnPlayerJump;
     }
 
-    // per-frame updates
+    // Update functions
+
     private void FixedUpdate() {
         // Movement needs to be done here because this is the best way to get continuous input
         var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>();
         
         // if player can move, move them
         if (moveVect != Vector2.zero && TryChangeState(State.MOVING)) {
-                DoMovement(moveVect);
+            DoMovement(moveVect);
         }
+    }
+
+    private void Update() {
+        // update fling power and inform any other listening scripts
+        if (currentState == State.CHARGING) { 
+            UpdateFlingPower();
+            flingPowerChangeEvent?.Invoke(currentFlingPower);
+        }
+    }
+
+    /// <summary>
+    /// Updates the percentage fling power strength based on current power 
+    /// and whether it is set to increase or decrease
+    ///</summary>
+    private void UpdateFlingPower() {
+        // update power amount
+        float powerDelta = powerPerSecond * Time.deltaTime;
+        currentFlingPower += (increasingPower) ? powerDelta : -powerDelta;
+        
+        // flip power delta if endpoints exceeded
+        if (currentFlingPower <= 0.0f) { increasingPower = true; }
+        else if (currentFlingPower >= 1.0f) { increasingPower = false; }
+
+        // clamp power within appropriate levels
+        currentFlingPower = Mathf.Clamp(currentFlingPower, 0f, 1f);
     }
 
     // Input Event handlers
@@ -89,23 +132,28 @@ public class PlayerController : MonoBehaviour
     /// <summary>If the player is able to start charging a fling, does so.</summary>
     /// <param name="_">Input context. Unused.</param>
     private void OnStartFling(InputAction.CallbackContext _) {
-        Debug.Log("Charging Fling!");
+        if (!TryChangeState(State.CHARGING)) { return; }
+
+        currentFlingPower = 0.0f;
+        flingStartEvent?.Invoke();
     }
 
     /// <summary>If the player is charging a fling, executes the fling.</summary>
     /// <param name="_">Input context. Unused.</param>
     private void OnFinishFling(InputAction.CallbackContext _) {
-        Debug.Log("Flinging!");
+        if (currentState != State.CHARGING) { return; }
+
+        flingEvent?.Invoke(currentFlingPower);
+
+        TryChangeState(State.IDLE);
     }
     
     /// <summary>If the player is able to jump, applies an upward physics impulse.</summary>
     /// <param name="_">Input context. Unused.</param>
     private void OnPlayerJump(InputAction.CallbackContext _) {
         if (!TryChangeState(State.MOVING) || !IsGrounded()) { return; }
-        
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
-        Debug.Log("Jumping!");
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
@@ -151,8 +199,8 @@ public class PlayerController : MonoBehaviour
                 result = (newState != State.MOVING && newState != State.FLINGING);
                 break;
             case State.CHARGING:
-                // player can't attack while charging
-                result = (newState != State.ATTACKING);
+                // player can't attack or start moving while charging
+                result = (newState != State.ATTACKING && newState != State.MOVING);
                 break;
             case State.FLINGING:
                 // player can't start attacking or moving while attempting to fling
@@ -166,7 +214,9 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("Unhandled Player State encountered!");
                 break;
         }
-        Debug.Log($"TryChangeState from {currentState} to {newState} result: {result}");
+        if (newState != currentState) { 
+            Debug.Log($"TryChangeState from {currentState} to {newState} result: {result}");
+        }
         return result;
     }
 
