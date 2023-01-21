@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     public enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
     
     // editable fields
+    [Tooltip("The heart that is connected to this player")]
+    [SerializeField] private Heart heart;
+
     [Tooltip("Amount of time in seconds that the player will take when clawing")]
     [SerializeField] private float clawTime = 0.5f;
 
@@ -60,6 +63,9 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+
+        // validate inspector-filled values
+        if (!heart) { Debug.LogError("Player script has no Heart set!"); }
     }
 
     void Start() {

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 544234350199105420}
   - component: {fileID: 544234350199105417}
   - component: {fileID: 544234350199105418}
-  - component: {fileID: 544234350199105419}
+  - component: {fileID: 2129344693005582639}
   - component: {fileID: 899317091345427459}
+  - component: {fileID: 410028367784948221}
   m_Layer: 0
   m_Name: Dodger
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 544234350199105421}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 544234351446948864}
@@ -42,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 544234350199105421}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &544234350199105418
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -85,8 +86,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &544234350199105419
-CapsuleCollider:
+--- !u!135 &2129344693005582639
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,10 +104,8 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &899317091345427459
 Rigidbody:
@@ -135,6 +134,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &410028367784948221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 544234350199105421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225b84ca1dc6e184a994b5f6c64884ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 561901077834919788}
 --- !u!1 &544234351446948865
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,10 +331,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebbb06eeb95ab545824c8cf247bca20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heart: {fileID: 410028367784948221}
   clawTime: 0.5
   moveSpeed: 5
   jumpPower: 5
   maxTetherLength: 3
+  powerPerSecond: 0.85
 --- !u!114 &3223780927468627496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,14 +496,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4270560214136834144}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0, z: 0.52}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0.38}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 544234352050427535}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 90}
 --- !u!33 &8540787310414981046
 MeshFilter:
   m_ObjectHideFlags: 0
