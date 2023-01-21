@@ -118,25 +118,17 @@ public class Heart : MonoBehaviour
 
     // Helper methods 
 
-    /// <summary>Toggles whether the rigidbody of the heart is able to be moved.</summary>
-    /// <param name="freezePosition">if true, the rigidbody's position will be constrained, otherwise it will not.</param>
-    /// <param name="allowFall">if true, the rigidbody's y position will not be constrained, 
-    ///     even if the the first parameter is true.</param>
-    void ToggleMobility(bool freezePosition, bool allowFall = false) {
+    /// <summary>Toggles whether the heart is able to be moved in various axes.</summary>
+    /// <param name="freezeX">if true, the rigidbody's x position will not be constrained.</param>
+    void ToggleFreezePosition(bool freezeX = false, bool freezeY = false, bool freezeZ = true) {
         // constraints are a bunch of bit flags, so use bitwise OR to set appropriately
-        
+
         // rotation should always be constrained
         RigidbodyConstraints constraints = RigidbodyConstraints.FreezeRotation;
         
         // position is conditionally restrained
-        if (freezePosition) {
-            constraints |= RigidbodyConstraints.FreezePositionX;
-            constraints |= RigidbodyConstraints.FreezePositionZ;
-            if (!allowFall) {
-                constraints |= RigidbodyConstraints.FreezePositionY;
-            }
-        }
-
+        // TODO
+        
         rbody.constraints = constraints;
     }
 
@@ -161,4 +153,5 @@ public class Heart : MonoBehaviour
     }
     
     // TODO actual fling consists of moving along the circle, and interpolating the radius from actual to target
+    // TODO could be done using physics, and manipulating the length of the joint between heart and player, or by directly moving the heart and shrinking the radius.
 }
