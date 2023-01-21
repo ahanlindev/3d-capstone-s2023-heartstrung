@@ -89,13 +89,14 @@ public class PlayerController : MonoBehaviour
     private void DoMovement(Vector2 moveInput) {       
         // early-return if needed
         if (moveInput == Vector2.zero) { return; }
-        
+        var moveInput3D = new Vector3(moveInput.x, 0.0f, moveInput.y);
+
         // account for player move speed
-        moveInput *= moveSpeed;
+        moveInput3D *= moveSpeed;
 
         // find proper positon and look rotation
-        var newPos = transform.position + new Vector3(moveInput.x, 0.0f, moveInput.y);
-        var newRot = Quaternion.LookRotation(newPos, transform.up);
+        var newPos = transform.position + moveInput3D;
+        var newRot = Quaternion.LookRotation(moveInput3D.normalized, transform.up);
 
         // set rigidbody position and rotation accordingly
         rbody.MovePosition(newPos);
