@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
 public class PlayerController : MonoBehaviour
 {
     public enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
@@ -43,6 +43,13 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+    }
+
+    void Start() {
+        var joint = GetComponent<ConfigurableJoint>();
+        var limit = joint.linearLimit;
+        limit.limit = maxTetherLength;
+        joint.linearLimit = limit;
     }
 
     private void OnEnable() {
