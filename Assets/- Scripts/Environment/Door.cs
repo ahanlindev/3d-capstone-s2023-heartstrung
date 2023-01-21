@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public Trigger trigger;
-    bool open = false;
-
+    [Tooltip("The trigger that opens this door. For buttons this is stored in the ButtonTrigger gameObject.")]
+    [SerializeField] public Trigger trigger;
+    public MeshRenderer DoorMeshRenderer;
+    public MeshCollider DoorMeshCollider;
+    
     // Update is called once per frame
     void Update()
     {
-        if(open) {
-            Debug.Log("Door Opened.");
-            Destroy(this.gameObject);
+        if(trigger.getStatus()) {
+            DoorMeshRenderer.enabled = false;
+            DoorMeshCollider.enabled = false;
         } else {
-            checkForOpen();
+            DoorMeshRenderer.enabled = true;
+            DoorMeshCollider.enabled = true;
         }
-    }
-
-    void checkForOpen() {
-        if(trigger.getStatus()) { open = true; }
     }
 }
