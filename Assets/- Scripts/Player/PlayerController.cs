@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class PlayerController : MonoBehaviour
 {
     public enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput inputActions;
     private State currentState;
     private Rigidbody rbody;
+    private Collider coll;
+    private bool isAirborne;
 
     // Emitted events
     // emits percent charge when fling is charging
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
         // fill fields
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
+        coll = GetComponent<Collider>();
     }
 
     private void OnEnable() {
@@ -83,6 +86,10 @@ public class PlayerController : MonoBehaviour
     }
     
     private void OnPlayerJump(InputAction.CallbackContext context) {
+        if (!TryChangeState(State.MOVING) || !IsGrounded()) { return; }
+        
+        Vector3 jumpVec = transform.up * jumpPower;
+        rbody.AddForce(jumpVec, ForceMode.Impulse);
         Debug.Log("Jumping!");
     }
 
@@ -101,7 +108,6 @@ public class PlayerController : MonoBehaviour
         // set rigidbody position and rotation accordingly
         rbody.MovePosition(newPos);
         rbody.MoveRotation(newRot);
-        Debug.Log($"Movement Vector: {moveInput}");
     }
 
     // State management
@@ -153,6 +159,8 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    /// <summary>Initialized whatever information is neeeded to enter newState</summary>
+    /// <param name="newState">state to initialize.</param>
     private void InitState(State newState) {
         switch (newState) {
             case State.IDLE:
@@ -171,5 +179,13 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("Unhandled Player State encountered!");
                 break;
         }
+    }
+
+    /// <summary>Checks if player is grounded using a raycast.</summary>
+    /// <returns>True if the player is grounded, otherwise false.</returns>
+    private bool IsGrounded() {
+        // send raycast straight downward. If it hits nothing, the player must be airborne.
+        float distToGround = coll.bounds.extents.y;
+        return Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
     }
 }
