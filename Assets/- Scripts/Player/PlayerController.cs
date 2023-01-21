@@ -150,7 +150,13 @@ public class PlayerController : MonoBehaviour
     private void OnStartFling(InputAction.CallbackContext _) {
         if (!TryChangeState(State.CHARGING)) { return; }
 
+        // reset fling power
         currentFlingPower = 0.0f;
+
+        // face player directly away from the heart
+        Vector3 vecToHeart = heart.transform.position - transform.position;
+        rbody.MoveRotation(Quaternion.LookRotation(-vecToHeart, transform.up));
+
         flingStartEvent?.Invoke();
     }
     
