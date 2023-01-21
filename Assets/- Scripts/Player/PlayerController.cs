@@ -161,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
         flingEvent?.Invoke(currentFlingPower);
 
-        TryChangeState(State.IDLE);
+        TryChangeState(State.FLINGING);
     }
     
     /// <summary>If the player is able to jump, applies an upward physics impulse.</summary>
