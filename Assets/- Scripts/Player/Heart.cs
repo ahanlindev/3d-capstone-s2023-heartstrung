@@ -124,12 +124,15 @@ public class Heart : MonoBehaviour
         // constraints are a bunch of bit flags, so use bitwise OR to set appropriately
 
         // rotation should always be constrained
-        RigidbodyConstraints constraints = RigidbodyConstraints.FreezeRotation;
+        RigidbodyConstraints rotConstraints = RigidbodyConstraints.FreezeRotation;
         
         // position is conditionally restrained
-        // TODO
-        
-        rbody.constraints = constraints;
+        var xConstraint = (freezeX) ? RigidbodyConstraints.FreezePositionX : 0;
+        var yConstraint = (freezeY) ? RigidbodyConstraints.FreezePositionY : 0;
+        var zConstraint = (freezeZ) ? RigidbodyConstraints.FreezePositionZ : 0;
+
+        // set rigidbody constraints to combination of pos and rot
+        rbody.constraints = rotConstraints | xConstraint | yConstraint | zConstraint;
     }
 
     Vector3 CalculateDestination(float power) {
