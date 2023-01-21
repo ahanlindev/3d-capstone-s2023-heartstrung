@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
 public class PlayerController : MonoBehaviour
 {
-    public enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
+    private enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
     
     // editable fields
     [Tooltip("The heart that is connected to this player")]
@@ -214,6 +214,8 @@ public class PlayerController : MonoBehaviour
     /// <param name="newState">the desired new state.</param>
     /// <returns>true if transition to newState will work, false otherwise.</returns>
     private bool CanChangeState(State newState) {
+        
+        
         // result may change depending on combination of current and new state
         bool result = false;
 
@@ -246,8 +248,11 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("Unhandled Player State encountered!");
                 break;
         }
-        if (newState != currentState) { 
-            Debug.Log($"TryChangeState from {currentState} to {newState} result: {result}");
+        
+        // special case if heart is in a non-flingable state
+        if ((newState == State.CHARGING || newState == State.FLINGING) 
+                && !heart.CanBeFlung()) {
+            result = false;
         }
         return result;
     }
@@ -259,30 +264,7 @@ public class PlayerController : MonoBehaviour
         if (!CanChangeState(newState)) { return false; }
 
         currentState = newState;
-        InitState(newState);
         return true;
-    }
-
-    /// <summary>Initialized whatever information is neeeded to enter newState</summary>
-    /// <param name="newState">state to initialize.</param>
-    private void InitState(State newState) {
-        switch (newState) {
-            case State.IDLE:
-                break;
-            case State.MOVING:
-                break;
-            case State.CHARGING:
-                break;
-            case State.FLINGING:
-                break;
-            case State.ATTACKING:
-                break;
-            case State.DEAD:
-                break;
-            default:
-                Debug.LogError("Unhandled Player State encountered!");
-                break;
-        }
     }
 
     /// <summary>Checks if player is grounded using a raycast.</summary>
