@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 6289831870490038893}
   - component: {fileID: 9133553586003904830}
   - component: {fileID: 6797452240382638417}
-  - component: {fileID: 3187811148189668889}
-  - component: {fileID: 3294223794662967494}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -85,43 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3187811148189668889
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2265321952487930532}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3294223794662967494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2265321952487930532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb401d84a073243509dec97689ae60f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mvFactor: 2
-  period: 2
-  wayPointOne: {fileID: 2995233634895214977}
-  wayPointTwo: {fileID: 920308156129455314}
 --- !u!1 &4545789187039626132
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,6 +154,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7431929585246400372}
+  - component: {fileID: 8452164123157763236}
+  - component: {fileID: 1166155388309684114}
   m_Layer: 0
   m_Name: MovingPf2points
   m_TagString: Untagged
@@ -218,3 +181,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8452164123157763236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807505125090585609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb401d84a073243509dec97689ae60f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedFactor: 2
+  hangTime: 3
+  wayPointOne: {fileID: 2995233634895214977}
+  wayPointTwo: {fileID: 920308156129455314}
+  target:
+  - {fileID: 2995233634895214977}
+  - {fileID: 920308156129455314}
+--- !u!65 &1166155388309684114
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7807505125090585609}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 1, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
