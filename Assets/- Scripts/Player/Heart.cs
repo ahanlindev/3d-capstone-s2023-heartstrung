@@ -69,17 +69,14 @@ public class Heart : MonoBehaviour
 
     /// <summary>Subscribes to the player's fling event. Will fling this object around the player</summary>
     void OnPlayerFling(float power) {
-        Debug.Log($"Flung by player with power {power}");
-        //DEBUG
-
         if (TryChangeState(State.FLUNG)) {
+            IgnorePlayerCollisions(true);
             currentDestination = CalculateDestination(power);
             totalFlingAngle = CalculateAngleToDestination(currentDestination);
             initialFlingRadius = Vector3.Distance(transform.position, player.transform.position);
         }
     }
     
-    // DEBUG
     /// <summary>
     /// Moves the object around the player towards the destination over the course of a single physics tick
     ///</summary>
@@ -95,12 +92,13 @@ public class Heart : MonoBehaviour
             Vector3 newPos = transform.position + movement;
 
             // pull new position to within proper radius
-            float remainingAngle = CalculateAngleToDestination(currentDestination);
-            float radiusLerpRatio = remainingAngle / totalFlingAngle;
+            // float remainingAngle = CalculateAngleToDestination(currentDestination);
+            // float radiusLerpRatio = (totalFlingAngle - remainingAngle) / totalFlingAngle;
+            // float destRadius = Vector3.Distance(player.transform.position, currentDestination);
+            //float newRadius = Mathf.Lerp(initialFlingRadius, destRadius, radiusLerpRatio);
             
             Vector3 newVecFromPlayer = newPos - player.transform.position;
-            float destRadius = Vector3.Distance(player.transform.position, currentDestination);
-            float newRadius = Mathf.Lerp(initialFlingRadius, destRadius, radiusLerpRatio);
+            float newRadius = initialFlingRadius; // TODO this is a hack for the jam. Ignores power.
             newPos = player.transform.position + (newVecFromPlayer.normalized) * newRadius;
             rbody.useGravity = false; // TODO does this help
             rbody.MovePosition(newPos);
@@ -116,7 +114,7 @@ public class Heart : MonoBehaviour
     /// </summary>
     private bool TryFinishFling() {
         rbody.useGravity = true; // TODO does this help
-
+        IgnorePlayerCollisions(false);
         if (IsGrounded()) {
             // Heart has landed. Go into idle mode and emit event
             TryChangeState(State.IDLE);
@@ -217,32 +215,41 @@ public class Heart : MonoBehaviour
     }
 
     /// <summary>
+    /// TODO currently broken
     /// Returns the angle in degrees between the heart and 
     /// its destination, with the player's position as the origin
     /// </summary>
     /// <param name="destination">The desired destination position</param>
     float CalculateAngleToDestination(Vector3 destination) {
-        Vector3 playerPos = player.transform.position;
-        Vector3 pos = transform.position;
+        // Vector3 playerPos = player.transform.position;
+        // Vector3 pos = transform.position;
 
-        // find vectors from player to heart, and from player to destination
-        var playerVecToHeart = pos - playerPos;
-        var playerVecToDest = destination - playerPos;
+        // // find vectors from player to heart, and from player to destination
+        // var playerVecToHeart = pos - playerPos;
+        // var playerVecToDest = destination - playerPos;
 
-        // get angles to these vectors with respect to Player's up vector
-        // and add them together to get total angle to destination
-        return Vector3.Angle(playerVecToHeart, player.transform.up) 
-                + Vector3.Angle(player.transform.up, playerVecToDest);
+        // return Vector3.Angle(playerVecToHeart, playerVecToDest);
+        return 0;
+    }
+
+    /// <summary>Makes all non-trigger colliders of the heart and the player either ignore each other or recognize each other</summary>
+    /// <param name="ignoreCollision">if true, the player and heart will ignore each other. Otherwise they will not.</param>
+    private void IgnorePlayerCollisions(bool ignoreCollision) {
+        foreach (Collider mycol in GetComponentsInChildren<Collider>()) {
+            foreach (Collider plycol in player.GetComponentsInChildren<Collider>()) {
+                if (!mycol.isTrigger && !plycol.isTrigger) {
+                    Physics.IgnoreCollision(mycol, plycol, ignoreCollision);
+                }
+            }
+        }
     }
 
     /// <summary>Checks if heart is grounded using a raycast.</summary>
     /// <returns>True if the heart is grounded, otherwise false.</returns>
+    // TODO currently can fail on edges of platform. Add coyote time.
     private bool IsGrounded() {
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
         return Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
     }
-    
-    // TODO actual fling consists of moving along the circle, and interpolating the radius from actual to target
-    // TODO could be done using physics, and manipulating the length of the joint between heart and player, or by directly moving the heart and shrinking the radius.
 }

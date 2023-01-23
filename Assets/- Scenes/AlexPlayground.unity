@@ -607,11 +607,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 410028367784948221, guid: ea484b1ac1e778347ae36badae43d14b,
-        type: 3}
-      propertyPath: flingSpeed
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 544234351446948864, guid: ea484b1ac1e778347ae36badae43d14b,
         type: 3}
       propertyPath: m_RootOrder
@@ -684,8 +679,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1912785662583155289, guid: ea484b1ac1e778347ae36badae43d14b,
         type: 3}
+      propertyPath: m_MassScale
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912785662583155289, guid: ea484b1ac1e778347ae36badae43d14b,
+        type: 3}
       propertyPath: m_ConnectedAnchor.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912785662583155289, guid: ea484b1ac1e778347ae36badae43d14b,
+        type: 3}
+      propertyPath: m_ConnectedMassScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
