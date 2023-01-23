@@ -155,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
         // face player directly away from the heart
         Vector3 vecToHeart = heart.transform.position - transform.position;
+        vecToHeart.y = 0.0f; // don't want to rotate player too much
         rbody.MoveRotation(Quaternion.LookRotation(-vecToHeart, transform.up));
 
         flingStartEvent?.Invoke();

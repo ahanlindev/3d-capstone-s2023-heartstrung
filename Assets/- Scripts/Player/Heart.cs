@@ -13,7 +13,7 @@ public class Heart : MonoBehaviour
     [SerializeField] private PlayerController player;
     
     [Tooltip("Linear speed along the arc that the heart will fly through the air in units per second")]
-    [SerializeField] private float flingSpeed = Mathf.PI;
+    [SerializeField] private float flingSpeed = 10;
 
     // private fields
     // rigidbody of the heart
@@ -102,6 +102,7 @@ public class Heart : MonoBehaviour
             float destRadius = Vector3.Distance(player.transform.position, currentDestination);
             float newRadius = Mathf.Lerp(initialFlingRadius, destRadius, radiusLerpRatio);
             newPos = player.transform.position + (newVecFromPlayer.normalized) * newRadius;
+            rbody.useGravity = false; // TODO does this help
             rbody.MovePosition(newPos);
         }
         else {
@@ -114,6 +115,8 @@ public class Heart : MonoBehaviour
     /// Usually idle or falling. Emits LandedEvent if successful.
     /// </summary>
     private bool TryFinishFling() {
+        rbody.useGravity = true; // TODO does this help
+
         if (IsGrounded()) {
             // Heart has landed. Go into idle mode and emit event
             TryChangeState(State.IDLE);
