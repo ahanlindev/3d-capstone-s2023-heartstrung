@@ -61,7 +61,7 @@ public class Heart : MonoBehaviour
     
     private void FixedUpdate() {
         if (currentState == State.FLUNG) {
-            
+            DoFlingTick();
         }    
     }
 
