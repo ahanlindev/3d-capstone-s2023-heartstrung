@@ -521,7 +521,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: eaaff4567d97f404e8a30c98e7f036de,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.565009
+      value: 6.517
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eaaff4567d97f404e8a30c98e7f036de,
         type: 3}
@@ -633,6 +633,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2028170243}
+    - targetCorrespondingSourceObject: {fileID: 714915061924024691, guid: eaaff4567d97f404e8a30c98e7f036de,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2028170244}
     - targetCorrespondingSourceObject: {fileID: -1062363010879095286, guid: eaaff4567d97f404e8a30c98e7f036de,
         type: 3}
       insertIndex: -1
@@ -14284,17 +14288,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e3e87c284f85c4989de124d00c7456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 0}
-  lastPos: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
-  lastRot: {x: 0, y: 0, z: 0}
-  angularVelocity: {x: 0, y: 0, z: 0}
+--- !u!114 &2028170244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028170242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6b1cf17d0413843b013887f9f46281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   MaxWobble: 0.03
   WobbleSpeed: 1
   Recovery: 1
-  wobbleAmountX: 0
-  wobbleAmountZ: 0
-  wobbleAmountToAddX: 0
-  wobbleAmountToAddZ: 0
-  pulse: 0
-  time: 0.5
