@@ -155,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
         // face player directly away from the heart
         Vector3 vecToHeart = heart.transform.position - transform.position;
+        vecToHeart.y = 0.0f; // don't want to rotate player too much
         rbody.MoveRotation(Quaternion.LookRotation(-vecToHeart, transform.up));
 
         flingStartEvent?.Invoke();
@@ -269,6 +270,7 @@ public class PlayerController : MonoBehaviour
 
     /// <summary>Checks if player is grounded using a raycast.</summary>
     /// <returns>True if the player is grounded, otherwise false.</returns>
+    // TODO currently can fail on edges of platform. Add coyote time.
     private bool IsGrounded() {
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
