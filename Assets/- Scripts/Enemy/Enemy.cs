@@ -6,6 +6,9 @@ using UnityEngine.AI;
 public class AI : MonoBehaviour
 {
     private NavMeshAgent _navAgent;
+    public float speed = 2; 
+    public float delta = 0.2f; 
+    private static int i = 0;
 
     private enum State {WANDER, CHASE, DEAD, HURT, ATTACK};
     private State _currentState;
@@ -27,48 +30,39 @@ public class AI : MonoBehaviour
         if (_navAgent is null) {
             Debug.LogError("Nav Mesh Agent is NULL");
         }
-        if (_waypoints.Count > 1 && !(_waypoints[0] is null)) {
-            _navAgent.SetDestination(_waypoints[0].position);
-        } else {
-            Debug.LogError("Please select 2 waypoints at least");
-        }
     }
 
-    private void OnTriggerEnter(Collider other) 
-    {   
-        //maybe change to random pos on navmesh instead of patrol?
-        if (other.CompareTag("Waypoints")) {
-            _target++;
+    private void moveTo()
+    {
+        _waypoints[i].position = new Vector3(_waypoints[i].position.x, transform.position.y, _waypoints[i].position.z);
+        
+        _navAgent.transform.LookAt(_waypoints[i]);
 
-            if (_target == _waypoints.Count) {
-                _waypoints.Reverse();
-                _target = 1;
-            }
+        _navAgent.transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
-            if (!(_waypoints[_target] is null)) {
-                _navAgent.SetDestination(_waypoints[_target].position);
-            } else {
-                Debug.LogError("Target waypoint is null");
-            }
-        }
+        if (_navAgent.transform.position.x > _waypoints[i].position.x - delta
+            && _navAgent.transform.position.x < _waypoints[i].position.x + delta
+            && _navAgent.transform.position.z > _waypoints[i].position.z - delta
+            && _navAgent.transform.position.z < _waypoints[i].position.z + delta)
+            i = (i + 1) % _waypoints.Count;
     }
 
     private void OnEnable() 
     {
         EnemyEyes eyes = GetComponentInChildren<EnemyEyes>();
+        eyes.OnPlayerSeenEvent += StartChase;
         eyes.OnHeartSeenEvent += StartChase;
-        eyes.OnKittySeenEvent += StartChase;
+        eyes.OnPlayerGoneEvent += StopChase;
         eyes.OnHeartGoneEvent += StopChase;
-        eyes.OnKittyGoneEvent += StopChase;
     }
 
     public void OnDisable()
     {
         EnemyEyes eyes = GetComponentInChildren<EnemyEyes>();
+        eyes.OnPlayerSeenEvent -= StartChase;
         eyes.OnHeartSeenEvent -= StartChase;
-        eyes.OnKittySeenEvent -= StartChase;
+        eyes.OnPlayerGoneEvent -= StopChase;
         eyes.OnHeartGoneEvent -= StopChase;
-        eyes.OnKittyGoneEvent -= StopChase;
     }
 
     private void OnDead() 
@@ -85,6 +79,9 @@ public class AI : MonoBehaviour
 
     private void OnHurt() 
     {
+        //take dmg
+
+        //condition check
         if (_enemyHealth < 1) {
             OnDead();
         } else {
@@ -108,7 +105,8 @@ public class AI : MonoBehaviour
         _playerPosition = playerPos;
     }
 
-    private void StopChase() {
+    private void StopChase() 
+    {
         _currentState = State.WANDER;
     }
 
@@ -116,9 +114,11 @@ public class AI : MonoBehaviour
     {
         switch (_currentState) {
             case State.WANDER: 
+                moveTo();
                 break;
             case State.CHASE:
                 _navAgent.SetDestination(_playerPosition);
+                _navAgent.transform.LookAt(_playerPosition);
                 break;
             case State.DEAD:
                 //pause the enemy for x amount of time

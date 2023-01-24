@@ -6,34 +6,37 @@ using UnityEngine;
 
 public class EnemyEyes : MonoBehaviour
 {
-    GameObject colliderGameObject;
-    Vector3 colliderPosition;
-    public event Action<Vector3> OnHeartSeenEvent;
-    public event Action<Vector3> OnKittySeenEvent;
-    public event Action OnHeartGoneEvent;
-    public event Action OnKittyGoneEvent;
+    public float TargetDetectionDistance;
 
-    private void OnTriggerEnter(Collider other)
+    private RaycastHit _hitInfo;
+    private bool _enemyDetected = false;
+
+
+    public event Action<Vector3> OnHeartSeenEvent;
+    public event Action<Vector3> OnPlayerSeenEvent;
+    public event Action OnHeartGoneEvent;
+    public event Action OnPlayerGoneEvent;
+
+
+    void Update() 
     {
-        if (other.CompareTag("Heart")) {
-            Debug.Log("Dodger detected");
-            colliderGameObject = other.gameObject;
-            colliderPosition = colliderGameObject.transform.position;
-            OnHeartSeenEvent?.Invoke(colliderPosition);
-        } else if (other.CompareTag("Kitty")) {
-            Debug.Log("kitty detected");
-            colliderGameObject = other.gameObject;
-            colliderPosition = colliderGameObject.transform.position;
-            OnKittySeenEvent?.Invoke(colliderPosition);
-        }
+        CheckForPlayerInLineOfSight();
     }
 
-    private void OnTriggerExit(Collider other) 
+    public void CheckForPlayerInLineOfSight() 
     {
-        if (other.CompareTag("Heart")) {
-            OnHeartGoneEvent?.Invoke();
-        } else if (other.CompareTag("Kitty")) {
-            OnKittyGoneEvent?.Invoke();
+        _enemyDetected = Physics.Raycast(transform.position, transform.forward,
+            out _hitInfo, TargetDetectionDistance);
+        if (_enemyDetected) {
+            if (_hitInfo.transform.CompareTag("Heart")) {
+                Debug.Log("heart detected");
+                OnHeartSeenEvent?.Invoke(_hitInfo.transform.position);
+            } else if (_hitInfo.transform.CompareTag("Player")) {
+                Debug.Log("player detected");
+                OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
+            }
+        } else {
+
         }
     }
 }
