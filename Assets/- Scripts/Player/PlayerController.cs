@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
+[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
+    // Order is used by animator. If new states need to be added, append them
     private enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
     
     // editable fields
@@ -32,13 +34,16 @@ public class PlayerController : MonoBehaviour
     private PlayerInput inputActions;
 
     // current player state
-    private State currentState;
+    [SerializeField] private State currentState; // TODO deserialize after DEBUG
 
     // player's rigidbody component
     private Rigidbody rbody;
 
     // player's collider component
     private Collider coll;
+
+    // player's animator component
+    private Animator anim;
     
     // used when charging: if true, fling power will increase next tick. Else, false
     private bool increasingPower;
@@ -63,6 +68,7 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+        anim = GetComponent<Animator>();
 
         // validate inspector-filled values
         if (!heart) { Debug.LogError("Player script has no Heart set!"); }
@@ -99,8 +105,12 @@ public class PlayerController : MonoBehaviour
         var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>();
         
         // if player can move, move them
-        if (moveVect != Vector2.zero && TryChangeState(State.MOVING)) {
-            DoMovement(moveVect);
+        if (moveVect != Vector2.zero ) {
+            if (TryChangeState(State.MOVING)) {
+                DoMovement(moveVect);
+            }
+        } else if (currentState == State.MOVING) {
+            TryChangeState(State.IDLE);
         }
     }
 
@@ -110,6 +120,7 @@ public class PlayerController : MonoBehaviour
             UpdateFlingPower();
             flingPowerChangeEvent?.Invoke(currentFlingPower);
         }
+        UpdateAnimationParams();
     }
 
     /// <summary>
@@ -175,6 +186,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="_">Input context. Unused.</param>
     private void OnPlayerJump(InputAction.CallbackContext _) {
         if (!TryChangeState(State.MOVING) || !IsGrounded()) { return; }
+        anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
     }
@@ -215,8 +227,6 @@ public class PlayerController : MonoBehaviour
     /// <param name="newState">the desired new state.</param>
     /// <returns>true if transition to newState will work, false otherwise.</returns>
     private bool CanChangeState(State newState) {
-        
-        
         // result may change depending on combination of current and new state
         bool result = false;
 
@@ -275,5 +285,11 @@ public class PlayerController : MonoBehaviour
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
         return Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
+    }
+
+    /// <summary>Updates each animation param that may change from frame to frame.</summary>
+    private void UpdateAnimationParams() {
+        anim.SetBool("Grounded", IsGrounded());
+        anim.SetInteger("State", (int)currentState);
     }
 }
