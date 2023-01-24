@@ -63,7 +63,6 @@ public class PfMovingList : MonoBehaviour
             //SetEase(Ease.InOutSine)
             transform.DOMove(target[index].position, duration);
             Vector3 offset = transform.position - lastPosition;
-            Debug.Log(offset);
             lastPosition = transform.position;
             if (collidedObj != null)
             {
@@ -77,5 +76,10 @@ public class PfMovingList : MonoBehaviour
     {
         collidedObj = collision.collider.transform;
 
+    }
+
+    void OnCollisionExit(Collision other)
+    {
+        collidedObj = null;
     }
 }
