@@ -67,7 +67,6 @@ public class PfMovingList : MonoBehaviour
             lastPosition = transform.position;
             if (collidedObj != null)
             {
-                Debug.Log(collidedObj.name);
                 collidedObj.GetComponent<Rigidbody>().transform.position += offset;
             }
 

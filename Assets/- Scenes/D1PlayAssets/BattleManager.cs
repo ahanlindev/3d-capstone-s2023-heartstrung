@@ -1,44 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections; using System.Collections.Generic; using UnityEngine; using System;  public class BattleManager : MonoBehaviour {     // Start is called before the first frame update     public int health = 100;     public int HPHurtEveryTime = 5;     public static BattleManager Instance { get; private set; } 
+    public event Action<int> kittyTakeDmgEvent;
 
-public class BattleManager : MonoBehaviour
-{
-    // Start is called before the first frame update
-    public int health = 100;
-    public int HPHurtEveryTime = 5;
-    public static BattleManager Instance { get; private set; }
-    public HealthBar playerHealthBar;
-
-
-    private void Awake()
+      private void Awake()     {         if (Instance != null && Instance != this)         {             Destroy(this);             return;         }         Instance = this;     }       void Start()     {
+        kittyTakeDmgEvent?.Invoke(health);     }      // Update is called once per frame     void Update()     {         if (Input.anyKeyDown)         {             OnKittyTakeDmg();         }     }
+          public void debugPrint()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-            return;
-        }
-        Instance = this;
-    }
+        Debug.Log("Test");
 
-
-    void Start()
-    {
-        playerHealthBar.SetHealth(health);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.anyKeyDown)
-        {
-            substractHP();
-        }
-    }
-
-    void substractHP()
-    {
-        health -= HPHurtEveryTime;
-        playerHealthBar.SetHealth(health);
-    }
-}
+    }     private void OnKittyTakeDmg()     {          health -= HPHurtEveryTime;         kittyTakeDmgEvent?.Invoke(health);     } } 
