@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput inputActions;
 
     // current player state
-    private State currentState;
+    [SerializeField] private State currentState; // TODO deserialize after DEBUG
 
     // player's rigidbody component
     private Rigidbody rbody;
@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+        anim = GetComponent<Animator>();
 
         // validate inspector-filled values
         if (!heart) { Debug.LogError("Player script has no Heart set!"); }
@@ -104,8 +105,12 @@ public class PlayerController : MonoBehaviour
         var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>();
         
         // if player can move, move them
-        if (moveVect != Vector2.zero && TryChangeState(State.MOVING)) {
-            DoMovement(moveVect);
+        if (moveVect != Vector2.zero ) {
+            if (TryChangeState(State.MOVING)) {
+                DoMovement(moveVect);
+            }
+        } else if (currentState == State.MOVING) {
+            TryChangeState(State.IDLE);
         }
     }
 
