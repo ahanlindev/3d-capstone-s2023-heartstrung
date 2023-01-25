@@ -652,6 +652,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7552256427608830633}
+    - targetCorrespondingSourceObject: {fileID: 714915061924024691, guid: bf34b3ba69e348b49a6aab7266ed752a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2627631753750745288}
     - targetCorrespondingSourceObject: {fileID: -3899695929888188558, guid: bf34b3ba69e348b49a6aab7266ed752a,
         type: 3}
       insertIndex: -1
@@ -693,6 +697,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!1 &899944591563889510 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 714915061924024691, guid: bf34b3ba69e348b49a6aab7266ed752a,
+    type: 3}
+  m_PrefabInstance: {fileID: 402752898229717525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2627631753750745288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899944591563889510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6b1cf17d0413843b013887f9f46281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxWobble: 0.03
+  WobbleSpeed: 1
+  Recovery: 1
 --- !u!1 &5510051434538179943 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3899695929888188558, guid: bf34b3ba69e348b49a6aab7266ed752a,
