@@ -284,18 +284,18 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded() {
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
-        bool castHit = false;
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                float deltaX = 0.25f * x;
-                float deltaZ = 0.25f * z;
+        bool castHit = Physics.BoxCast(transform.position, new Vector3(1,.4f,1), -transform.up, Quaternion.identity, 1.0f);
+        // for (int x = -1; x <= 1; x++) {
+        //     for (int z = -1; z <= 1; z++) {
+        //         float deltaX = 0.25f * x;
+        //         float deltaZ = 0.25f * z;
                 
-                Vector3 origin = transform.position;
-                origin.x += deltaX;
-                origin.z += deltaZ;
-                castHit |= Physics.Raycast(origin, -transform.up, distToGround + 0.1f);
-            }
-        }
+        //         Vector3 origin = transform.position;
+        //         origin.x += deltaX;
+        //         origin.z += deltaZ;
+        //         castHit |= Physics.Raycast(origin, -transform.up, distToGround + 0.1f);
+        //     }
+        // }
         return castHit;
     }
 
