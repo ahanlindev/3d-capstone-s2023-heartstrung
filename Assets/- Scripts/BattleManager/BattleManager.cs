@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Start is called before the first frame update    
+
     public int health = 100;
     public int HPHurtEveryTime = 5;
+
     public static BattleManager Instance { get; private set; }
 
     public event Action<int> kittyTakeDmgEvent;
-
-
 
     private void Awake()
     {
@@ -24,33 +25,17 @@ public class BattleManager : MonoBehaviour
         Instance = this;
     }
 
-
     void Start()
     {
         kittyTakeDmgEvent?.Invoke(health);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-
-        //if (Input.anyKeyDown)
-        //{
-        //    OnKittyTakeDmg();
-        //}
-    }
-    
-
-    public void debugPrint()
-    {
-        Debug.Log("Test");
 
     }
-    private void OnKittyTakeDmg()
-    {
 
-        health -= HPHurtEveryTime;
-        kittyTakeDmgEvent?.Invoke(health);
+    private void OnKittyTakeDmg() { 
+        health -= HPHurtEveryTime; 
+        if(health <= 0) {
+            SceneManager.LoadSceneAsync("DefeatScene");
+        }
+        kittyTakeDmgEvent?.Invoke(health); 
     }
 }
