@@ -13,7 +13,7 @@ public class BattleManager : MonoBehaviour
 
     public static BattleManager Instance { get; private set; }
 
-    public event Action<int> kittyTakeDmgEvent;
+    public static event Action<int> kittyTakeDmgEvent;
 
     private void Awake()
     {
@@ -27,9 +27,9 @@ public class BattleManager : MonoBehaviour
     
     public void KittyTakeDmg() { 
         health -= HPHurtEveryTime; 
+        kittyTakeDmgEvent?.Invoke(health); 
         if(health <= 0) {
             SceneManager.LoadSceneAsync("DefeatScene");
         }
-        kittyTakeDmgEvent?.Invoke(health); 
     }
 }

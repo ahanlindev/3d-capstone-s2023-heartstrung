@@ -47,10 +47,13 @@ public class Heart : MonoBehaviour
 
     private void OnEnable() {
         PlayerController.flingEvent += OnPlayerFling;
+        BattleManager.kittyTakeDmgEvent += OnTakeDamage;
     }
 
     private void OnDisable() {
         PlayerController.flingEvent -= OnPlayerFling;
+        BattleManager.kittyTakeDmgEvent -= OnTakeDamage;
+
     }
 
     // Accessors
@@ -66,6 +69,15 @@ public class Heart : MonoBehaviour
     }
 
     // Event Handlers
+
+    // TODO this is for the jam. Shakes the character model without shaking the collider
+    void OnTakeDamage(int dmg) {
+        Debug.Log("Ow"); 
+        transform.DOShakeRotation(0.3f)
+        .SetDelay(0.5f)
+        .OnStart(() => rbody.constraints = 0)
+        .OnComplete(()=> rbody.constraints = RigidbodyConstraints.FreezeRotation);
+    }
 
     /// <summary>Subscribes to the player's fling event. Will fling this object around the player</summary>
     void OnPlayerFling(float power) {
