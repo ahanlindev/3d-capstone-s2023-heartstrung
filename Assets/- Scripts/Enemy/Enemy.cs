@@ -23,11 +23,14 @@ public class AI : MonoBehaviour
     [SerializeField]
     private List<Transform> _waypoints;
     private int _target;
+
+    private EnemyClaw _enemyClaw;
     
     // Start is called before the first frame update
     void Start()
     {
         _navAgent = GetComponent<NavMeshAgent>();
+        _enemyClaw = GetComponentInChildren<EnemyClaw>();
         _currentState = State.WANDER;
         if (_navAgent is null) {
             Debug.LogError("Nav Mesh Agent is NULL");
@@ -97,6 +100,7 @@ public class AI : MonoBehaviour
     private void ExecuteAttack() 
     {
         //deal dmg to kitty
+        _enemyClaw.Claw(1.0f);
         StartCoroutine(AttackTimer());
     }
 
