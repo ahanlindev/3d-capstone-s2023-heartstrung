@@ -18,11 +18,11 @@ public class Claws : MonoBehaviour
         DOVirtual.DelayedCall(duration, () => clawHitbox.enabled = false);
     }
 
-    private void OnCollisionEnter(Collision other) {
-        
+    private void OnTriggerEnter(Collider other) {
+        Debug.Log($"Claws collided with {other.gameObject.name}");
         var enemy = other.gameObject.GetComponent<AI>();
         if (enemy) {
-            //enemy.OnDead();
+            enemy.OnDead();
         }
     }
 }

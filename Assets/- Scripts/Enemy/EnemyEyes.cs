@@ -35,11 +35,12 @@ public class EnemyEyes : MonoBehaviour
             pov_origin = Quaternion.AngleAxis(-15.0f, transform.up) * pov_origin;
             if (found) {
                 if (_hitInfo.transform.CompareTag("Heart")) {
-                    Debug.Log("heart detected");
                     OnHeartSeenEvent?.Invoke(_hitInfo.transform.position);
                 } else if (_hitInfo.transform.CompareTag("Player")) {
-                    Debug.Log("player detected");
-                    OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
+                    // Debug.Log("player detected");
+                    // OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
+                } else {
+                    Debug.Log("Unknown object detected");
                 }
             }
         }
