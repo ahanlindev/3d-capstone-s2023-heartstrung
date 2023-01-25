@@ -36,7 +36,8 @@ public class EnemyEyes : MonoBehaviour
                 OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
             }
         } else {
-
+            OnHeartGoneEvent?.Invoke();
+            OnPlayerGoneEvent?.Invoke();
         }
     }
 }
