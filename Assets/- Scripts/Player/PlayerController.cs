@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<Collider>();
         anim = GetComponentInChildren<Animator>();
         claws = GetComponentInChildren<Claws>();
+        audioSource = GetComponent<AudioSource>();
 
         // validate non-guaranteed values
         if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
@@ -100,9 +101,6 @@ public class PlayerController : MonoBehaviour
         var limit = joint.linearLimit;
         limit.limit = maxTetherLength;
         joint.linearLimit = limit;
-
-        // initalize SFX
-        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable() {
@@ -119,6 +117,7 @@ public class PlayerController : MonoBehaviour
         inputActions.Gameplay.Fling.performed -= OnStartFling;
         inputActions.Gameplay.Fling.canceled -= OnFinishFling;
         inputActions.Gameplay.Jump.performed -= OnPlayerJump;
+        Heart.LandedEvent -= OnHeartLanded;
     }
 
     // Update functions
