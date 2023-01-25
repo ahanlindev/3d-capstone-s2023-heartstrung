@@ -44,6 +44,21 @@ public class PlayerController : MonoBehaviour
 
     // player's animator component
     private Animator anim;
+
+    // Audio emitter for Kitty
+    private AudioSource audioSource;
+
+    // Sound effect for kitty jumping
+    public AudioClip jumpAudioClip;
+
+    // Sound effect for Dodger landing
+    public AudioClip dodgerLandAudioClip;
+
+    // Sound effect for Dodger being flung
+    public AudioClip dodgerFlingAudioClip;
+
+    // Sound effect for Kitty attacking
+    public AudioClip kittyAttackAudioClip;
     
     // used when charging: if true, fling power will increase next tick. Else, false
     private bool increasingPower;
@@ -80,6 +95,9 @@ public class PlayerController : MonoBehaviour
         var limit = joint.linearLimit;
         limit.limit = maxTetherLength;
         joint.linearLimit = limit;
+
+        // initalize SFX
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable() {
@@ -148,6 +166,8 @@ public class PlayerController : MonoBehaviour
     private void OnPlayerClaw(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
         StartCoroutine(ClawTimer());
+        audioSource.clip = kittyAttackAudioClip;
+        audioSource.Play();
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
@@ -189,6 +209,8 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
+        audioSource.clip = jumpAudioClip;
+        audioSource.Play();
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
@@ -219,6 +241,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnHeartLanded() {
         TryChangeState(State.IDLE);
+        audioSource.clip = dodgerLandAudioClip;
+        audioSource.Play();
     }
 
     // State management
@@ -275,6 +299,10 @@ public class PlayerController : MonoBehaviour
         if (!CanChangeState(newState)) { return false; }
 
         currentState = newState;
+        if(newState == State.FLINGING) {
+            audioSource.clip = dodgerFlingAudioClip;
+            audioSource.Play();
+        }
         return true;
     }
 
