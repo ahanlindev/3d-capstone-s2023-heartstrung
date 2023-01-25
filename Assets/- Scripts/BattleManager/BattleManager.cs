@@ -9,7 +9,7 @@ public class BattleManager : MonoBehaviour
     // Start is called before the first frame update    
 
     public int health = 100;
-    public int HPHurtEveryTime = 5;
+    public int HPHurtEveryTime = 34;
 
     public static BattleManager Instance { get; private set; }
 
@@ -24,14 +24,8 @@ public class BattleManager : MonoBehaviour
         }
         Instance = this;
     }
-
-    void Start()
-    {
-        kittyTakeDmgEvent?.Invoke(health);
-
-    }
-
-    private void OnKittyTakeDmg() { 
+    
+    public void KittyTakeDmg() { 
         health -= HPHurtEveryTime; 
         if(health <= 0) {
             SceneManager.LoadSceneAsync("DefeatScene");
