@@ -19,7 +19,6 @@ public class EnemyClaw : MonoBehaviour
         clawHitbox.enabled = true;
         DOVirtual.DelayedCall(duration, () => clawHitbox.enabled = false);
     }
-
     private void OnTriggerEnter(Collider other) {
         Debug.Log($"Enemy claws collided with {other.gameObject.name}");
         var Dodge = other.gameObject.GetComponent<Heart>();
