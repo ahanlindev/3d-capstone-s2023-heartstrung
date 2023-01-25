@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
-[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     // Order is used by animator. If new states need to be added, append them
@@ -68,9 +67,10 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
 
-        // validate inspector-filled values
+        // validate non-guaranteed values
+        if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
         if (!heart) { Debug.LogError("Player script has no Heart set!"); }
     }
 
