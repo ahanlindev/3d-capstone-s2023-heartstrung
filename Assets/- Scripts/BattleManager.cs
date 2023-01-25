@@ -29,18 +29,8 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame   
-    void Update()
-    {
-        if (Input.anyKeyDown) { OnKittyTakeDmg(); }
-    }
-
-    public void debugPrint()
-    {
-        Debug.Log("Test");
-    }
-
     private void OnKittyTakeDmg() { 
-        health -= HPHurtEveryTime; kittyTakeDmgEvent?.Invoke(health); 
+        health -= HPHurtEveryTime; 
+        kittyTakeDmgEvent?.Invoke(health); 
     }
 }
