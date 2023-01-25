@@ -30,15 +30,16 @@ public class AI : MonoBehaviour
         if (_navAgent is null) {
             Debug.LogError("Nav Mesh Agent is NULL");
         }
+
+        _navAgent.updateRotation = true;
     }
 
     private void moveTo()
     {
         _waypoints[i].position = new Vector3(_waypoints[i].position.x, transform.position.y, _waypoints[i].position.z);
         
-        _navAgent.transform.LookAt(_waypoints[i]);
-
-        _navAgent.transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        transform.LookAt(_waypoints[i]);
+        _navAgent.destination = _waypoints[i].position;
 
         if (_navAgent.transform.position.x > _waypoints[i].position.x - delta
             && _navAgent.transform.position.x < _waypoints[i].position.x + delta
@@ -117,8 +118,8 @@ public class AI : MonoBehaviour
                 moveTo();
                 break;
             case State.CHASE:
-                _navAgent.SetDestination(_playerPosition);
-                _navAgent.transform.LookAt(_playerPosition);
+                _navAgent.destination = _playerPosition;
+                _navAgent.transform.LookAt(new Vector3(_playerPosition.x, transform.position.y, _playerPosition.z));
                 break;
             case State.DEAD:
                 //pause the enemy for x amount of time

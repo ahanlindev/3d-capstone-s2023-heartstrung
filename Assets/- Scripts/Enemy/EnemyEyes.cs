@@ -9,7 +9,6 @@ public class EnemyEyes : MonoBehaviour
     public float TargetDetectionDistance;
 
     private RaycastHit _hitInfo;
-    private bool _enemyDetected = false;
 
 
     public event Action<Vector3> OnHeartSeenEvent;
@@ -24,18 +23,27 @@ public class EnemyEyes : MonoBehaviour
     }
 
     public void CheckForPlayerInLineOfSight() 
-    {
-        _enemyDetected = Physics.Raycast(transform.position, transform.forward,
-            out _hitInfo, TargetDetectionDistance);
-        if (_enemyDetected) {
-            if (_hitInfo.transform.CompareTag("Heart")) {
-                Debug.Log("heart detected");
-                OnHeartSeenEvent?.Invoke(_hitInfo.transform.position);
-            } else if (_hitInfo.transform.CompareTag("Player")) {
-                Debug.Log("player detected");
-                OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
+    {   
+        bool found = false;
+        bool total_found = false;
+        var pov_origin = Quaternion.AngleAxis(60.0f, transform.up) * transform.forward;
+        for (int i = 0; i < 8; i ++) {
+            // set vars
+            found = Physics.Raycast(transform.position, pov_origin,
+                out _hitInfo, TargetDetectionDistance);
+            total_found |= found;
+            pov_origin = Quaternion.AngleAxis(-15.0f, transform.up) * pov_origin;
+            if (found) {
+                if (_hitInfo.transform.CompareTag("Heart")) {
+                    Debug.Log("heart detected");
+                    OnHeartSeenEvent?.Invoke(_hitInfo.transform.position);
+                } else if (_hitInfo.transform.CompareTag("Player")) {
+                    Debug.Log("player detected");
+                    OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
+                }
             }
-        } else {
+        }
+        if (!total_found) {
             OnHeartGoneEvent?.Invoke();
             OnPlayerGoneEvent?.Invoke();
         }
