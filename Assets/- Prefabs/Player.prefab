@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 3970882955175522478}
   - component: {fileID: 5510484824728186419}
   - component: {fileID: 8922730163482554411}
+  - component: {fileID: 3653465816337974626}
   m_Layer: 0
   m_Name: Kitty
   m_TagString: Untagged
@@ -242,6 +243,10 @@ MonoBehaviour:
   maxTetherLength: 5
   powerPerSecond: 0.85
   currentState: 0
+  jumpAudioClip: {fileID: 0}
+  dodgerLandAudioClip: {fileID: 0}
+  dodgerFlingAudioClip: {fileID: 0}
+  kittyAttackAudioClip: {fileID: 0}
 --- !u!114 &8922730163482554411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +278,20 @@ MonoBehaviour:
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3653465816337974626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529305596885029435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c4003441a823fb4297e7b136726b328, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  HPHurtEveryTime: 20
 --- !u!1 &8540035555247595114
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,7 +304,7 @@ GameObject:
   - component: {fileID: 7699286157923174543}
   - component: {fileID: 7064186212039369616}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Claws
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1624,6 +1643,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8922740681149597282}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 567c64dd178d28948902a568637d2c49,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 739630728501058938}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 567c64dd178d28948902a568637d2c49,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6994062219193023287}
   m_SourcePrefab: {fileID: 100100000, guid: 567c64dd178d28948902a568637d2c49, type: 3}
 --- !u!4 &1552359557506737722 stripped
 Transform:
@@ -1675,7 +1702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebbb06eeb95ab545824c8cf247bca20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heart: {fileID: 5732147065771214900}
+  heart: {fileID: 0}
   clawTime: 1
   moveSpeed: 5
   jumpPower: 5
