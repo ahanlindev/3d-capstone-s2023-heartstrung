@@ -44,6 +44,9 @@ public class PlayerController : MonoBehaviour
     // player's animator component
     private Animator anim;
     
+    // Claw component in child
+    private Claws claws;
+
     // used when charging: if true, fling power will increase next tick. Else, false
     private bool increasingPower;
     private float currentFlingPower;
@@ -68,9 +71,11 @@ public class PlayerController : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         anim = GetComponentInChildren<Animator>();
+        claws = GetComponentInChildren<Claws>();
 
         // validate non-guaranteed values
         if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
+        if (!claws) {Debug.LogError("Player script cannot find Claws component in children"); }
         if (!heart) { Debug.LogError("Player script has no Heart set!"); }
     }
 
@@ -148,6 +153,7 @@ public class PlayerController : MonoBehaviour
     private void OnPlayerClaw(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
         StartCoroutine(ClawTimer());
+        claws.Claw(clawTime);
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
