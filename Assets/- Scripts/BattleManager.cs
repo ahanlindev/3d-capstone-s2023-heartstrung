@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+
 public class BattleManager : MonoBehaviour
 {
     // Start is called before the first frame update    
