@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
-[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     // Order is used by animator. If new states need to be added, append them
@@ -68,9 +67,10 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
 
-        // validate inspector-filled values
+        // validate non-guaranteed values
+        if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
         if (!heart) { Debug.LogError("Player script has no Heart set!"); }
     }
 
@@ -284,7 +284,19 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded() {
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
-        return Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
+        bool castHit = false;
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                float deltaX = 0.25f * x;
+                float deltaZ = 0.25f * z;
+                
+                Vector3 origin = transform.position;
+                origin.x += deltaX;
+                origin.z += deltaZ;
+                castHit |= Physics.Raycast(origin, -transform.up, distToGround + 0.1f);
+            }
+        }
+        return castHit;
     }
 
     /// <summary>Updates each animation param that may change from frame to frame.</summary>
