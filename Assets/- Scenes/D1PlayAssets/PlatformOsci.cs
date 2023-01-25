@@ -80,4 +80,9 @@ public class PlatformOsci : MonoBehaviour
     {
         collidedObj = collision.collider.transform;
     }
+
+    private void OnCollisionExit(Collision other)
+    {
+        collidedObj = null;
+    }
 }
