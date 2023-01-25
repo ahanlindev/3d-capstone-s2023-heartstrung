@@ -14,8 +14,9 @@ public class PfMovingList : MonoBehaviour
     private static int index = 0;
     private float localTimer = 0;
    
-    private Transform collidedObj;
     private Vector3 lastPosition;
+
+    private HashSet<Transform> collidedBodies;
 
     [Tooltip("Time for the platform waiting at one waypoint.")] 
     [SerializeField] public float hangTime = 3.0f;
@@ -25,6 +26,7 @@ public class PfMovingList : MonoBehaviour
     {
     
         lastPosition = transform.position;
+        collidedBodies = new HashSet<Transform>();
     }
 
     // Update is called once per frame
@@ -64,9 +66,9 @@ public class PfMovingList : MonoBehaviour
             transform.DOMove(target[index].position, duration);
             Vector3 offset = transform.position - lastPosition;
             lastPosition = transform.position;
-            if (collidedObj != null)
+            foreach(Transform attached in collidedBodies)
             {
-                collidedObj.GetComponent<Rigidbody>().transform.position += offset;
+                attached.GetComponent<Rigidbody>().transform.position += offset;
             }
 
         }
@@ -74,12 +76,12 @@ public class PfMovingList : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        collidedObj = collision.collider.transform;
-
+        Transform collidedObj = collision.collider.transform;
+        collidedBodies.Add(collidedObj);
     }
 
-    void OnCollisionExit(Collision other)
+    private void OnCollisionExit(Collision other)
     {
-        collidedObj = null;
+        collidedBodies.Remove(other.transform);
     }
 }
