@@ -11,10 +11,11 @@ public class PfMovingList : MonoBehaviour
     [Tooltip("Add/delete empty objects to the target list to set new waypoints.")]
     [SerializeField] public Transform[] target;  //
     private float delta = 0.05f; // 
-    private static int index = 0;
+    private int index = 0;
     private float localTimer = 0;
    
     private Vector3 lastPosition;
+    private int tgtLength = 0;
 
     private HashSet<Transform> collidedBodies;
 
@@ -23,10 +24,10 @@ public class PfMovingList : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-    
+    { 
         lastPosition = transform.position;
         collidedBodies = new HashSet<Transform>();
+        tgtLength = target.Length;
     }
 
     // Update is called once per frame
@@ -38,16 +39,20 @@ public class PfMovingList : MonoBehaviour
 
     void moveTo()
     {
+       
+
         if (localTimer > 0)
         {
             localTimer -= Time.fixedDeltaTime;
         }
-        else if (transform.position.x > target[index].position.x - delta
-         && transform.position.x < target[index].position.x + delta
-         && transform.position.z > target[index].position.z - delta
-         && transform.position.z < target[index].position.z + delta)
+        
+        else if ((transform.position - target[index].position).magnitude < delta)
         {
-            index = (index + 1) % target.Length;
+            index = (index + 1) % tgtLength;
+            //if (speed == 1.5f)
+            //{
+            //    Debug.Log(index);
+            //}
             localTimer = hangTime;
         }
         else
