@@ -31,6 +31,9 @@ public class BattleManager : MonoBehaviour
 
     private void OnKittyTakeDmg() { 
         health -= HPHurtEveryTime; 
+        if(health <= 0) {
+            SceneManager.LoadSceneAsync("DefeatScene");
+        }
         kittyTakeDmgEvent?.Invoke(health); 
     }
 }
