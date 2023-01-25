@@ -6,10 +6,15 @@ using UnityEngine.AI;
 public class AI : MonoBehaviour
 {
     private NavMeshAgent _navAgent;
+    public float speed = 2; 
+    public float delta = 0.2f; 
+    private static int i = 0;
 
     private enum State {WANDER, CHASE, DEAD, HURT, ATTACK};
     private State _currentState;
     [SerializeField] private float _respawnTime = 10;
+    [SerializeField] private float _attackTime = 3;
+
     [SerializeField] private int _enemyHealth = 10;
 
     //use raycast to detect dodger
@@ -18,60 +23,55 @@ public class AI : MonoBehaviour
     [SerializeField]
     private List<Transform> _waypoints;
     private int _target;
+
+    private EnemyClaw _enemyClaw;
     
     // Start is called before the first frame update
     void Start()
     {
         _navAgent = GetComponent<NavMeshAgent>();
+        _enemyClaw = GetComponentInChildren<EnemyClaw>();
         _currentState = State.WANDER;
         if (_navAgent is null) {
             Debug.LogError("Nav Mesh Agent is NULL");
         }
-        if (_waypoints.Count > 1 && !(_waypoints[0] is null)) {
-            _navAgent.SetDestination(_waypoints[0].position);
-        } else {
-            Debug.LogError("Please select 2 waypoints at least");
-        }
+
+        _navAgent.updateRotation = true;
     }
 
-    private void OnTriggerEnter(Collider other) 
-    {   
-        //maybe change to random pos on navmesh instead of patrol?
-        if (other.CompareTag("Waypoints")) {
-            _target++;
+    private void moveTo()
+    {
+        _waypoints[i].position = new Vector3(_waypoints[i].position.x, transform.position.y, _waypoints[i].position.z);
+        
+        transform.LookAt(_waypoints[i]);
+        _navAgent.destination = _waypoints[i].position;
 
-            if (_target == _waypoints.Count) {
-                _waypoints.Reverse();
-                _target = 1;
-            }
-
-            if (!(_waypoints[_target] is null)) {
-                _navAgent.SetDestination(_waypoints[_target].position);
-            } else {
-                Debug.LogError("Target waypoint is null");
-            }
-        }
+        if (_navAgent.transform.position.x > _waypoints[i].position.x - delta
+            && _navAgent.transform.position.x < _waypoints[i].position.x + delta
+            && _navAgent.transform.position.z > _waypoints[i].position.z - delta
+            && _navAgent.transform.position.z < _waypoints[i].position.z + delta)
+            i = (i + 1) % _waypoints.Count;
     }
 
     private void OnEnable() 
     {
         EnemyEyes eyes = GetComponentInChildren<EnemyEyes>();
+        eyes.OnPlayerSeenEvent += StartChase;
         eyes.OnHeartSeenEvent += StartChase;
-        eyes.OnKittySeenEvent += StartChase;
+        eyes.OnPlayerGoneEvent += StopChase;
         eyes.OnHeartGoneEvent += StopChase;
-        eyes.OnKittyGoneEvent += StopChase;
     }
 
     public void OnDisable()
     {
         EnemyEyes eyes = GetComponentInChildren<EnemyEyes>();
+        eyes.OnPlayerSeenEvent -= StartChase;
         eyes.OnHeartSeenEvent -= StartChase;
-        eyes.OnKittySeenEvent -= StartChase;
+        eyes.OnPlayerGoneEvent -= StopChase;
         eyes.OnHeartGoneEvent -= StopChase;
-        eyes.OnKittyGoneEvent -= StopChase;
     }
 
-    private void OnDead() 
+    public void OnDead() 
     {
         _currentState = State.DEAD;
         StartCoroutine(DeathTimer());
@@ -83,21 +83,32 @@ public class AI : MonoBehaviour
         _currentState = State.WANDER;
     }
 
-    private void OnHurt() 
-    {
-        if (_enemyHealth < 1) {
-            OnDead();
-        } else {
-            //play knockback animation and knock enemy back
+    // private void OnHurt() 
+    // {
+    //     //take dmg
 
-            //get current position, maybe normalize?
-        }
-    }
+    //     //condition check
+    //     if (_enemyHealth < 1) {
+    //         OnDead();
+    //     } else {
+    //         //play knockback animation and knock enemy back
+
+    //         //get current position, maybe normalize?
+    //     }
+    // }
 
     private void ExecuteAttack() 
     {
-        //calculate the distance between enemy and dodge, if within range, execute attack
-        //on hit, emit signal to dodge to notify that he is hurt
+        //deal dmg to kitty
+        _enemyClaw.Claw(1.0f);
+        StartCoroutine(AttackTimer());
+    }
+
+    private IEnumerator AttackTimer() 
+    {
+        
+        yield return new WaitForSeconds(_attackTime);
+        _currentState = State.CHASE;
     }
 
     private void StartChase(Vector3 playerPos) 
@@ -108,7 +119,8 @@ public class AI : MonoBehaviour
         _playerPosition = playerPos;
     }
 
-    private void StopChase() {
+    private void StopChase() 
+    {
         _currentState = State.WANDER;
     }
 
@@ -116,19 +128,32 @@ public class AI : MonoBehaviour
     {
         switch (_currentState) {
             case State.WANDER: 
+                _navAgent.isStopped = false;
+                moveTo();
                 break;
             case State.CHASE:
-                _navAgent.SetDestination(_playerPosition);
+                _navAgent.isStopped = false;
+                _navAgent.transform.LookAt(new Vector3(_playerPosition.x, transform.position.y, _playerPosition.z));
+                _navAgent.destination = _playerPosition;
+                if (_navAgent.transform.position.x > _playerPosition.x - delta
+                    && _navAgent.transform.position.x < _playerPosition.x + delta
+                    && _navAgent.transform.position.z > _playerPosition.z - delta
+                    && _navAgent.transform.position.z < _waypoints[i].position.z + delta) {
+                        _currentState = State.ATTACK;
+                        ExecuteAttack();
+                    }
                 break;
             case State.DEAD:
                 //pause the enemy for x amount of time
+                _navAgent.isStopped = true;
                 break;
             case State.ATTACK:
                 //play the attack animation and deal dmg to dodge & kitty
+                _navAgent.isStopped = true;
                 break;
-            case State.HURT:
-                //play the knockback animation and take dmg and pause for a little
-                break;
+            // case State.HURT:
+            //     play the knockback animation and take dmg and pause for a little
+            //     break;
             default:
                 break;
         }   

@@ -6,34 +6,46 @@ using UnityEngine;
 
 public class EnemyEyes : MonoBehaviour
 {
-    GameObject colliderGameObject;
-    Vector3 colliderPosition;
-    public event Action<Vector3> OnHeartSeenEvent;
-    public event Action<Vector3> OnKittySeenEvent;
-    public event Action OnHeartGoneEvent;
-    public event Action OnKittyGoneEvent;
+    public float TargetDetectionDistance;
 
-    private void OnTriggerEnter(Collider other)
+    private RaycastHit _hitInfo;
+
+
+    public event Action<Vector3> OnHeartSeenEvent;
+    public event Action<Vector3> OnPlayerSeenEvent;
+    public event Action OnHeartGoneEvent;
+    public event Action OnPlayerGoneEvent;
+
+
+    void Update() 
     {
-        if (other.CompareTag("Heart")) {
-            Debug.Log("Dodger detected");
-            colliderGameObject = other.gameObject;
-            colliderPosition = colliderGameObject.transform.position;
-            OnHeartSeenEvent?.Invoke(colliderPosition);
-        } else if (other.CompareTag("Kitty")) {
-            Debug.Log("kitty detected");
-            colliderGameObject = other.gameObject;
-            colliderPosition = colliderGameObject.transform.position;
-            OnKittySeenEvent?.Invoke(colliderPosition);
-        }
+        CheckForPlayerInLineOfSight();
     }
 
-    private void OnTriggerExit(Collider other) 
-    {
-        if (other.CompareTag("Heart")) {
+    public void CheckForPlayerInLineOfSight() 
+    {   
+        bool found = false;
+        bool total_found = false;
+        var pov_origin = Quaternion.AngleAxis(60.0f, transform.up) * transform.forward;
+        for (int i = 0; i < 8; i ++) {
+            // set vars
+            found = Physics.Raycast(transform.position, pov_origin,
+                out _hitInfo, TargetDetectionDistance);
+            total_found |= found;
+            pov_origin = Quaternion.AngleAxis(-15.0f, transform.up) * pov_origin;
+            if (found) {
+                if (_hitInfo.transform.CompareTag("Heart")) {
+                    Debug.Log("heart detected");
+                    OnHeartSeenEvent?.Invoke(_hitInfo.transform.position);
+                } else if (_hitInfo.transform.CompareTag("Player")) {
+                    Debug.Log("player detected");
+                    OnPlayerSeenEvent?.Invoke(_hitInfo.transform.position);
+                }
+            }
+        }
+        if (!total_found) {
             OnHeartGoneEvent?.Invoke();
-        } else if (other.CompareTag("Kitty")) {
-            OnKittyGoneEvent?.Invoke();
+            OnPlayerGoneEvent?.Invoke();
         }
     }
 }
