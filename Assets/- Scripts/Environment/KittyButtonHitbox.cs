@@ -13,16 +13,22 @@ public class KittyButtonHitbox : MonoBehaviour
     void OnCollisionEnter(Collision collision) {
         if(!pressed) {
             Debug.Log("collided with " + collision.gameObject.name);
-            if(collision.gameObject.name == "Kitty") { button.enable(); }
-            pressed = true;
+            if(collision.gameObject.name == "Kitty") {
+                button.enable();
+                pressed = true;
+            }
+           
         }
     }
 
     void OnCollisionExit(Collision collision) {
         if(!persistent) {
             Debug.Log("No longer colliding with " + collision.gameObject.name);
-            if(collision.gameObject.name == "Kitty") { button.disable(); }
-            pressed = false;
+            if(collision.gameObject.name == "Kitty") {
+                button.disable();
+                pressed = false;
+            }
+            
         }
     }
 }

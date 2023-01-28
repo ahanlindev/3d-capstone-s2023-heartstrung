@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
-[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     // Order is used by animator. If new states need to be added, append them
@@ -44,7 +43,25 @@ public class PlayerController : MonoBehaviour
 
     // player's animator component
     private Animator anim;
+
+    // Audio emitter for Kitty
+    private AudioSource audioSource;
+
+    // Sound effect for kitty jumping
+    public AudioClip jumpAudioClip;
+
+    // Sound effect for Dodger landing
+    public AudioClip dodgerLandAudioClip;
+
+    // Sound effect for Dodger being flung
+    public AudioClip dodgerFlingAudioClip;
+
+    // Sound effect for Kitty attacking
+    public AudioClip kittyAttackAudioClip;
     
+    // Claw component in child
+    private Claws claws;
+
     // used when charging: if true, fling power will increase next tick. Else, false
     private bool increasingPower;
     private float currentFlingPower;
@@ -68,9 +85,13 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
+        claws = GetComponentInChildren<Claws>();
+        audioSource = GetComponent<AudioSource>();
 
-        // validate inspector-filled values
+        // validate non-guaranteed values
+        if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
+        if (!claws) {Debug.LogError("Player script cannot find Claws component in children"); }
         if (!heart) { Debug.LogError("Player script has no Heart set!"); }
     }
 
@@ -96,6 +117,7 @@ public class PlayerController : MonoBehaviour
         inputActions.Gameplay.Fling.performed -= OnStartFling;
         inputActions.Gameplay.Fling.canceled -= OnFinishFling;
         inputActions.Gameplay.Jump.performed -= OnPlayerJump;
+        Heart.LandedEvent -= OnHeartLanded;
     }
 
     // Update functions
@@ -148,6 +170,9 @@ public class PlayerController : MonoBehaviour
     private void OnPlayerClaw(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
         StartCoroutine(ClawTimer());
+        claws.Claw(clawTime);
+        audioSource.clip = kittyAttackAudioClip;
+        audioSource.Play();
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
@@ -189,6 +214,8 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
+        audioSource.clip = jumpAudioClip;
+        audioSource.Play();
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
@@ -219,6 +246,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnHeartLanded() {
         TryChangeState(State.IDLE);
+        audioSource.clip = dodgerLandAudioClip;
+        audioSource.Play();
     }
 
     // State management
@@ -275,6 +304,10 @@ public class PlayerController : MonoBehaviour
         if (!CanChangeState(newState)) { return false; }
 
         currentState = newState;
+        if(newState == State.FLINGING) {
+            audioSource.clip = dodgerFlingAudioClip;
+            audioSource.Play();
+        }
         return true;
     }
 
@@ -284,7 +317,19 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded() {
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
-        return Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
+        bool castHit = Physics.BoxCast(transform.position, new Vector3(1,.4f,1), -transform.up, Quaternion.identity, 1.0f);
+        // for (int x = -1; x <= 1; x++) {
+        //     for (int z = -1; z <= 1; z++) {
+        //         float deltaX = 0.25f * x;
+        //         float deltaZ = 0.25f * z;
+                
+        //         Vector3 origin = transform.position;
+        //         origin.x += deltaX;
+        //         origin.z += deltaZ;
+        //         castHit |= Physics.Raycast(origin, -transform.up, distToGround + 0.1f);
+        //     }
+        // }
+        return castHit;
     }
 
     /// <summary>Updates each animation param that may change from frame to frame.</summary>

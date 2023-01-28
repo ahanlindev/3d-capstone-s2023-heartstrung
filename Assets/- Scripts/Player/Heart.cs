@@ -47,10 +47,13 @@ public class Heart : MonoBehaviour
 
     private void OnEnable() {
         PlayerController.flingEvent += OnPlayerFling;
+        BattleManager.kittyTakeDmgEvent += OnTakeDamage;
     }
 
     private void OnDisable() {
         PlayerController.flingEvent -= OnPlayerFling;
+        BattleManager.kittyTakeDmgEvent -= OnTakeDamage;
+
     }
 
     // Accessors
@@ -66,6 +69,15 @@ public class Heart : MonoBehaviour
     }
 
     // Event Handlers
+
+    // TODO this is for the jam. Shakes the character model without shaking the collider
+    void OnTakeDamage(int dmg) {
+        Debug.Log("Ow"); 
+        transform.DOShakeRotation(0.3f)
+        .SetDelay(0.5f)
+        .OnStart(() => rbody.constraints = 0)
+        .OnComplete(()=> rbody.constraints = RigidbodyConstraints.FreezeRotation);
+    }
 
     /// <summary>Subscribes to the player's fling event. Will fling this object around the player</summary>
     void OnPlayerFling(float power) {
@@ -250,6 +262,18 @@ public class Heart : MonoBehaviour
     private bool IsGrounded() {
         // send raycast straight downward. If it hits nothing, the player must be airborne.
         float distToGround = coll.bounds.extents.y;
-        return Physics.Raycast(transform.position, -transform.up, distToGround + 0.1f);
+        bool castHit = Physics.BoxCast(transform.position, new Vector3(1,.4f,1), -transform.up, Quaternion.identity, 1.0f);
+        // for (int x = -1; x <= 1; x++) {
+        //     for (int z = -1; z <= 1; z++) {
+        //         float deltaX = 0.25f * x;
+        //         float deltaZ = 0.25f * z;
+                
+        //         Vector3 origin = transform.position;
+        //         origin.x += deltaX;
+        //         origin.z += deltaZ;
+        //         castHit |= Physics.Raycast(origin, -transform.up, distToGround + 0.1f);
+        //     }
+        // }
+        return castHit;
     }
 }

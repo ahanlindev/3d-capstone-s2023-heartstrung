@@ -8,17 +8,16 @@ public class HealthBar : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
-    public BattleManager battleManager;
 
 
     private void OnEnable()
     {
-        battleManager.kittyTakeDmgEvent += SetHealth;
+        BattleManager.kittyTakeDmgEvent += SetHealth;
     }
 
     private void OnDisable()
     {
-        battleManager.kittyTakeDmgEvent -= SetHealth;
+        BattleManager.kittyTakeDmgEvent -= SetHealth;
     }
 
 
