@@ -6,6 +6,7 @@ public class BaseStateMachine : MonoBehaviour
 
     // Initialize the state machine.
     private void Start() {
+        _currentState = GetInitialState();
         _currentState?.Enter();
     }
 
@@ -17,6 +18,13 @@ public class BaseStateMachine : MonoBehaviour
 
     /// <summary>Returns the desired initial state for the state machine. In the base class, this is null.</summary>
     protected virtual BaseState GetInitialState() { return null; }
+
+    public void ChangeState(BaseState newState) {
+        _currentState.Exit();
+
+        _currentState = newState;
+        _currentState.Enter();
+    } 
 
     // Debug. TODO remove when unnecessary
     private void OnGUI() {
