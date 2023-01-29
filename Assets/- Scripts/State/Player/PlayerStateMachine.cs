@@ -45,9 +45,7 @@ namespace Player
             _jumpInput  = _playerInput.Gameplay.Jump;
         }
 
-        protected override BaseState GetInitialState()
-        {
-            return idleState;
-        }
+        // Initial state for player should be idle
+        protected override BaseState GetInitialState() => idleState;
     }
 }
