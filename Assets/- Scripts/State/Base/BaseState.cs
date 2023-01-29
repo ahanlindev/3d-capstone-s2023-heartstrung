@@ -4,12 +4,12 @@
 public class BaseState
 {
     public string name;
-    protected BaseStateMachine _stateMachine;
+    protected BaseStateMachine _baseStateMachine;
 
     public BaseState(string name, BaseStateMachine stateMachine)
     {
         this.name = name;
-        this._stateMachine = stateMachine;
+        this._baseStateMachine = stateMachine;
     }
 
     public virtual void Enter() { }

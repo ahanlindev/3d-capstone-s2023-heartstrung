@@ -1,10 +1,7 @@
 namespace Player
 {
-    public class ChargingState : BaseState
+    public class ChargingState : PlayerState
     {
-        // BaseState has _stateMachine, but this casts it to PlayerStateMachine
-        private PlayerStateMachine _sm { get => (PlayerStateMachine) _stateMachine; }
-
         public ChargingState(PlayerStateMachine stateMachine) : base("Charging", stateMachine) { }
 
         public override void Enter()

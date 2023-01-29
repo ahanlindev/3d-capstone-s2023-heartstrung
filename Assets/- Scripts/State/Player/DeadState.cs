@@ -1,11 +1,8 @@
 namespace Player
 {
-    public class DeadState : BaseState
+    public class DeadState : PlayerState
     {
-        // BaseState has _stateMachine, but this casts it to PlayerStateMachine
-        private PlayerStateMachine _sm { get => (PlayerStateMachine) _stateMachine; }
-
-        public DeadState(PlayerStateMachine stateMachine) : base("Dead", stateMachine) { }
+       public DeadState(PlayerStateMachine stateMachine) : base("Dead", stateMachine) { }
 
         public override void Enter()
         {

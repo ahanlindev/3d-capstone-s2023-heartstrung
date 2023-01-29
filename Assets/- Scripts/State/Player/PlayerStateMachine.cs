@@ -17,8 +17,9 @@ namespace Player
         // Input
         private PlayerInput _playerInput;
         // Variables to act as shortcuts
-        private InputAction _movementInput, _clawInput, _flingInput, _jumpMovement;  
+        public InputAction _movementInput, _clawInput, _flingInput, _jumpInput;  
 
+        // Player Controller
         private void Awake()
         {
             // construct each state
@@ -37,7 +38,7 @@ namespace Player
             _movementInput = _playerInput.Gameplay.Movement;
             _clawInput = _playerInput.Gameplay.Claw;
             _flingInput = _playerInput.Gameplay.Fling;
-            _jumpMovement = _playerInput.Gameplay.Jump;
+            _jumpInput  = _playerInput.Gameplay.Jump;
         }
 
         protected override BaseState GetInitialState()

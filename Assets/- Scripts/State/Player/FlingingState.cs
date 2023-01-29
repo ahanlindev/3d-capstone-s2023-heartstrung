@@ -1,10 +1,7 @@
 namespace Player
 {
-    public class FlingingState : BaseState
+    public class FlingingState : PlayerState
     {
-        // BaseState has _stateMachine, but this casts it to PlayerStateMachine
-        private PlayerStateMachine _sm { get => (PlayerStateMachine) _stateMachine; }
-
         public FlingingState(PlayerStateMachine stateMachine) : base("Flinging", stateMachine) { }
 
         public override void Enter()
