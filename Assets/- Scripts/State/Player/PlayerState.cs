@@ -26,6 +26,9 @@ namespace Player
         /// <param name="_">input context for this action. Goes unused.</param>
         protected virtual void OnPlayerFinishFling(InputAction.CallbackContext _) { }
 
+        /// <summary>Event handler for when the heart lands after being flung</summary>
+        protected virtual void OnHeartLanded() {}
+
         /// <summary>Handler for whatever movement event the player performs</summary>
         /// <param name="moveVector">Desired movement direction</param>
         protected virtual void HandlePlayerMove(Vector3 moveVector) { }
@@ -34,11 +37,12 @@ namespace Player
         {
             base.Enter();
 
-            // subscribe to input events
-            _stateMachine._attackInput.performed += OnPlayerAttack;
-            _stateMachine._jumpInput.performed += OnPlayerJump;
-            _stateMachine._attackInput.performed += OnPlayerStartFling;
-            _stateMachine._attackInput.performed += OnPlayerFinishFling;
+            // subscribe to events
+            _stateMachine.attackInput.performed += OnPlayerAttack;
+            _stateMachine.jumpInput.performed += OnPlayerJump;
+            _stateMachine.attackInput.performed += OnPlayerStartFling;
+            _stateMachine.attackInput.performed += OnPlayerFinishFling;
+            _stateMachine.heart.LandedEvent += OnHeartLanded;
         }
 
         public override void UpdateLogic()
@@ -51,7 +55,7 @@ namespace Player
             base.UpdatePhysics();
 
             // read in player movement input and send it to handler
-            Vector2 moveVec = _stateMachine._movementInput.ReadValue<Vector2>();
+            Vector2 moveVec = _stateMachine.movementInput.ReadValue<Vector2>();
             Vector3 moveVec3D = new Vector3(moveVec.x, 0.0f, moveVec.y);
             HandlePlayerMove(moveVec3D);
         }
@@ -61,10 +65,11 @@ namespace Player
             base.Exit();
 
             // unsubscribe to input events
-            _stateMachine._attackInput.performed -= OnPlayerAttack;
-            _stateMachine._jumpInput.performed -= OnPlayerJump;
-            _stateMachine._attackInput.performed -= OnPlayerStartFling;
-            _stateMachine._attackInput.performed -= OnPlayerFinishFling;
+            _stateMachine.attackInput.performed -= OnPlayerAttack;
+            _stateMachine.jumpInput.performed -= OnPlayerJump;
+            _stateMachine.attackInput.performed -= OnPlayerStartFling;
+            _stateMachine.attackInput.performed -= OnPlayerFinishFling;
+            _stateMachine.heart.LandedEvent -= OnHeartLanded;
         }
     }
 }

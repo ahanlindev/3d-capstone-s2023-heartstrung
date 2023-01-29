@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         inputActions.Gameplay.Fling.canceled += OnFinishFling;
         inputActions.Gameplay.Jump.performed += OnPlayerJump;
 
-        Heart.LandedEvent += OnHeartLanded;
+        heart.LandedEvent += OnHeartLanded;
     }
 
     private void OnDisable() {
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
         inputActions.Gameplay.Fling.performed -= OnStartFling;
         inputActions.Gameplay.Fling.canceled -= OnFinishFling;
         inputActions.Gameplay.Jump.performed -= OnPlayerJump;
-        Heart.LandedEvent -= OnHeartLanded;
+        heart.LandedEvent -= OnHeartLanded;
     }
 
     // Update functions
