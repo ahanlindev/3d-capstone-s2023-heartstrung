@@ -27,9 +27,9 @@ namespace Player
             base.Exit();
         }
 
-        protected override void OnPlayerClaw(InputAction.CallbackContext _)
+        protected override void OnPlayerAttack(InputAction.CallbackContext _)
         {
-            base.OnPlayerClaw(_);
+            base.OnPlayerAttack(_);
         }
 
         protected override void OnPlayerJump(InputAction.CallbackContext _)
