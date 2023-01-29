@@ -14,10 +14,14 @@ namespace Player
         [HideInInspector] public HurtState hurtState;
         [HideInInspector] public DeadState deadState;
 
+        // Shortcuts for input actions
+        [HideInInspector] public InputAction _movementInput; 
+        [HideInInspector] public InputAction _clawInput; 
+        [HideInInspector] public InputAction _flingInput; 
+        [HideInInspector] public InputAction _jumpInput;  
+        
         // Input
         private PlayerInput _playerInput;
-        // Variables to act as shortcuts
-        public InputAction _movementInput, _clawInput, _flingInput, _jumpInput;  
 
         // Player Controller
         private void Awake()

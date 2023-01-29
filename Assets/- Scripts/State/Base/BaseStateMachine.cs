@@ -9,8 +9,10 @@ public class BaseStateMachine : MonoBehaviour
         _currentState?.Enter();
     }
 
+    // perform whatever per-frame logic the current state demands
     private void Update() => _currentState?.UpdateLogic();
 
+    // perform whatever per-physics-tick logic the current state demands
     private void FixedUpdate() => _currentState?.UpdatePhysics();
 
     /// <summary>Returns the desired initial state for the state machine. In the base class, this is null.</summary>
