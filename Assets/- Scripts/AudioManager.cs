@@ -12,8 +12,8 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
     [SerializeField] public int numAudioSources = 5;
 
-    private string path = "Assets/Resources/SFX/";
-    private string resourcesPath = "SFX/";
+    private string path = "Assets/Resources/Audio/SFX/";
+    private string resourcesPath = "Audio/SFX/";
 
     private Dictionary<string, AudioClip> sounds = new Dictionary<string, AudioClip>();
 
@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
         DirectoryInfo dir = new DirectoryInfo(path);
         FileInfo[] info = dir.GetFiles("*.*");
         foreach(FileInfo fileInfo in info) {
-            if(fileInfo.Extension == ".ogg") {
+            if(fileInfo.Extension == ".ogg" || fileInfo.Extension == ".mp3" || fileInfo.Extension == ".wav") {
                 // Make the key in the AudioSources dictionary the file name minus the extension
                 string key = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
                 Debug.Log("Found Sound Effect " + key);
@@ -40,7 +40,10 @@ public class AudioManager : MonoBehaviour
                 AudioClip sound = Resources.Load<AudioClip>(resourcesPath + key);
                 if(sound != null) {
                     Debug.Log("Sound Effect Loaded!");
+                } else {
+                    Debug.LogError("could not load sound effect " + resourcesPath + key);
                 }
+
                 sounds.Add(key, sound);
             }
         }
@@ -55,6 +58,9 @@ public class AudioManager : MonoBehaviour
         foreach(KeyValuePair<string, AudioClip> sound in sounds) {
             Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
         }
+
+        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this.transform.parent.gameObject);
     }
 
     /// <summary>Attempts to play the sound effect identified by the name passed in.</summary>
@@ -72,6 +78,8 @@ public class AudioManager : MonoBehaviour
             }
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
+                // randomize pitch for v a r i a t i o n (TM)
+                source.pitch = Random.Range(.75f, 1.25f);
                 source.Play();
                 return true;
             }
