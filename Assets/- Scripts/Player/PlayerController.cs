@@ -43,21 +43,6 @@ public class PlayerController : MonoBehaviour
 
     // player's animator component
     private Animator anim;
-
-    // Audio emitter for Kitty
-    private AudioSource audioSource;
-
-    // Sound effect for kitty jumping
-    public AudioClip jumpAudioClip;
-
-    // Sound effect for Dodger landing
-    public AudioClip dodgerLandAudioClip;
-
-    // Sound effect for Dodger being flung
-    public AudioClip dodgerFlingAudioClip;
-
-    // Sound effect for Kitty attacking
-    public AudioClip kittyAttackAudioClip;
     
     // Claw component in child
     private Claws claws;
@@ -87,7 +72,6 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<Collider>();
         anim = GetComponentInChildren<Animator>();
         claws = GetComponentInChildren<Claws>();
-        audioSource = GetComponent<AudioSource>();
 
         // validate non-guaranteed values
         if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
@@ -171,8 +155,7 @@ public class PlayerController : MonoBehaviour
         if (!TryChangeState(State.ATTACKING)) { return; }
         StartCoroutine(ClawTimer());
         claws.Claw(clawTime);
-        audioSource.clip = kittyAttackAudioClip;
-        audioSource.Play();
+        AudioManager.instance.playSound("KittyAttack");
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
@@ -214,8 +197,7 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
-        audioSource.clip = jumpAudioClip;
-        audioSource.Play();
+        AudioManager.instance.playSound("KittyJump");
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
@@ -246,8 +228,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnHeartLanded() {
         TryChangeState(State.IDLE);
-        audioSource.clip = dodgerLandAudioClip;
-        audioSource.Play();
+        AudioManager.instance.playSound("DodgerLand");
     }
 
     // State management
@@ -305,8 +286,8 @@ public class PlayerController : MonoBehaviour
 
         currentState = newState;
         if(newState == State.FLINGING) {
-            audioSource.clip = dodgerFlingAudioClip;
-            audioSource.Play();
+            AudioManager.instance.playSound("DodgerFling");
+            // AudioManager.instance.playSound("no");
         }
         return true;
     }
