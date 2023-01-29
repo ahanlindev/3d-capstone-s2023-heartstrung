@@ -6,39 +6,39 @@ namespace Player
     public class PlayerState : BaseState
     {
         // BaseState has _stateMachine, but this casts it to PlayerStateMachine
-        private PlayerStateMachine _stateMachine { get => (PlayerStateMachine) _baseStateMachine; }
+        protected PlayerStateMachine _stateMachine { get => (PlayerStateMachine)_baseStateMachine; }
 
         public PlayerState(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }
 
-        /// <summary>Event handler for when the player performs a claw input</summary>
+        /// <summary>Event handler for when the player performs an attack input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerClaw(InputAction.CallbackContext _) {}
+        protected virtual void OnPlayerAttack(InputAction.CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a jump input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerJump(InputAction.CallbackContext _) {}
+        protected virtual void OnPlayerJump(InputAction.CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerStartFling(InputAction.CallbackContext _) {}
+        protected virtual void OnPlayerStartFling(InputAction.CallbackContext _) { }
 
         /// <summary>Event handler for when the player finishes performing a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerFinishFling(InputAction.CallbackContext _) {}
+        protected virtual void OnPlayerFinishFling(InputAction.CallbackContext _) { }
 
         /// <summary>Handler for whatever movement event the player performs</summary>
         /// <param name="moveVector">Desired movement direction</param>
-        protected virtual void HandlePlayerMove(Vector3 moveVector) {}
+        protected virtual void HandlePlayerMove(Vector3 moveVector) { }
 
         public override void Enter()
         {
             base.Enter();
 
             // subscribe to input events
-            _stateMachine._clawInput.performed += OnPlayerClaw;
+            _stateMachine._attackInput.performed += OnPlayerAttack;
             _stateMachine._jumpInput.performed += OnPlayerJump;
-            _stateMachine._clawInput.performed += OnPlayerStartFling;
-            _stateMachine._clawInput.performed += OnPlayerFinishFling;
+            _stateMachine._attackInput.performed += OnPlayerStartFling;
+            _stateMachine._attackInput.performed += OnPlayerFinishFling;
         }
 
         public override void UpdateLogic()
@@ -61,10 +61,10 @@ namespace Player
             base.Exit();
 
             // unsubscribe to input events
-            _stateMachine._clawInput.performed -= OnPlayerClaw;
+            _stateMachine._attackInput.performed -= OnPlayerAttack;
             _stateMachine._jumpInput.performed -= OnPlayerJump;
-            _stateMachine._clawInput.performed -= OnPlayerStartFling;
-            _stateMachine._clawInput.performed -= OnPlayerFinishFling;
+            _stateMachine._attackInput.performed -= OnPlayerStartFling;
+            _stateMachine._attackInput.performed -= OnPlayerFinishFling;
         }
     }
 }

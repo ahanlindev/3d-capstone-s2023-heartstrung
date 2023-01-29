@@ -15,11 +15,11 @@ namespace Player
         [HideInInspector] public DeadState deadState;
 
         // Shortcuts for input actions
-        [HideInInspector] public InputAction _movementInput; 
-        [HideInInspector] public InputAction _clawInput; 
-        [HideInInspector] public InputAction _flingInput; 
-        [HideInInspector] public InputAction _jumpInput;  
-        
+        [HideInInspector] public InputAction _movementInput;
+        [HideInInspector] public InputAction _attackInput;
+        [HideInInspector] public InputAction _flingInput;
+        [HideInInspector] public InputAction _jumpInput;
+
         // Input
         private PlayerInput _playerInput;
 
@@ -39,10 +39,10 @@ namespace Player
             _playerInput = new PlayerInput();
             _playerInput.Enable();
 
-            _movementInput = _playerInput.Gameplay.Movement;
-            _clawInput = _playerInput.Gameplay.Claw;
+            _movementInput = _playerInput.Gameplay.Move;
+            _attackInput = _playerInput.Gameplay.Attack;
             _flingInput = _playerInput.Gameplay.Fling;
-            _jumpInput  = _playerInput.Gameplay.Jump;
+            _jumpInput = _playerInput.Gameplay.Jump;
         }
 
         // Initial state for player should be idle
