@@ -26,8 +26,11 @@ namespace Player
         /// <param name="_">input context for this action. Goes unused.</param>
         protected virtual void OnPlayerFinishFling(CallbackContext _) { }
 
-        /// <summary>Event handler for when the player gets hurt by something</summary>
-        protected virtual void OnHurt() {}
+        /// <summary>Event handler for when the player gets hurt by something. Override to ignore or change base behavior.</summary>
+        protected virtual void OnHurt() { _stateMachine.ChangeState(_stateMachine.hurtState); }
+
+        /// <summary>Event handler for when the player dies. Override to ignore or change base behavior. </summary>
+        protected virtual void OnDie() {_stateMachine.ChangeState(_stateMachine.deadState); }
 
         /// <summary>Event handler for when the heart lands after being flung</summary>
         protected virtual void OnHeartLanded() {}
