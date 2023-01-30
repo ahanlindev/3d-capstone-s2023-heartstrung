@@ -33,8 +33,8 @@ namespace Player
 
         protected override void OnPlayerJump(CallbackContext _)
         {
-            // TODO implement jump
             base.OnPlayerJump(_);
+            _stateMachine.ChangeState(_stateMachine.jumpingState);
         }
 
         protected override void HandlePlayerMove(Vector3 moveVector)

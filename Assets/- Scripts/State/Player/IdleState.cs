@@ -8,7 +8,7 @@ namespace Player
         public IdleState(PlayerStateMachine stateMachine) : base("Idle", stateMachine) { }
 
         public override void UpdateLogic() => base.UpdateLogic();
-        public override void UpdatePhysics() => base.UpdatePhysics();
+        protected override void OnPlayerFinishFling(CallbackContext _) => base.OnPlayerFinishFling(_);
         protected override void OnHurt() => base.OnHurt();
         protected override void OnDie() => base.OnDie();
         protected override void OnHeartLanded() => base.OnHeartLanded();
@@ -16,6 +16,13 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
+        }
+
+        public override void UpdatePhysics() { 
+            base.UpdatePhysics();
+            if (!IsGrounded()) {
+                _stateMachine.ChangeState(_stateMachine.fallingState);
+            }
         }
 
         public override void Exit()
@@ -32,8 +39,7 @@ namespace Player
         protected override void OnPlayerJump(CallbackContext _)
         {
             base.OnPlayerJump(_);
-            // TODO this might need rework if we implement a "Jumping" state
-            _stateMachine.ChangeState(_stateMachine.movingState);
+            _stateMachine.ChangeState(_stateMachine.jumpingState);
         }
 
         protected override void OnPlayerStartFling(CallbackContext _)
@@ -41,8 +47,6 @@ namespace Player
             base.OnPlayerStartFling(_);
             _stateMachine.ChangeState(_stateMachine.chargingState);
         }
-
-        protected override void OnPlayerFinishFling(CallbackContext _) => base.OnPlayerFinishFling(_);
 
         protected override void HandlePlayerMove(Vector3 moveVector)
         {

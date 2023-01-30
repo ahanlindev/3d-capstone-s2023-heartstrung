@@ -10,6 +10,8 @@ namespace Player
         public IdleState idleState { get; private set; }
         public MovingState movingState { get; private set; }
         public AttackingState attackingState { get; private set; }
+        public JumpingState jumpingState { get; private set; }
+        public FallingState fallingState { get; private set; }
         public ChargingState chargingState { get; private set; }
         public FlingingState flingingState { get; private set; }
         public HurtState hurtState { get; private set; }
@@ -63,6 +65,8 @@ namespace Player
             idleState = new IdleState(this);
             movingState = new MovingState(this);
             attackingState = new AttackingState(this);
+            jumpingState = new JumpingState(this);
+            fallingState = new FallingState(this);
             chargingState = new ChargingState(this);
             flingingState = new FlingingState(this);
             hurtState = new HurtState(this);

@@ -16,8 +16,9 @@ namespace Player
             
             // return to idle when done
             DOVirtual.DelayedCall(
-                _stateMachine.attackTime, 
-                () => _stateMachine.ChangeState(_stateMachine.idleState)
+                delay: _stateMachine.attackTime, 
+                callback: () => _stateMachine.ChangeState(_stateMachine.idleState),
+                ignoreTimeScale: false
             );
         }
 

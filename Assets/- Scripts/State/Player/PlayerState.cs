@@ -83,6 +83,20 @@ namespace Player
             // reset animator state
             _stateMachine.SetAnimatorBool(name, false);
         }
+
+        /// <summary>Check if the player is touching the ground</summary>
+        /// <returns>True if player is grounded, false otherwise.</returns>
+        protected bool IsGrounded()
+        {
+            float distToGround = _stateMachine.coll.bounds.extents.y;
+            bool touchingGround = Physics.BoxCast(
+                center: _stateMachine.transform.position,
+                halfExtents: new Vector3(0.5f, 0.1f, 0.5f),
+                direction: -_stateMachine.transform.up,
+                orientation: Quaternion.identity,
+                maxDistance: distToGround
+            );
+            return touchingGround;
         }
     }
 }
