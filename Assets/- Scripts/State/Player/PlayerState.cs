@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
@@ -12,24 +12,27 @@ namespace Player
 
         /// <summary>Event handler for when the player performs an attack input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerAttack(InputAction.CallbackContext _) { }
+        protected virtual void OnPlayerAttack(CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a jump input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerJump(InputAction.CallbackContext _) { }
+        protected virtual void OnPlayerJump(CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerStartFling(InputAction.CallbackContext _) { }
+        protected virtual void OnPlayerStartFling(CallbackContext _) { }
 
         /// <summary>Event handler for when the player finishes performing a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerFinishFling(InputAction.CallbackContext _) { }
+        protected virtual void OnPlayerFinishFling(CallbackContext _) { }
+
+        /// <summary>Event handler for when the player gets hurt by something</summary>
+        protected virtual void OnHurt() {}
 
         /// <summary>Event handler for when the heart lands after being flung</summary>
         protected virtual void OnHeartLanded() {}
 
-        /// <summary>Handler for whatever movement event the player performs</summary>
+        /// <summary>Handler for whatever per-physics-tick movement event the player performs</summary>
         /// <param name="moveVector">Desired movement direction</param>
         protected virtual void HandlePlayerMove(Vector3 moveVector) { }
 

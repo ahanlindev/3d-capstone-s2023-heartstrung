@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
@@ -27,23 +27,23 @@ namespace Player
             base.Exit();
         }
 
-        protected override void OnPlayerAttack(InputAction.CallbackContext _)
+        protected override void OnPlayerAttack(CallbackContext _)
         {
             base.OnPlayerAttack(_);
             _stateMachine.ChangeState(_stateMachine.attackingState);
         }
 
-        protected override void OnPlayerJump(InputAction.CallbackContext _)
+        protected override void OnPlayerJump(CallbackContext _)
         {
             base.OnPlayerJump(_);
         }
 
-        protected override void OnPlayerStartFling(InputAction.CallbackContext _)
+        protected override void OnPlayerStartFling(CallbackContext _)
         {
             base.OnPlayerStartFling(_);
         }
 
-        protected override void OnPlayerFinishFling(InputAction.CallbackContext _)
+        protected override void OnPlayerFinishFling(CallbackContext _)
         {
             base.OnPlayerFinishFling(_);
         }
