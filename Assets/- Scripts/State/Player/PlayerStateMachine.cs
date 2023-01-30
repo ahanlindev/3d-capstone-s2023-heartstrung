@@ -6,6 +6,9 @@ namespace Player
 {
     public class PlayerStateMachine : BaseStateMachine
     {
+        // Emitted events
+        public event System.Action PlayerHurtEvent; 
+
         // Possible States
         public IdleState idleState { get; private set; }
         public MovingState movingState { get; private set; }
@@ -28,7 +31,7 @@ namespace Player
         public Collider coll { get; private set; }
         public Claws claws { get; private set; }
 
-        // Inspector-set values
+        // Inspector-visible values
         [Tooltip("Heart connected to this player")]
         [SerializeField] private Heart _heart;
         public Heart heart { get => _heart; private set => _heart = value; }
@@ -37,6 +40,11 @@ namespace Player
         [Tooltip("Amount of time in seconds that the player will be in the attack state")]
         [SerializeField] private float _attackTime = 0.5f;
         public float attackTime { get => _attackTime; private set => _attackTime = value; }
+
+        // TODO this is sloppy. Refactor soon.
+        [Tooltip("Amount of time in seconds that the player will be in the hurt state")]
+        [SerializeField] private float _hurtTime = 0.5f;
+        public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
 
         [Tooltip("Player's max speed in units/second")]
         [SerializeField] private float _moveSpeed = 2f;
@@ -108,6 +116,11 @@ namespace Player
             } else {
                 Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
             }
+        }
+
+        /// <summary>Informs the player that they have been hit by something.</summary>
+        public void GetHurt() { 
+            PlayerHurtEvent?.Invoke();
         }
 
         /// <summary>

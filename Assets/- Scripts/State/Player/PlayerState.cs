@@ -48,15 +48,11 @@ namespace Player
             _stateMachine.jumpInput.performed += OnPlayerJump;
             _stateMachine.flingInput.performed += OnPlayerStartFling;
             _stateMachine.flingInput.canceled += OnPlayerFinishFling;
+            _stateMachine.PlayerHurtEvent += OnHurt;
             _stateMachine.heart.LandedEvent += OnHeartLanded;
 
             // set animator state
             _stateMachine.SetAnimatorBool(name, true);
-        }
-
-        public override void UpdateLogic()
-        {
-            base.UpdateLogic();
         }
 
         public override void UpdatePhysics()
@@ -78,6 +74,7 @@ namespace Player
             _stateMachine.jumpInput.performed -= OnPlayerJump;
             _stateMachine.flingInput.performed -= OnPlayerStartFling;
             _stateMachine.flingInput.canceled -= OnPlayerFinishFling;
+            _stateMachine.PlayerHurtEvent -= OnHurt;
             _stateMachine.heart.LandedEvent -= OnHeartLanded;
 
             // reset animator state
