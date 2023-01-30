@@ -46,8 +46,8 @@ namespace Player
             // subscribe to events
             _stateMachine.attackInput.performed += OnPlayerAttack;
             _stateMachine.jumpInput.performed += OnPlayerJump;
-            _stateMachine.attackInput.performed += OnPlayerStartFling;
-            _stateMachine.attackInput.performed += OnPlayerFinishFling;
+            _stateMachine.flingInput.performed += OnPlayerStartFling;
+            _stateMachine.flingInput.canceled += OnPlayerFinishFling;
             _stateMachine.heart.LandedEvent += OnHeartLanded;
         }
 
@@ -73,8 +73,8 @@ namespace Player
             // unsubscribe to input events
             _stateMachine.attackInput.performed -= OnPlayerAttack;
             _stateMachine.jumpInput.performed -= OnPlayerJump;
-            _stateMachine.attackInput.performed -= OnPlayerStartFling;
-            _stateMachine.attackInput.performed -= OnPlayerFinishFling;
+            _stateMachine.flingInput.performed -= OnPlayerStartFling;
+            _stateMachine.flingInput.canceled -= OnPlayerFinishFling;
             _stateMachine.heart.LandedEvent -= OnHeartLanded;
         }
     }
