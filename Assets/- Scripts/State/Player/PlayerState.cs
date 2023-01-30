@@ -30,10 +30,10 @@ namespace Player
         protected virtual void OnHurt() { _stateMachine.ChangeState(_stateMachine.hurtState); }
 
         /// <summary>Event handler for when the player dies. Override to ignore or change base behavior. </summary>
-        protected virtual void OnDie() {_stateMachine.ChangeState(_stateMachine.deadState); }
+        protected virtual void OnDie() { _stateMachine.ChangeState(_stateMachine.deadState); }
 
         /// <summary>Event handler for when the heart lands after being flung</summary>
-        protected virtual void OnHeartLanded() {}
+        protected virtual void OnHeartLanded() { }
 
         /// <summary>Handler for whatever per-physics-tick movement event the player performs</summary>
         /// <param name="moveVector">Desired movement direction</param>
@@ -49,6 +49,9 @@ namespace Player
             _stateMachine.flingInput.performed += OnPlayerStartFling;
             _stateMachine.flingInput.canceled += OnPlayerFinishFling;
             _stateMachine.heart.LandedEvent += OnHeartLanded;
+
+            // set animator state
+            _stateMachine.SetAnimatorBool(name, true);
         }
 
         public override void UpdateLogic()
@@ -76,6 +79,10 @@ namespace Player
             _stateMachine.flingInput.performed -= OnPlayerStartFling;
             _stateMachine.flingInput.canceled -= OnPlayerFinishFling;
             _stateMachine.heart.LandedEvent -= OnHeartLanded;
+
+            // reset animator state
+            _stateMachine.SetAnimatorBool(name, false);
+        }
         }
     }
 }

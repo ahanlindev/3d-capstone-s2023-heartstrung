@@ -16,13 +16,11 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            _stateMachine.anim.SetBool("Idle", true);
         }
 
         public override void Exit()
         {
             base.Exit();
-            _stateMachine.anim.SetBool("Idle", false);
         }
 
         protected override void OnPlayerAttack(CallbackContext _)

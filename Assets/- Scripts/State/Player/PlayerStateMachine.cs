@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,26 +6,25 @@ namespace Player
 {
     public class PlayerStateMachine : BaseStateMachine
     {
-        // Possible States for this type of FSM
-        [HideInInspector] public IdleState idleState { get; private set; }
-        [HideInInspector] public MovingState movingState { get; private set; }
-        [HideInInspector] public AttackingState attackingState { get; private set; }
-        [HideInInspector] public ChargingState chargingState { get; private set; }
-        [HideInInspector] public FlingingState flingingState { get; private set; }
-        [HideInInspector] public HurtState hurtState { get; private set; }
-        [HideInInspector] public DeadState deadState { get; private set; }
+        // Possible States
+        public IdleState idleState { get; private set; }
+        public MovingState movingState { get; private set; }
+        public AttackingState attackingState { get; private set; }
+        public ChargingState chargingState { get; private set; }
+        public FlingingState flingingState { get; private set; }
+        public HurtState hurtState { get; private set; }
+        public DeadState deadState { get; private set; }
 
         // Shortcuts for input actions
-        [HideInInspector] public InputAction movementInput { get; private set; }
-        [HideInInspector] public InputAction attackInput { get; private set; }
-        [HideInInspector] public InputAction flingInput { get; private set; }
-        [HideInInspector] public InputAction jumpInput { get; private set; }
+        public InputAction movementInput { get; private set; }
+        public InputAction attackInput { get; private set; }
+        public InputAction flingInput { get; private set; }
+        public InputAction jumpInput { get; private set; }
 
         // Other necessary components
         public Rigidbody rbody { get; private set; }
-        [HideInInspector] public Collider coll { get; private set; }
-        [HideInInspector] public Animator anim { get; private set; }
-        [HideInInspector] public Claws claws { get; private set; }
+        public Collider coll { get; private set; }
+        public Claws claws { get; private set; }
 
         // Inspector-set values
         [Tooltip("Heart connected to this player")]
@@ -52,8 +52,9 @@ namespace Player
         [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.85f;
         public float powerPerSecond { get => _powerPerSecond; private set => _powerPerSecond = value; }
 
-        // Input
+        // Private fields
         private PlayerInput _playerInput;
+        private Animator anim;
 
         // Player Controller
         private void Awake()
@@ -90,5 +91,29 @@ namespace Player
 
         // Initial state for player should be idle
         protected override BaseState GetInitialState() => idleState;
+
+        /// <summary>
+        /// If an animator parameter of the desired name exists, sets it to value. 
+        /// If the desired parameter does not exists, a warning is logged to console. 
+        /// </summary>
+        /// <param name="name">Name of the animation parameter to update</param>
+        /// <param name="value">Desired value for the animation parameter</param>
+        public void SetAnimatorBool(string name, bool value) {
+            if (AnimatorHasParam(name)) {
+                anim.SetBool(name, true);
+            } else {
+                Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
+            }
+        }
+
+        /// <summary>
+        /// Helper method to check whether the state machine's 
+        /// animator has a parameter with the desired name.
+        /// </summary>
+        /// <returns>True if a matching parameter is found, false otherwise.</returns>
+        private bool AnimatorHasParam(string paramName) {
+            var matchingParams = anim.parameters.Where((param) => param.name == paramName);
+            return matchingParams.Count() > 0;
+        }
     }
 }
