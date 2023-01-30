@@ -104,7 +104,7 @@ namespace Player
         /// <param name="value">Desired value for the animation parameter</param>
         public void SetAnimatorBool(string name, bool value) {
             if (AnimatorHasParam(name)) {
-                anim.SetBool(name, true);
+                anim.SetBool(name, value);
             } else {
                 Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
             }
