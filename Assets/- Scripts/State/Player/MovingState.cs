@@ -42,6 +42,11 @@ namespace Player
         protected override void HandlePlayerMove(Vector3 moveVector)
         {
             base.HandlePlayerMove(moveVector);
+            // go to idle if no longer moving
+            if (moveVector == Vector3.zero) {
+                _stateMachine.ChangeState(_stateMachine.idleState);
+                return;
+            }
 
             // account for player move speed and tick rate
             moveVector *= _stateMachine.moveSpeed;
