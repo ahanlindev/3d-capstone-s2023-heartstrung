@@ -6,27 +6,27 @@ namespace Player
 {
     public class AttackingState : PlayerState
     {
-        public AttackingState(PlayerStateMachine stateMachine) : base("Idle", stateMachine) { }
+        public AttackingState(PlayerStateMachine stateMachine) : base("Attacking", stateMachine) { }
 
         public override void Enter()
         {
             base.Enter();
+            // perform attack
+            _stateMachine.claws.Claw(_stateMachine.attackTime);
+            
+            // return to idle when done
+            DOVirtual.DelayedCall(
+                _stateMachine.attackTime, 
+                () => _stateMachine.ChangeState(_stateMachine.idleState)
+            );
         }
 
-        public override void UpdateLogic()
-        {
-            base.UpdateLogic();
-        }
+        public override void UpdateLogic() => base.UpdateLogic();
 
-        public override void UpdatePhysics()
-        {
-            base.UpdatePhysics();
-        }
+        public override void UpdatePhysics() => base.UpdatePhysics();
 
-        public override void Exit()
-        {
-            base.Exit();
-        }
+        public override void Exit() => base.Exit();
+        
 
         protected override void OnPlayerAttack(CallbackContext _)
         {
