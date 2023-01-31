@@ -12,10 +12,10 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            
+
             // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
-                delay: _stateMachine.hurtTime, 
+                delay: _stateMachine.hurtTime,
                 callback: () => _stateMachine.ChangeState(_stateMachine.idleState),
                 ignoreTimeScale: false
             );

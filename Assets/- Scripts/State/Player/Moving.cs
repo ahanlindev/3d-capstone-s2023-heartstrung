@@ -22,7 +22,7 @@ namespace Player
         {
             base.Exit();
         }
-        
+
         public override void UpdatePhysics()
         {
             base.UpdatePhysics();

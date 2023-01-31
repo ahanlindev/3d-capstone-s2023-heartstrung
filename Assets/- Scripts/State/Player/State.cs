@@ -49,8 +49,9 @@ namespace Player
             _stateMachine.flingInput.performed += OnPlayerStartFling;
             _stateMachine.flingInput.canceled += OnPlayerFinishFling;
             _stateMachine.PlayerHurtEvent += OnHurt;
-            
-            if (_stateMachine.heart) {
+
+            if (_stateMachine.heart)
+            {
                 _stateMachine.heart.LandedEvent += OnHeartLanded;
             }
 
@@ -78,8 +79,9 @@ namespace Player
             _stateMachine.flingInput.performed -= OnPlayerStartFling;
             _stateMachine.flingInput.canceled -= OnPlayerFinishFling;
             _stateMachine.PlayerHurtEvent -= OnHurt;
-            
-            if (_stateMachine.heart) {
+
+            if (_stateMachine.heart)
+            {
                 _stateMachine.heart.LandedEvent -= OnHeartLanded;
             }
 

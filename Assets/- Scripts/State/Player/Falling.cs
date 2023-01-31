@@ -12,7 +12,8 @@ namespace Player
             base.UpdatePhysics();
 
             // return to idle if on ground
-            if (IsGrounded()) {
+            if (IsGrounded())
+            {
                 _stateMachine.ChangeState(_stateMachine.idleState);
             }
         }
@@ -28,7 +29,7 @@ namespace Player
             // TODO should the player be able to fling in midair?
             base.OnPlayerStartFling(_);
         }
-        
+
         protected override void HandlePlayerMove(Vector3 moveVector)
         {
             base.HandlePlayerMove(moveVector);

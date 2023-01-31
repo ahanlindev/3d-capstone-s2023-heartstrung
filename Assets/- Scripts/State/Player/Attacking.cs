@@ -13,10 +13,10 @@ namespace Player
             base.Enter();
             // perform attack
             _stateMachine.claws.Claw(_stateMachine.attackTime);
-            
+
             // return to idle when done
             DOVirtual.DelayedCall(
-                delay: _stateMachine.attackTime, 
+                delay: _stateMachine.attackTime,
                 callback: () => _stateMachine.ChangeState(_stateMachine.idleState),
                 ignoreTimeScale: false
             );

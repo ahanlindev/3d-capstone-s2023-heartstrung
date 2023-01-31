@@ -18,9 +18,11 @@ namespace Player
             base.Enter();
         }
 
-        public override void UpdatePhysics() { 
+        public override void UpdatePhysics()
+        {
             base.UpdatePhysics();
-            if (!IsGrounded()) {
+            if (!IsGrounded())
+            {
                 _stateMachine.ChangeState(_stateMachine.fallingState);
             }
         }
@@ -47,7 +49,8 @@ namespace Player
             base.OnPlayerStartFling(_);
 
             // cannot fling if there is no heart set
-            if (_stateMachine.heart) {
+            if (_stateMachine.heart)
+            {
                 _stateMachine.ChangeState(_stateMachine.chargingState);
             }
         }

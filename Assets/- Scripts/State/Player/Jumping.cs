@@ -7,7 +7,7 @@ namespace Player
     public class Jumping : State
     {
         /// <summary> Used to prevent ground check from passing right after jump is pressed.</summary>
-        private bool _canLand = false; 
+        private bool _canLand = false;
 
         public Jumping(PlayerStateMachine stateMachine) : base("Jumping", stateMachine) { }
 
@@ -27,7 +27,8 @@ namespace Player
             base.UpdatePhysics();
 
             // return to idle if on ground
-            if (IsGrounded() && _canLand) {
+            if (IsGrounded() && _canLand)
+            {
                 _stateMachine.ChangeState(_stateMachine.idleState);
             }
         }
