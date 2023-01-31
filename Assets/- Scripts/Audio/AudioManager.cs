@@ -13,9 +13,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] public int numAudioSources = 5;
 
     private string path = "Assets/Resources/Audio/SFX/";
-    private string resourcesPath = "Audio/SFX/";
 
-    private Dictionary<string, AudioClip> sounds = new Dictionary<string, AudioClip>();
+    private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
 
     private AudioSource[] audioSources = new AudioSource[5];
 
@@ -27,24 +26,23 @@ public class AudioManager : MonoBehaviour
             instance = this;
         }
 
-        // Grab each existing sound effect from path
+        // Create and instantiate new AudioEvents for each event specified
+        // by the file structure of the SFX folder.
         DirectoryInfo dir = new DirectoryInfo(path);
-        FileInfo[] info = dir.GetFiles("*.*");
+        FileInfo[] info = dir.GetFiles("*");
         foreach(FileInfo fileInfo in info) {
-            if(fileInfo.Extension == ".ogg" || fileInfo.Extension == ".mp3" || fileInfo.Extension == ".wav") {
-                // Make the key in the AudioSources dictionary the file name minus the extension
+            string fileName = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
+            string pathToThisFile = path + fileName + "/";
+            if(Directory.Exists(pathToThisFile)) {
+                // create an AudioEvent from this folder
+                // Debug.Log("path " + pathToThisFile + " exists!");
+                AudioEvent newEvent = new AudioEvent();
+                // Make the key in the AudioEvent dictionary the folder name minus the .meta extension
                 string key = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
-                Debug.Log("Found Sound Effect " + key);
-                // convert the file into an AudioClip for the AudioSource
-
-                AudioClip sound = Resources.Load<AudioClip>(resourcesPath + key);
-                if(sound != null) {
-                    Debug.Log("Sound Effect Loaded!");
-                } else {
-                    Debug.LogError("could not load sound effect " + resourcesPath + key);
-                }
-
-                sounds.Add(key, sound);
+                newEvent.addSoundsFromPath(pathToThisFile);
+                sounds.Add(key, newEvent);
+            } else {
+                // Debug.Log("didn't find directory " + pathToThisFile);
             }
         }
 
@@ -54,19 +52,18 @@ public class AudioManager : MonoBehaviour
             audioSources[0].playOnAwake = false;
         }
 
-        // DEBUG: Print sounds dict to console
-        foreach(KeyValuePair<string, AudioClip> sound in sounds) {
-            Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
-        }
+        // // DEBUG: Print sounds dict to console
+        // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
+        //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
+        // }
 
-        DontDestroyOnLoad(gameObject);
         DontDestroyOnLoad(this.transform.parent.gameObject);
     }
 
     /// <summary>Attempts to play the sound effect identified by the name passed in.</summary>
     /// <param name="sound">The name of the sound effect to play.</param>
     public bool playSound(string sound) {
-        AudioClip soundToPlay = sounds[sound];
+        AudioClip soundToPlay = sounds[sound].poolSound();
         if(soundToPlay == null) {
             Debug.LogError(sound + " is not a sound effect!");
             return false;
@@ -78,7 +75,7 @@ public class AudioManager : MonoBehaviour
             }
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
-                // randomize pitch for v a r i a t i o n (TM)
+                // randomize pitch for  v a r i a t i o n (TM)
                 source.pitch = Random.Range(.75f, 1.25f);
                 source.Play();
                 return true;
