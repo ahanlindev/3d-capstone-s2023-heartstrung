@@ -22,24 +22,41 @@ public class hurtingBush : MonoBehaviour
         
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
         if (alive)
         {
-            Debug.Log(collision.transform.name);
 
-
-            if (collision.gameObject.tag == "Player")
+            // assume we have this PSM
+            var playerComponent = other.GetComponent<PlayerStateMachine>();
+            if (playerComponent != null)
             {
-                //Transform collidedObj = collision.collider.transform;
-                //collidedBodies.Add(collidedObj);
-               
-                Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+                playerComponent.GetHurt();
 
-                if (rb != null)
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb)
                     rb.AddExplosionForce(power, transform.position, radius, 3.0F);
+                return;
+            }
+
+            var heartComponent = other.GetComponent<Heart>();
+            if (heartComponent != null)
+            {
+                heartComponent.GetHurt();
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb)
+                    rb.AddExplosionForce(power, transform.position, radius, 3.0F);
+                return;
             }
         }
+    }
 
+    public void bushDie()
+    {
+        alive = false;
+        Debug.Log("bush is now dead");
+
+        //The bush will no longer block the way, may apply change color or disable the whole cube.
+        GetComponent<BoxCollider>().enabled = false;
     }
 }
