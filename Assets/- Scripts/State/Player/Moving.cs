@@ -8,13 +8,11 @@ namespace Player
         public Moving(PlayerStateMachine stateMachine) : base("Moving", stateMachine) { }
 
         public override void UpdateLogic() => base.UpdateLogic();
-        public override void UpdatePhysics() => base.UpdatePhysics();
-        protected override void OnPlayerStartFling(CallbackContext _) => base.OnPlayerStartFling(_);
         protected override void OnPlayerFinishFling(CallbackContext _) => base.OnPlayerFinishFling(_);
         protected override void OnHurt() => base.OnHurt();
         protected override void OnDie() => base.OnDie();
         protected override void OnHeartLanded() => base.OnHeartLanded();
-        
+
         public override void Enter()
         {
             base.Enter();
@@ -37,11 +35,23 @@ namespace Player
             _stateMachine.ChangeState(_stateMachine.jumpingState);
         }
 
+        protected override void OnPlayerStartFling(CallbackContext _)
+        {
+            base.OnPlayerStartFling(_);
+
+            // cannot fling if there is no heart set
+            if (_stateMachine.heart)
+            {
+                _stateMachine.ChangeState(_stateMachine.chargingState);
+            }
+        }
+
         protected override void HandlePlayerMove(Vector3 moveVector)
         {
             base.HandlePlayerMove(moveVector);
             // go to idle if no longer moving
-            if (moveVector == Vector3.zero) {
+            if (moveVector == Vector3.zero)
+            {
                 _stateMachine.ChangeState(_stateMachine.idleState);
                 return;
             }

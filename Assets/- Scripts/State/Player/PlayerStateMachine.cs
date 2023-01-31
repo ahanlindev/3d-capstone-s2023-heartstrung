@@ -96,7 +96,7 @@ public class PlayerStateMachine : BaseStateMachine
         // validate non-guaranteed values
         if (!anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
         if (!claws) { Debug.LogError("PlayerStateMachine cannot find Claws component in children"); }
-        if (!heart) { Debug.LogError("PlayerStateMachine has no Heart set!"); }
+        if (!heart) { Debug.LogWarning("Player does not have a heart set!"); }
     }
 
     // Initial state for player should be idle

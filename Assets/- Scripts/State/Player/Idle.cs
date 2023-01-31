@@ -45,7 +45,11 @@ namespace Player
         protected override void OnPlayerStartFling(CallbackContext _)
         {
             base.OnPlayerStartFling(_);
-            _stateMachine.ChangeState(_stateMachine.chargingState);
+
+            // cannot fling if there is no heart set
+            if (_stateMachine.heart) {
+                _stateMachine.ChangeState(_stateMachine.chargingState);
+            }
         }
 
         protected override void HandlePlayerMove(Vector3 moveVector)

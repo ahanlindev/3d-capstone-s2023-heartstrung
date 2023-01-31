@@ -49,7 +49,10 @@ namespace Player
             _stateMachine.flingInput.performed += OnPlayerStartFling;
             _stateMachine.flingInput.canceled += OnPlayerFinishFling;
             _stateMachine.PlayerHurtEvent += OnHurt;
-            _stateMachine.heart.LandedEvent += OnHeartLanded;
+            
+            if (_stateMachine.heart) {
+                _stateMachine.heart.LandedEvent += OnHeartLanded;
+            }
 
             // set animator state
             _stateMachine.SetAnimatorBool(name, true);
@@ -75,7 +78,10 @@ namespace Player
             _stateMachine.flingInput.performed -= OnPlayerStartFling;
             _stateMachine.flingInput.canceled -= OnPlayerFinishFling;
             _stateMachine.PlayerHurtEvent -= OnHurt;
-            _stateMachine.heart.LandedEvent -= OnHeartLanded;
+            
+            if (_stateMachine.heart) {
+                _stateMachine.heart.LandedEvent -= OnHeartLanded;
+            }
 
             // reset animator state
             _stateMachine.SetAnimatorBool(name, false);
