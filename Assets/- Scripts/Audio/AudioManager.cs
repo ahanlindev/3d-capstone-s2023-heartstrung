@@ -57,15 +57,19 @@ public class AudioManager : MonoBehaviour
         //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
         // }
 
+        // Manually override the default pitch shift variable for the following sound event(s)
+        // Maybe find a more elegant solution for this later?
+        sounds["Defeat"].setPitchShift(false);
+
         DontDestroyOnLoad(this.transform.parent.gameObject);
     }
 
-    /// <summary>Attempts to play the sound effect identified by the name passed in.</summary>
-    /// <param name="sound">The name of the sound effect to play.</param>
-    public bool playSound(string sound) {
+    /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
+    /// <param name="sound">The name of the AudioPool to pool from.</param>
+    public bool playSoundEvent(string sound) {
         AudioClip soundToPlay = sounds[sound].poolSound();
         if(soundToPlay == null) {
-            Debug.LogError(sound + " is not a sound effect!");
+            Debug.LogError(sound + " is not a sound event!");
             return false;
         }
         // find an available AudioSource to play the sound
@@ -76,7 +80,12 @@ public class AudioManager : MonoBehaviour
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
                 // randomize pitch for  v a r i a t i o n (TM)
-                source.pitch = Random.Range(.75f, 1.25f);
+                if(sounds[sound].doPitchShift()) {
+                    source.pitch = Random.Range(.75f, 1.25f);
+                } else {
+                    source.pitch = 1f;
+                    Debug.Log("not doing pitch shift for " + sound);
+                }
                 source.Play();
                 return true;
             }

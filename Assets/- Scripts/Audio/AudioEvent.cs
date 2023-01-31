@@ -8,6 +8,17 @@ public class AudioEvent
 {
     private List<AudioClip> soundPool = new List<AudioClip>();
 
+    [Tooltip("Should randomized pitch shifting occur on this sound event?")]
+    [SerializeField] private bool pitchShift = true;
+
+    public bool doPitchShift() {
+        return pitchShift;
+    }
+
+    public void setPitchShift(bool var) {
+        pitchShift = var;
+    }
+
     /// <summary>Add all AudioClip files from the specified file path to this AudioEvent pool.</summary>
     /// <param name="path">The path from the root of the project to the sound effect folder.</param>
     public void addSoundsFromPath(string path) {
@@ -36,7 +47,7 @@ public class AudioEvent
 
     // Add the specified AudioClip to this AudioEvent pool.
     public void addSound(AudioClip clip) {
-
+        soundPool.Add(clip);
     }
 
     // Returns a randomly selected AudioClip from soundPool.

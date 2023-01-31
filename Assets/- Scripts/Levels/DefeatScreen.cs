@@ -7,6 +7,6 @@ public class DefeatScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AudioManager.instance.playSound("OwThatHurt");
+        AudioManager.instance.playSoundEvent("Defeat");
     }
 }
