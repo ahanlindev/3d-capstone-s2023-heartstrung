@@ -3,9 +3,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
-    public class FlingingState : PlayerState
+    public class Flinging : State
     {
-        public FlingingState(PlayerStateMachine stateMachine) : base("Flinging", stateMachine) { }
+        public Flinging(PlayerStateMachine stateMachine) : base("Flinging", stateMachine) { }
 
         public override void Enter()
         {

@@ -4,12 +4,12 @@ using DG.Tweening;
 
 namespace Player
 {
-    public class JumpingState : PlayerState
+    public class Jumping : State
     {
         /// <summary> Used to prevent ground check from passing right after jump is pressed.</summary>
         private bool _canLand = false; 
 
-        public JumpingState(PlayerStateMachine stateMachine) : base("Jumping", stateMachine) { }
+        public Jumping(PlayerStateMachine stateMachine) : base("Jumping", stateMachine) { }
 
         public override void Enter()
         {

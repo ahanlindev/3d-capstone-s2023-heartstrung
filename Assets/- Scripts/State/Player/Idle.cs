@@ -3,9 +3,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
-    public class IdleState : PlayerState
+    public class Idle : State
     {
-        public IdleState(PlayerStateMachine stateMachine) : base("Idle", stateMachine) { }
+        public Idle(PlayerStateMachine stateMachine) : base("Idle", stateMachine) { }
 
         public override void UpdateLogic() => base.UpdateLogic();
         protected override void OnPlayerFinishFling(CallbackContext _) => base.OnPlayerFinishFling(_);

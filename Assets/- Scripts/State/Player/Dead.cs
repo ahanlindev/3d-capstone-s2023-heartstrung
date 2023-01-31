@@ -3,9 +3,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
-    public class ChargingState : PlayerState
+    public class Dead : State
     {
-        public ChargingState(PlayerStateMachine stateMachine) : base("Charging", stateMachine) { }
+        public Dead(PlayerStateMachine stateMachine) : base("Dead", stateMachine) { }
 
         public override void Enter()
         {

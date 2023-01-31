@@ -1,22 +1,21 @@
+using System.Collections;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 using DG.Tweening;
 
 namespace Player
 {
-    public class AttackingState : PlayerState
+    public class Hurt : State
     {
-        public AttackingState(PlayerStateMachine stateMachine) : base("Attacking", stateMachine) { }
+        public Hurt(PlayerStateMachine stateMachine) : base("Hurt", stateMachine) { }
 
         public override void Enter()
         {
             base.Enter();
-            // perform attack
-            _stateMachine.claws.Claw(_stateMachine.attackTime);
             
-            // return to idle when done
+            // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
-                delay: _stateMachine.attackTime, 
+                delay: _stateMachine.hurtTime, 
                 callback: () => _stateMachine.ChangeState(_stateMachine.idleState),
                 ignoreTimeScale: false
             );

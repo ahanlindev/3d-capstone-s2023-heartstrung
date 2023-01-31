@@ -3,9 +3,9 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
-    public class MovingState : PlayerState
+    public class Moving : State
     {
-        public MovingState(PlayerStateMachine stateMachine) : base("Moving", stateMachine) { }
+        public Moving(PlayerStateMachine stateMachine) : base("Moving", stateMachine) { }
 
         public override void UpdateLogic() => base.UpdateLogic();
         public override void UpdatePhysics() => base.UpdatePhysics();

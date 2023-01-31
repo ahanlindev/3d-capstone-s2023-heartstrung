@@ -3,12 +3,12 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
-    public class PlayerState : BaseState
+    public class State : BaseState
     {
         // BaseState has _stateMachine, but this casts it to PlayerStateMachine
         protected PlayerStateMachine _stateMachine { get => (PlayerStateMachine)_baseStateMachine; }
 
-        public PlayerState(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }
+        public State(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }
 
         /// <summary>Event handler for when the player performs an attack input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
