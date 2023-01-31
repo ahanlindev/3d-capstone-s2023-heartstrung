@@ -22,6 +22,15 @@ namespace Player
         {
             base.Exit();
         }
+        
+        public override void UpdatePhysics()
+        {
+            base.UpdatePhysics();
+            if (!IsGrounded())
+            {
+                _stateMachine.ChangeState(_stateMachine.fallingState);
+            }
+        }
 
         protected override void OnPlayerAttack(CallbackContext _)
         {

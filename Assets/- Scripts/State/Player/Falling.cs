@@ -17,6 +17,18 @@ namespace Player
             }
         }
 
+        protected override void OnPlayerAttack(CallbackContext _)
+        {
+            // TODO should the player be able to attack in midair?
+            base.OnPlayerAttack(_);
+        }
+
+        protected override void OnPlayerStartFling(CallbackContext _)
+        {
+            // TODO should the player be able to fling in midair?
+            base.OnPlayerStartFling(_);
+        }
+        
         protected override void HandlePlayerMove(Vector3 moveVector)
         {
             base.HandlePlayerMove(moveVector);
