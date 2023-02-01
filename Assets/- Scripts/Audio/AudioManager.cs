@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 
 // Attach this script to the LevelManager.
 // 
@@ -12,11 +13,11 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
     [SerializeField] public int numAudioSources = 5;
 
-    private string path = "Assets/Resources/Audio/SFX/";
-
     private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
 
     private AudioSource[] audioSources = new AudioSource[5];
+    
+    private string resourcesPath = "Audio/SFX";
 
     void Awake() {
         // Singleton logic
@@ -26,42 +27,31 @@ public class AudioManager : MonoBehaviour
             instance = this;
         }
 
-        // Create and instantiate new AudioEvents for each event specified
-        // by the file structure of the SFX folder.
-        DirectoryInfo dir = new DirectoryInfo(path);
-        FileInfo[] info = dir.GetFiles("*");
-        foreach(FileInfo fileInfo in info) {
-            string fileName = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
-            string pathToThisFile = path + fileName + "/";
-            if(Directory.Exists(pathToThisFile)) {
-                // create an AudioEvent from this folder
-                // Debug.Log("path " + pathToThisFile + " exists!");
-                AudioEvent newEvent = new AudioEvent();
-                // Make the key in the AudioEvent dictionary the folder name minus the .meta extension
-                string key = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
-                newEvent.addSoundsFromPath(pathToThisFile);
-                sounds.Add(key, newEvent);
-            } else {
-                // Debug.Log("didn't find directory " + pathToThisFile);
-            }
-        }
-
         // Instantiate the AudioSources
         for(int i = 0; i < numAudioSources; i++) {
             audioSources[0] = gameObject.AddComponent<AudioSource>();
             audioSources[0].playOnAwake = false;
         }
 
-        // // DEBUG: Print sounds dict to console
-        // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
-        //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
-        // }
-
-        // Manually override the default pitch shift variable for the following sound event(s)
-        // Maybe find a more elegant solution for this later?
-        sounds["Defeat"].setPitchShift(false);
-
+        // Don't destroy this between scenes
         DontDestroyOnLoad(this.transform.parent.gameObject);
+
+        Debug.Log("Done loading sounds.");
+    }
+
+    void Start() {
+        // Get the AudioEvents pre-defined as children of this gameObject
+        AudioEvent[] audioEvents = GetComponentsInChildren<AudioEvent>();
+
+        // To make search faster and easier, make a dictionary
+        foreach(AudioEvent audioEvent in audioEvents) {
+            sounds.Add(audioEvent.EventName, audioEvent);
+        }
+
+        // DEBUG: Print sounds dict to console
+        foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
+            Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
+        }
     }
 
     /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
@@ -80,7 +70,7 @@ public class AudioManager : MonoBehaviour
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
                 // randomize pitch for  v a r i a t i o n (TM)
-                if(sounds[sound].doPitchShift()) {
+                if(sounds[sound].PitchShift) {
                     source.pitch = Random.Range(.75f, 1.25f);
                 } else {
                     source.pitch = 1f;

@@ -2,56 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
-// A class that stores a pool of AudioClips to play from when activated.
-public class AudioEvent
+/// <summary>A class that stores a pool of AudioClips to play from when activated.<\summary>
+public class AudioEvent : MonoBehaviour
 {
-    private List<AudioClip> soundPool = new List<AudioClip>();
+    [Tooltip("The name of this sound event. Used to reference in scripts.")]
+    public string EventName {get; private set;}
+
+    [Tooltip("The list of sound effects that this AudioEvent will choose from.")]
+    [SerializeField] public List<AudioClip> SoundPool = new List<AudioClip>();
 
     [Tooltip("Should randomized pitch shifting occur on this sound event?")]
-    [SerializeField] private bool pitchShift = true;
+    [SerializeField] public bool PitchShift = true;
 
-    public bool doPitchShift() {
-        return pitchShift;
+    void Awake() {
+        Debug.Log("setting name to " + this.gameObject.name);
+        EventName = this.gameObject.name;
+        Debug.Log("name has been set to " + EventName);
     }
 
-    public void setPitchShift(bool var) {
-        pitchShift = var;
-    }
-
-    /// <summary>Add all AudioClip files from the specified file path to this AudioEvent pool.</summary>
-    /// <param name="path">The path from the root of the project to the sound effect folder.</param>
-    public void addSoundsFromPath(string path) {
-        // Debug.Log("adding sounds from path " + path);
-        // Grab each existing sound effect from path
-        DirectoryInfo dir = new DirectoryInfo(path);
-        FileInfo[] info = dir.GetFiles("*.*");
-        foreach(FileInfo fileInfo in info) {
-            if(fileInfo.Extension == ".ogg" || fileInfo.Extension == ".mp3" || fileInfo.Extension == ".wav") {
-                string fileName = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
-                string resourcesPath = path.Substring(path.IndexOf("Resources") + "Resources".Length + 1);
-                // Debug.Log("Found Sound Effect " + fileName);
-                // convert the file into an AudioClip for the AudioSource
-
-                AudioClip sound = Resources.Load<AudioClip>(resourcesPath + fileName);
-                if(sound != null) {
-                    // Debug.Log("Sound Effect Loaded!");
-                } else {
-                    // Debug.LogError("could not load sound effect " + resourcesPath + fileName);
-                }
-
-                soundPool.Add(sound);
-            }
-        }
-    }
-
-    // Add the specified AudioClip to this AudioEvent pool.
-    public void addSound(AudioClip clip) {
-        soundPool.Add(clip);
-    }
-
-    // Returns a randomly selected AudioClip from soundPool.
+    /// <summary>Returns a randomly selected AudioClip from SoundPool.</summary>
     public AudioClip poolSound() {
-        return soundPool[Random.Range(0, soundPool.Count)];
+        return SoundPool[Random.Range(0, SoundPool.Count)];
     }
 }
