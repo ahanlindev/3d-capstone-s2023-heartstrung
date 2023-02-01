@@ -57,6 +57,7 @@ public class hurtingBush : MonoBehaviour
         Debug.Log("bush is now dead");
 
         //The bush will no longer block the way, may apply change color or disable the whole cube.
-        GetComponent<BoxCollider>().enabled = false;
+        //GetComponent<BoxCollider>().enabled = false;
+        gameObject.SetActive(false);
     }
 }
