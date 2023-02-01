@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 
 // Attach this script to the LevelManager.
 // 
@@ -12,12 +13,11 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
     [SerializeField] public int numAudioSources = 5;
 
-    private string path = "Assets/Resources/SFX/";
-    private string resourcesPath = "SFX/";
-
-    private Dictionary<string, AudioClip> sounds = new Dictionary<string, AudioClip>();
+    private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
 
     private AudioSource[] audioSources = new AudioSource[5];
+    
+    private string resourcesPath = "Audio/SFX";
 
     void Awake() {
         // Singleton logic
@@ -27,42 +27,39 @@ public class AudioManager : MonoBehaviour
             instance = this;
         }
 
-        // Grab each existing sound effect from path
-        DirectoryInfo dir = new DirectoryInfo(path);
-        FileInfo[] info = dir.GetFiles("*.*");
-        foreach(FileInfo fileInfo in info) {
-            if(fileInfo.Extension == ".ogg") {
-                // Make the key in the AudioSources dictionary the file name minus the extension
-                string key = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf("."));
-                Debug.Log("Found Sound Effect " + key);
-                // convert the file into an AudioClip for the AudioSource
-
-                AudioClip sound = Resources.Load<AudioClip>(resourcesPath + key);
-                if(sound != null) {
-                    Debug.Log("Sound Effect Loaded!");
-                }
-                sounds.Add(key, sound);
-            }
-        }
-
         // Instantiate the AudioSources
         for(int i = 0; i < numAudioSources; i++) {
             audioSources[0] = gameObject.AddComponent<AudioSource>();
             audioSources[0].playOnAwake = false;
         }
 
+        // Don't destroy this between scenes
+        DontDestroyOnLoad(this.transform.parent.gameObject);
+
+        Debug.Log("Done loading sounds.");
+    }
+
+    void Start() {
+        // Get the AudioEvents pre-defined as children of this gameObject
+        AudioEvent[] audioEvents = GetComponentsInChildren<AudioEvent>();
+
+        // To make search faster and easier, make a dictionary
+        foreach(AudioEvent audioEvent in audioEvents) {
+            sounds.Add(audioEvent.EventName, audioEvent);
+        }
+
         // DEBUG: Print sounds dict to console
-        foreach(KeyValuePair<string, AudioClip> sound in sounds) {
+        foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
             Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
         }
     }
 
-    /// <summary>Attempts to play the sound effect identified by the name passed in.</summary>
-    /// <param name="sound">The name of the sound effect to play.</param>
-    public bool playSound(string sound) {
-        AudioClip soundToPlay = sounds[sound];
+    /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
+    /// <param name="sound">The name of the AudioPool to pool from.</param>
+    public bool playSoundEvent(string sound) {
+        AudioClip soundToPlay = sounds[sound].poolSound();
         if(soundToPlay == null) {
-            Debug.LogError(sound + " is not a sound effect!");
+            Debug.LogError(sound + " is not a sound event!");
             return false;
         }
         // find an available AudioSource to play the sound
@@ -72,6 +69,13 @@ public class AudioManager : MonoBehaviour
             }
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
+                // randomize pitch for  v a r i a t i o n (TM)
+                if(sounds[sound].PitchShift) {
+                    source.pitch = Random.Range(.75f, 1.25f);
+                } else {
+                    source.pitch = 1f;
+                    Debug.Log("not doing pitch shift for " + sound);
+                }
                 source.Play();
                 return true;
             }
