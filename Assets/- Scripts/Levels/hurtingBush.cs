@@ -42,7 +42,7 @@ public class hurtingBush : MonoBehaviour
             var heartComponent = other.GetComponent<Heart>();
             if (heartComponent != null)
             {
-                heartComponent.GetHurt();
+                //heartComponent.GetHurt(); // TODO implement heart hurt method
                 Rigidbody rb = other.GetComponent<Rigidbody>();
                 if (rb)
                     rb.AddExplosionForce(power, transform.position, radius, 3.0F);
