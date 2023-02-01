@@ -153,8 +153,8 @@ public class PlayerController : MonoBehaviour
     /// <param name="_">Input context. Unused.</param>
     private void OnPlayerAttack(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
-        StartCoroutine(ClawTimer());
-        claws.Claw(clawTime);
+        StartCoroutine(AttackTimer());
+        claws.Claw(attackTime);
         AudioManager.instance.playSoundEvent("KittyAttack");
     }
 
