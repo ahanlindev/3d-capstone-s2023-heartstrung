@@ -7,7 +7,7 @@ public class hurtingBush : MonoBehaviour
 
     private bool alive = true;
     public float radius = 5.0F;
-    public float power = 10.0F;
+    public float power = 5.0F;
     private HashSet<Transform> collidedBodies;
 
     // Start is called before the first frame update
@@ -22,32 +22,37 @@ public class hurtingBush : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (alive)
         {
 
-            // assume we have this PSM
-            var playerComponent = other.GetComponent<PlayerStateMachine>();
+            Debug.Log(other.transform.name);
+            var playerComponent = other.gameObject.GetComponent<PlayerStateMachine>();
             if (playerComponent != null)
             {
+                Debug.Log("Hit");
                 playerComponent.GetHurt();
 
-                Rigidbody rb = other.GetComponent<Rigidbody>();
+                Rigidbody rb = other.gameObject.GetComponent< Rigidbody>();
                 if (rb)
-                    rb.AddExplosionForce(power, transform.position, radius, 3.0F);
-                return;
+                {
+                    Debug.Log("pushed");
+                    Vector3 dir = other.transform.position - transform.position;
+                    rb.AddForce(dir.normalized * power, ForceMode.VelocityChange);
+                }
+     
             }
 
-            var heartComponent = other.GetComponent<Heart>();
-            if (heartComponent != null)
-            {
-                heartComponent.GetHurt();
-                Rigidbody rb = other.GetComponent<Rigidbody>();
-                if (rb)
-                    rb.AddExplosionForce(power, transform.position, radius, 3.0F);
-                return;
-            }
+            //var heartComponent = other.GetComponent<Heart>();
+            //if (heartComponent != null)
+            //{
+            //    heartComponent.GetHurt();
+            //    Rigidbody rb = other.GetComponent<Rigidbody>();
+            //    if (rb)
+            //        rb.AddExplosionForce(power, transform.position, radius, 3.0F);
+            //    return;
+            //}
         }
     }
 
@@ -57,6 +62,6 @@ public class hurtingBush : MonoBehaviour
         Debug.Log("bush is now dead");
 
         //The bush will no longer block the way, may apply change color or disable the whole cube.
-        GetComponent<BoxCollider>().enabled = false;
+        Destroy(gameObject);
     }
 }
