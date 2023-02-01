@@ -3,6 +3,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
+    /// <summary>State where the player is charging a fling</summary>
     public class Charging : State
     {
         public Charging(PlayerStateMachine stateMachine) : base("Charging", stateMachine) { }

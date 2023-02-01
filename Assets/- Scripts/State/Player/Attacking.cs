@@ -4,6 +4,7 @@ using DG.Tweening;
 
 namespace Player
 {
+    /// <summary>State where the player is performing an attack</summary>
     public class Attacking : State
     {
         public Attacking(PlayerStateMachine stateMachine) : base("Attacking", stateMachine) { }

@@ -3,15 +3,10 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
+    /// <summary>State where the player is on the ground and actively in motion</summary>
     public class Moving : State
     {
         public Moving(PlayerStateMachine stateMachine) : base("Moving", stateMachine) { }
-
-        public override void UpdateLogic() => base.UpdateLogic();
-        protected override void OnPlayerFinishFling(CallbackContext _) => base.OnPlayerFinishFling(_);
-        protected override void OnHurt() => base.OnHurt();
-        protected override void OnDie() => base.OnDie();
-        protected override void OnHeartLanded() => base.OnHeartLanded();
 
         public override void Enter()
         {

@@ -3,6 +3,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
+    /// <summary>State where the player is airborne, but did leave the ground via jumping</summary>
     public class Falling : State
     {
         public Falling(PlayerStateMachine stateMachine) : base("Falling", stateMachine) { }

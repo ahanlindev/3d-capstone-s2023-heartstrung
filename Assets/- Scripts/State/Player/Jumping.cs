@@ -4,6 +4,7 @@ using DG.Tweening;
 
 namespace Player
 {
+    /// <summary>State where the player has left the ground by jumping</summary>
     public class Jumping : State
     {
         /// <summary> Used to prevent ground check from passing right after jump is pressed.</summary>

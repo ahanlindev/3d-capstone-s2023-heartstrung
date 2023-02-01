@@ -3,6 +3,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
+    /// <summary>State where the player is actively flinging, and waiting for the heart to land.</summary>
     public class Flinging : State
     {
         public Flinging(PlayerStateMachine stateMachine) : base("Flinging", stateMachine) { }

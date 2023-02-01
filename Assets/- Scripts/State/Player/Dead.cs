@@ -3,6 +3,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
+    /// <summary>State where the player is dead and cannot perform other actions</summary>
     public class Dead : State
     {
         public Dead(PlayerStateMachine stateMachine) : base("Dead", stateMachine) { }

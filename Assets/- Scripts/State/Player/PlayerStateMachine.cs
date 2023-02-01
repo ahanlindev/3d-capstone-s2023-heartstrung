@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>Runs player states and contains information required to maintain those states.</summary>
 public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events

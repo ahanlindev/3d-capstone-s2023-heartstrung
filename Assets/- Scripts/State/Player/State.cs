@@ -3,7 +3,8 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
 {
-    public class State : BaseState
+    /// <summary>Ties each substate to the player StateMachine, and handles input/animation upkeep</summary>
+    public abstract class State : BaseState
     {
         // BaseState has _stateMachine, but this casts it to PlayerStateMachine
         protected PlayerStateMachine _stateMachine { get => (PlayerStateMachine)_baseStateMachine; }

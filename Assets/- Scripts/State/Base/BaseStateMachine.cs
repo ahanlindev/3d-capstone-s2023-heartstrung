@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class BaseStateMachine : MonoBehaviour
+/// <summary>Component that runs logic drawn from its current state</summary>
+public abstract class BaseStateMachine : MonoBehaviour
 {
     private BaseState _currentState;
 
@@ -23,15 +24,7 @@ public class BaseStateMachine : MonoBehaviour
     public void ChangeState(BaseState newState)
     {
         _currentState.Exit();
-
         _currentState = newState;
         _currentState.Enter();
-    }
-
-    // Debug. TODO remove when unnecessary
-    private void OnGUI()
-    {
-        string stateName = (_currentState != null) ? _currentState.name : "Null State!";
-        GUILayout.Label($"<size=40><color=black>Current State:</color> <color=blue>{stateName}</color></size>");
     }
 }

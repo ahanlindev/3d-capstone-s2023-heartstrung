@@ -5,6 +5,7 @@ using DG.Tweening;
 
 namespace Player
 {
+    /// <summary>State where the player is temporarily immobilized by being hurt.</summary>
     public class Hurt : State
     {
         public Hurt(PlayerStateMachine stateMachine) : base("Hurt", stateMachine) { }
