@@ -15,6 +15,9 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
+            // play sound
+            AudioManager.instance.playSoundEvent("KittyJump");
+
 
             // apply appropriate force to jump
             Vector3 jumpVec = _stateMachine.transform.up * _stateMachine.jumpPower;

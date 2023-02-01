@@ -15,6 +15,10 @@ namespace Player
             // perform attack
             _stateMachine.claws.Claw(_stateMachine.attackTime);
 
+            // play sound
+            AudioManager.instance.playSoundEvent("KittyAttack");
+
+
             // return to idle when done
             DOVirtual.DelayedCall(
                 delay: _stateMachine.attackTime,
