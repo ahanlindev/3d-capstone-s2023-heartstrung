@@ -154,8 +154,8 @@ public class PlayerController : MonoBehaviour
     private void OnPlayerAttack(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
 
-        StartCoroutine(ClawTimer());
-        claws.Claw(clawTime);
+        StartCoroutine(AttackTimer());
+        claws.Claw(attackTime);
         AudioManager.instance.playSound("KittyAttack");
     }
 
@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
-        AudioManager.instance.playSound("KittyJump");
+        //AudioManager.instance.playSound("KittyJump");
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
