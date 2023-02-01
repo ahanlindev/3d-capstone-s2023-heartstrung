@@ -153,10 +153,9 @@ public class PlayerController : MonoBehaviour
     /// <param name="_">Input context. Unused.</param>
     private void OnPlayerAttack(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
-
-        StartCoroutine(ClawTimer());
-        claws.Claw(clawTime);
-        AudioManager.instance.playSound("KittyAttack");
+        StartCoroutine(AttackTimer());
+        claws.Claw(attackTime);
+        AudioManager.instance.playSoundEvent("KittyAttack");
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
@@ -198,7 +197,7 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
-        AudioManager.instance.playSound("KittyJump");
+        AudioManager.instance.playSoundEvent("KittyJump");
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
@@ -229,7 +228,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnHeartLanded() {
         TryChangeState(State.IDLE);
-        AudioManager.instance.playSound("DodgerLand");
+        AudioManager.instance.playSoundEvent("DodgerLand");
     }
 
     // State management
@@ -287,8 +286,7 @@ public class PlayerController : MonoBehaviour
 
         currentState = newState;
         if(newState == State.FLINGING) {
-            AudioManager.instance.playSound("DodgerFling");
-            // AudioManager.instance.playSound("no");
+            AudioManager.instance.playSoundEvent("DodgerFling");
         }
         return true;
     }

@@ -44,6 +44,7 @@ public class hurtingBush : MonoBehaviour
      
             }
 
+
             //var heartComponent = other.GetComponent<Heart>();
             //if (heartComponent != null)
             //{
@@ -53,6 +54,7 @@ public class hurtingBush : MonoBehaviour
             //        rb.AddExplosionForce(power, transform.position, radius, 3.0F);
             //    return;
             //}
+
         }
     }
 
@@ -62,6 +64,7 @@ public class hurtingBush : MonoBehaviour
         Debug.Log("bush is now dead");
 
         //The bush will no longer block the way, may apply change color or disable the whole cube.
+
         Destroy(gameObject);
     }
 }
