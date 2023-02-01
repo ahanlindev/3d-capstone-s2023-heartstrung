@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The heart that is connected to this player")]
     [SerializeField] private Heart heart;
 
-    [Tooltip("Amount of time in seconds that the player will take when clawing")]
-    [SerializeField] private float clawTime = 0.5f;
+    [Tooltip("Amount of time in seconds that the player will take when attacking")]
+    [SerializeField] private float attackTime = 0.5f;
 
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float moveSpeed = 2f;
@@ -88,27 +88,27 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnEnable() {
-        inputActions.Gameplay.Claw.performed += OnPlayerClaw;
+        inputActions.Gameplay.Attack.performed += OnPlayerAttack;
         inputActions.Gameplay.Fling.performed += OnStartFling;
         inputActions.Gameplay.Fling.canceled += OnFinishFling;
         inputActions.Gameplay.Jump.performed += OnPlayerJump;
 
-        Heart.LandedEvent += OnHeartLanded;
+        heart.LandedEvent += OnHeartLanded;
     }
 
     private void OnDisable() {
-        inputActions.Gameplay.Claw.performed -= OnPlayerClaw;
+        inputActions.Gameplay.Attack.performed -= OnPlayerAttack;
         inputActions.Gameplay.Fling.performed -= OnStartFling;
         inputActions.Gameplay.Fling.canceled -= OnFinishFling;
         inputActions.Gameplay.Jump.performed -= OnPlayerJump;
-        Heart.LandedEvent -= OnHeartLanded;
+        heart.LandedEvent -= OnHeartLanded;
     }
 
     // Update functions
 
     private void FixedUpdate() {
         // Movement needs to be done here because this is the best way to get continuous input
-        var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>();
+        var moveVect = inputActions.Gameplay.Move.ReadValue<Vector2>();
         
         // if player can move, move them
         if (moveVect != Vector2.zero ) {
@@ -148,10 +148,10 @@ public class PlayerController : MonoBehaviour
 
     // Input handlers
 
-    // For some reason, throws an error if name is "DoClaw"
-    /// <summary>If the player is able to claw, does so</summary>
+    // For some reason, throws an error if name is "DoAttack"
+    /// <summary>If the player is able to attack, does so</summary>
     /// <param name="_">Input context. Unused.</param>
-    private void OnPlayerClaw(InputAction.CallbackContext context) {
+    private void OnPlayerAttack(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
         StartCoroutine(ClawTimer());
         claws.Claw(clawTime);
@@ -159,8 +159,8 @@ public class PlayerController : MonoBehaviour
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
-    private IEnumerator ClawTimer() {
-        yield return new WaitForSeconds(clawTime);
+    private IEnumerator AttackTimer() {
+        yield return new WaitForSeconds(attackTime);
         TryChangeState(State.IDLE);
     }
 
