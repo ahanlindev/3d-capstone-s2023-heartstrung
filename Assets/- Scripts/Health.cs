@@ -29,6 +29,9 @@ public class Health : MonoBehaviour
     /// </summary>
     public void ChangeHealth(float delta) {
         CurrentHealth += delta;
+
+        // impose upper limit on health
+        CurrentHealth = Mathf.Clamp(CurrentHealth, CurrentHealth, _maxHealth);
         ChangeHealthEvent?.Invoke(CurrentHealth, delta);
     }
 }
