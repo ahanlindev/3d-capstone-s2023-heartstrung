@@ -32,8 +32,8 @@ public class PlayerStateMachine : BaseStateMachine
 
     // Inspector-visible values
     [Tooltip("Heart connected to this player")]
-    [SerializeField] private Heart _heart;
-    public Heart heart { get => _heart; private set => _heart = value; }
+    [SerializeField] private OldHeart _heart;
+    public OldHeart heart { get => _heart; private set => _heart = value; }
 
     // TODO this is sloppy. Refactor soon.
     [Tooltip("Amount of time in seconds that the player will be in the attack state")]

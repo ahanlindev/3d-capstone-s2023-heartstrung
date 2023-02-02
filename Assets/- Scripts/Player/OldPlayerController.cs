@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(ConfigurableJoint))]
-public class PlayerController : MonoBehaviour
+public class OldPlayerController : MonoBehaviour
 {
     // Order is used by animator. If new states need to be added, append them
     private enum State { IDLE, MOVING, ATTACKING, CHARGING, FLINGING, DEAD };
     
     // editable fields
     [Tooltip("The heart that is connected to this player")]
-    [SerializeField] private Heart heart;
+    [SerializeField] private OldHeart heart;
 
     [Tooltip("Amount of time in seconds that the player will take when attacking")]
     [SerializeField] private float attackTime = 0.5f;

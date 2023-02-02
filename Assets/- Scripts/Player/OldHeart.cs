@@ -4,13 +4,13 @@ using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-public class Heart : MonoBehaviour
+public class OldHeart : MonoBehaviour
 {
     private enum State { IDLE, FLUNG, FALLING, HURT, DEAD };
 
     // inspector fields
     [Tooltip("PlayerController instance for the player attached to this object")]
-    [SerializeField] private PlayerController player;
+    [SerializeField] private OldPlayerController player;
     
     [Tooltip("Linear speed along the arc that the heart will fly through the air in units per second")]
     [SerializeField] private float flingSpeed = 10;
@@ -46,12 +46,12 @@ public class Heart : MonoBehaviour
     }
 
     private void OnEnable() {
-        PlayerController.flingEvent += OnPlayerFling;
+        OldPlayerController.flingEvent += OnPlayerFling;
         BattleManager.kittyTakeDmgEvent += OnTakeDamage;
     }
 
     private void OnDisable() {
-        PlayerController.flingEvent -= OnPlayerFling;
+        OldPlayerController.flingEvent -= OnPlayerFling;
         BattleManager.kittyTakeDmgEvent -= OnTakeDamage;
 
     }
