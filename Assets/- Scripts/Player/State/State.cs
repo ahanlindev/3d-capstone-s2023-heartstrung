@@ -6,7 +6,8 @@ namespace Player
     /// <summary>Ties each substate to the player StateMachine, and handles input/animation upkeep</summary>
     public abstract class State : BaseState
     {
-        // BaseState has _stateMachine, but this casts it to PlayerStateMachine
+        // BaseState has _baseStateMachine, but this casts it to PlayerStateMachine
+        /// <summary>State machine for gathering information and operating on state</summary>
         protected PlayerStateMachine _stateMachine { get => (PlayerStateMachine)_baseStateMachine; }
 
         public State(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }

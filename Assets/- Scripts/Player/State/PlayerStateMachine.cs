@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events
-    public event System.Action PlayerHurtEvent;
+    public event System.Action PlayerHurtEvent; // Todo replace with heart's health event once implemented
+    public event System.Action FlingEvent; // Todo replace with heart's health event once implemented
 
     // Possible States
     public Player.Idle idleState { get; private set; }
