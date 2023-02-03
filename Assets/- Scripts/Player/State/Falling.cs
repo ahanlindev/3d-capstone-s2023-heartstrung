@@ -25,10 +25,10 @@ namespace Player
             base.OnPlayerAttack(_);
         }
 
-        protected override void OnPlayerStartFling(CallbackContext _)
+        protected override void OnPlayerStartCharge(CallbackContext _)
         {
             // TODO should the player be able to fling in midair?
-            base.OnPlayerStartFling(_);
+            base.OnPlayerStartCharge(_);
         }
 
         protected override void HandlePlayerMove(Vector3 moveVector)

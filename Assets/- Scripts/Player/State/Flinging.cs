@@ -10,47 +10,17 @@ namespace Player
 
         public override void Enter()
         {
-            base.Enter();
+            _stateMachine.FlingEvent?.Invoke();
         }
 
-        public override void UpdateLogic()
+        protected override void OnHurt()
         {
-            base.UpdateLogic();
+            _stateMachine.FlingInterruptedEvent?.Invoke();
         }
 
-        public override void UpdatePhysics()
+        protected override void OnPlayerFinishCharge(CallbackContext _)
         {
-            base.UpdatePhysics();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-        }
-
-        protected override void OnPlayerAttack(CallbackContext _)
-        {
-            base.OnPlayerAttack(_);
-        }
-
-        protected override void OnPlayerJump(CallbackContext _)
-        {
-            base.OnPlayerJump(_);
-        }
-
-        protected override void OnPlayerStartFling(CallbackContext _)
-        {
-            base.OnPlayerStartFling(_);
-        }
-
-        protected override void OnPlayerFinishFling(CallbackContext _)
-        {
-            base.OnPlayerFinishFling(_);
-        }
-
-        protected override void HandlePlayerMove(Vector3 moveVector)
-        {
-            base.HandlePlayerMove(moveVector);
+            base.OnPlayerFinishCharge(_);
         }
     }
 }

@@ -22,11 +22,11 @@ namespace Player
 
         /// <summary>Event handler for when the player performs a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerStartFling(CallbackContext _) { }
+        protected virtual void OnPlayerStartCharge(CallbackContext _) { }
 
         /// <summary>Event handler for when the player finishes performing a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerFinishFling(CallbackContext _) { }
+        protected virtual void OnPlayerFinishCharge(CallbackContext _) { }
 
         /// <summary>Event handler for when the player gets hurt by something. Override to ignore or change base behavior.</summary>
         protected virtual void OnHurt() { _stateMachine.ChangeState(_stateMachine.hurtState); }
@@ -48,8 +48,8 @@ namespace Player
             // subscribe to events
             _stateMachine.attackInput.performed += OnPlayerAttack;
             _stateMachine.jumpInput.performed += OnPlayerJump;
-            _stateMachine.flingInput.performed += OnPlayerStartFling;
-            _stateMachine.flingInput.canceled += OnPlayerFinishFling;
+            _stateMachine.flingInput.performed += OnPlayerStartCharge;
+            _stateMachine.flingInput.canceled += OnPlayerFinishCharge;
             _stateMachine.PlayerHurtEvent += OnHurt;
 
             if (_stateMachine.heart)
@@ -78,8 +78,8 @@ namespace Player
             // unsubscribe to input events
             _stateMachine.attackInput.performed -= OnPlayerAttack;
             _stateMachine.jumpInput.performed -= OnPlayerJump;
-            _stateMachine.flingInput.performed -= OnPlayerStartFling;
-            _stateMachine.flingInput.canceled -= OnPlayerFinishFling;
+            _stateMachine.flingInput.performed -= OnPlayerStartCharge;
+            _stateMachine.flingInput.canceled -= OnPlayerFinishCharge;
             _stateMachine.PlayerHurtEvent -= OnHurt;
 
             if (_stateMachine.heart)

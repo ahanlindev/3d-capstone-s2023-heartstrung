@@ -38,14 +38,14 @@ namespace Player
             base.OnPlayerJump(_);
         }
 
-        protected override void OnPlayerStartFling(CallbackContext _)
+        protected override void OnPlayerStartCharge(CallbackContext _)
         {
-            base.OnPlayerStartFling(_);
+            base.OnPlayerStartCharge(_);
         }
 
-        protected override void OnPlayerFinishFling(CallbackContext _)
+        protected override void OnPlayerFinishCharge(CallbackContext _)
         {
-            base.OnPlayerFinishFling(_);
+            base.OnPlayerFinishCharge(_);
         }
 
         protected override void HandlePlayerMove(Vector3 moveVector)

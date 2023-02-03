@@ -29,9 +29,9 @@ namespace Player
             _stateMachine.ChangeState(_stateMachine.jumpingState);
         }
 
-        protected override void OnPlayerStartFling(CallbackContext _)
+        protected override void OnPlayerStartCharge(CallbackContext _)
         {
-            base.OnPlayerStartFling(_);
+            base.OnPlayerStartCharge(_);
 
             // cannot fling if there is no heart set
             if (_stateMachine.heart)
