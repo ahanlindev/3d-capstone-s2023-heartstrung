@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The heart that is connected to this player")]
     [SerializeField] private Heart heart;
 
-    [Tooltip("Amount of time in seconds that the player will take when clawing")]
-    [SerializeField] private float clawTime = 0.5f;
+    [Tooltip("Amount of time in seconds that the player will take when attacking")]
+    [SerializeField] private float attackTime = 0.5f;
 
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float moveSpeed = 2f;
@@ -43,21 +43,6 @@ public class PlayerController : MonoBehaviour
 
     // player's animator component
     private Animator anim;
-
-    // Audio emitter for Kitty
-    private AudioSource audioSource;
-
-    // Sound effect for kitty jumping
-    public AudioClip jumpAudioClip;
-
-    // Sound effect for Dodger landing
-    public AudioClip dodgerLandAudioClip;
-
-    // Sound effect for Dodger being flung
-    public AudioClip dodgerFlingAudioClip;
-
-    // Sound effect for Kitty attacking
-    public AudioClip kittyAttackAudioClip;
     
     // Claw component in child
     private Claws claws;
@@ -87,7 +72,6 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<Collider>();
         anim = GetComponentInChildren<Animator>();
         claws = GetComponentInChildren<Claws>();
-        audioSource = GetComponent<AudioSource>();
 
         // validate non-guaranteed values
         if (!anim) {Debug.LogError("Player script cannot find Animator component in children"); }
@@ -104,27 +88,27 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnEnable() {
-        inputActions.Gameplay.Claw.performed += OnPlayerClaw;
+        inputActions.Gameplay.Attack.performed += OnPlayerAttack;
         inputActions.Gameplay.Fling.performed += OnStartFling;
         inputActions.Gameplay.Fling.canceled += OnFinishFling;
         inputActions.Gameplay.Jump.performed += OnPlayerJump;
 
-        Heart.LandedEvent += OnHeartLanded;
+        heart.LandedEvent += OnHeartLanded;
     }
 
     private void OnDisable() {
-        inputActions.Gameplay.Claw.performed -= OnPlayerClaw;
+        inputActions.Gameplay.Attack.performed -= OnPlayerAttack;
         inputActions.Gameplay.Fling.performed -= OnStartFling;
         inputActions.Gameplay.Fling.canceled -= OnFinishFling;
         inputActions.Gameplay.Jump.performed -= OnPlayerJump;
-        Heart.LandedEvent -= OnHeartLanded;
+        heart.LandedEvent -= OnHeartLanded;
     }
 
     // Update functions
 
     private void FixedUpdate() {
         // Movement needs to be done here because this is the best way to get continuous input
-        var moveVect = inputActions.Gameplay.Movement.ReadValue<Vector2>();
+        var moveVect = inputActions.Gameplay.Move.ReadValue<Vector2>();
         
         // if player can move, move them
         if (moveVect != Vector2.zero ) {
@@ -164,20 +148,19 @@ public class PlayerController : MonoBehaviour
 
     // Input handlers
 
-    // For some reason, throws an error if name is "DoClaw"
-    /// <summary>If the player is able to claw, does so</summary>
+    // For some reason, throws an error if name is "DoAttack"
+    /// <summary>If the player is able to attack, does so</summary>
     /// <param name="_">Input context. Unused.</param>
-    private void OnPlayerClaw(InputAction.CallbackContext context) {
+    private void OnPlayerAttack(InputAction.CallbackContext context) {
         if (!TryChangeState(State.ATTACKING)) { return; }
-        StartCoroutine(ClawTimer());
-        claws.Claw(clawTime);
-        audioSource.clip = kittyAttackAudioClip;
-        audioSource.Play();
+        StartCoroutine(AttackTimer());
+        claws.Claw(attackTime);
+        AudioManager.instance.playSoundEvent("KittyAttack");
     }
 
     // TODO: this timer is a sloppy way of deciding how long an attack lasts. Should figure out based on animation itself
-    private IEnumerator ClawTimer() {
-        yield return new WaitForSeconds(clawTime);
+    private IEnumerator AttackTimer() {
+        yield return new WaitForSeconds(attackTime);
         TryChangeState(State.IDLE);
     }
 
@@ -214,8 +197,7 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("JumpStart");
         Vector3 jumpVec = transform.up * jumpPower;
         rbody.AddForce(jumpVec, ForceMode.Impulse);
-        audioSource.clip = jumpAudioClip;
-        audioSource.Play();
+        AudioManager.instance.playSoundEvent("KittyJump");
     }
 
     /// <summary>Performs per-physics-tick movement based on player movement input</summary>
@@ -246,8 +228,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void OnHeartLanded() {
         TryChangeState(State.IDLE);
-        audioSource.clip = dodgerLandAudioClip;
-        audioSource.Play();
+        AudioManager.instance.playSoundEvent("DodgerLand");
     }
 
     // State management
@@ -305,8 +286,7 @@ public class PlayerController : MonoBehaviour
 
         currentState = newState;
         if(newState == State.FLINGING) {
-            audioSource.clip = dodgerFlingAudioClip;
-            audioSource.Play();
+            AudioManager.instance.playSoundEvent("DodgerFling");
         }
         return true;
     }

@@ -35,7 +35,7 @@ public class Heart : MonoBehaviour
     private float initialFlingRadius;
 
     // Emitted events
-    public static event Action LandedEvent;
+    public event Action LandedEvent;
 
     // Setup/Teardown
     private void Awake() {

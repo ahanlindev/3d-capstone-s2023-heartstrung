@@ -24,5 +24,11 @@ public class Claws : MonoBehaviour
         if (enemy) {
             enemy.OnDead();
         }
+
+        var hurtingbush = other.gameObject.GetComponent<hurtingBush>();
+        if (hurtingbush)
+        {
+            hurtingbush.bushDie();
+        }
     }
 }
