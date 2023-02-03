@@ -22,7 +22,7 @@ public class AudioManager : MonoBehaviour
     void Awake() {
         // Singleton logic
         if(instance != null && instance != this) {
-            Destroy(this);
+            Destroy(this.gameObject);
         } else {
             instance = this;
         }
@@ -33,10 +33,7 @@ public class AudioManager : MonoBehaviour
             audioSources[0].playOnAwake = false;
         }
 
-        // Don't destroy this between scenes
-        DontDestroyOnLoad(this.transform.parent.gameObject);
-
-        Debug.Log("Done loading sounds.");
+        // Debug.Log("Done loading sounds.");
     }
 
     void Start() {
@@ -48,10 +45,10 @@ public class AudioManager : MonoBehaviour
             sounds.Add(audioEvent.EventName, audioEvent);
         }
 
-        // DEBUG: Print sounds dict to console
-        foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
-            Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
-        }
+        // // DEBUG: Print sounds dict to console
+        // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
+        //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
+        // }
     }
 
     /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
@@ -74,7 +71,7 @@ public class AudioManager : MonoBehaviour
                     source.pitch = Random.Range(.75f, 1.25f);
                 } else {
                     source.pitch = 1f;
-                    Debug.Log("not doing pitch shift for " + sound);
+                    // Debug.Log("not doing pitch shift for " + sound);
                 }
                 source.Play();
                 return true;
