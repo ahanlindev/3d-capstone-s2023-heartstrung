@@ -35,7 +35,7 @@ namespace BehaviorTree
         private void _Attach(Node node)
         {
             node.parent = this;
-            chldren.Add(node);
+            children.Add(node);
         }
 
         public void SetData(string key, object value)
