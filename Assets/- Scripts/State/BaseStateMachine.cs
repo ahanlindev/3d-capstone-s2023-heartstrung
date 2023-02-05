@@ -18,13 +18,19 @@ public abstract class BaseStateMachine : MonoBehaviour
     // perform whatever per-physics-tick logic the current state demands
     private void FixedUpdate() => _currentState?.UpdatePhysics();
 
-    /// <summary>Returns the desired initial state for the state machine. In the base class, this is null.</summary>
-    protected virtual BaseState GetInitialState() { return null; }
+    /// <summary>Returns the desired initial state for the state machine.</summary>
+    protected abstract BaseState GetInitialState();
 
     public void ChangeState(BaseState newState)
     {
         _currentState.Exit();
         _currentState = newState;
         _currentState.Enter();
+    }
+
+    // DEBUG
+    protected virtual void OnGUI() {
+        string content = _currentState != null ? _currentState.name : "(no current state)";
+        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
     }
 }

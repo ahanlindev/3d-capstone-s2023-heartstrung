@@ -8,19 +8,38 @@ namespace Player
     {
         public Flinging(PlayerStateMachine stateMachine) : base("Flinging", stateMachine) { }
 
+        private bool _heartHasLanded = false;
+
         public override void Enter()
         {
-            _stateMachine.FlingEvent?.Invoke();
+            base.Enter();
+            _heartHasLanded = false;
+
+            Transform tf = _stateMachine.transform;
+            Transform heartTf = _stateMachine.heart.transform;
+
+            // face player directly away from the heart
+            Vector3 vecToHeart = heartTf.position - tf.position;
+            vecToHeart.y = 0.0f; // don't want to rotate player too much
+            _stateMachine.rbody.MoveRotation(Quaternion.LookRotation(-vecToHeart, tf.up));
+
+            _stateMachine.FlingEvent?.Invoke(1.0f);
         }
 
-        protected override void OnHurt()
+        public override void Exit()
         {
-            _stateMachine.FlingInterruptedEvent?.Invoke();
+            base.Exit();
+            if (!_heartHasLanded)
+            {
+                _stateMachine.FlingInterruptedEvent?.Invoke();
+            }
         }
 
-        protected override void OnPlayerFinishCharge(CallbackContext _)
+        protected override void OnHeartLanded()
         {
-            base.OnPlayerFinishCharge(_);
+            base.OnHeartLanded();
+            _heartHasLanded = true;
+            _stateMachine.ChangeState(_stateMachine.idleState);
         }
     }
 }

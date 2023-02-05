@@ -8,7 +8,16 @@ public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events
     public event Action PlayerHurtEvent; // Todo replace with heart's health event once implemented
-    public Action FlingEvent; 
+    
+    /// <summary>
+    /// Event emitted when the player executes a fling. 
+    /// First parameter is percentage fling power. 
+    /// </summary>
+    public Action<float> FlingEvent; 
+
+    /// <summary>
+    ///Event emitted when the player is interrupted while in the flinging state
+    /// </summary>
     public Action FlingInterruptedEvent;
 
     // Possible States
@@ -35,8 +44,8 @@ public class PlayerStateMachine : BaseStateMachine
 
     // Inspector-visible values
     [Tooltip("Heart connected to this player")]
-    [SerializeField] private OldHeart _heart;
-    public OldHeart heart { get => _heart; private set => _heart = value; }
+    [SerializeField] private HeartStateMachine _heart;
+    public HeartStateMachine heart { get => _heart; private set => _heart = value; }
 
     // TODO this is sloppy. Refactor soon.
     [Tooltip("Amount of time in seconds that the player will be in the attack state")]
@@ -97,6 +106,14 @@ public class PlayerStateMachine : BaseStateMachine
         anim = GetComponentInChildren<Animator>();
         claws = GetComponentInChildren<Claws>();
 
+        // initialize tether (TODO this should either be a method or done elsewhere)
+        var tether = GetComponent<ConfigurableJoint>();
+        if (tether) {
+            var tetherLimit = tether.linearLimit;
+            tetherLimit.limit = maxTetherLength;
+            tether.linearLimit = tetherLimit;
+        }
+
         // validate non-guaranteed values
         if (!anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
         if (!claws) { Debug.LogError("PlayerStateMachine cannot find Claws component in children"); }
@@ -139,5 +156,10 @@ public class PlayerStateMachine : BaseStateMachine
     {
         var matchingParams = anim.parameters.Where((param) => param.name == paramName);
         return matchingParams.Count() > 0;
+    }
+
+    // DEBUG
+    protected override void OnGUI() {
+        
     }
 }

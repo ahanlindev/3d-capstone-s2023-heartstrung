@@ -16,41 +16,13 @@ namespace Player
         public override void UpdateLogic()
         {
             base.UpdateLogic();
-        }
-
-        public override void UpdatePhysics()
-        {
-            base.UpdatePhysics();
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-        }
-
-        protected override void OnPlayerAttack(CallbackContext _)
-        {
-            base.OnPlayerAttack(_);
-        }
-
-        protected override void OnPlayerJump(CallbackContext _)
-        {
-            base.OnPlayerJump(_);
-        }
-
-        protected override void OnPlayerStartCharge(CallbackContext _)
-        {
-            base.OnPlayerStartCharge(_);
+            // TODO incorporate charging/targeting
         }
 
         protected override void OnPlayerFinishCharge(CallbackContext _)
         {
             base.OnPlayerFinishCharge(_);
-        }
-
-        protected override void HandlePlayerMove(Vector3 moveVector)
-        {
-            base.HandlePlayerMove(moveVector);
+            _stateMachine.ChangeState(_stateMachine.flingingState);
         }
     }
 }
