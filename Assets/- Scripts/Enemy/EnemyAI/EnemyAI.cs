@@ -6,6 +6,7 @@ using BehaviorTree;
 public class EnemyAI : BTree
 {
     public NavMeshAgent _agent;
+
     public UnityEngine.Transform[] waypoints;
 
     public Health _health;
@@ -18,11 +19,14 @@ public class EnemyAI : BTree
 
     public bool _dead = false;
 
+    public EnemyClaw _enemyClaw;
+
 
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _health = GetComponent<Health>();
+        _enemyClaw = GetComponent<EnemyClaw>();
     }
 
     private void OnEnable()
@@ -37,51 +41,32 @@ public class EnemyAI : BTree
 
     private void OnChangeHealth(float newTotal, float delta)
     {
-        if (newTotal <= 0)
-        {
+        if (newTotal  <= 0) {
             _dead = true;
-        }
-        else
-        {
-
         }
     }
 
-    protected override Node SetupTree()
+    protected override Node SetupTree() 
     {
         Node root = new Selector(new List<Node>
             {
-            new Sequence(new List<Node>
+             new Sequence(new List<Node>
                 {
-                new CheckFOVRange(_agent),
+                    new TakeHit(_health, _dead),
+                    new KO(_agent),
+            }),
+             new Sequence(new List<Node>
+                {
+                new CheckPlayerInRange(_agent),
+                new Attack(_agent, _enemyClaw),
+            }), 
+             new Sequence(new List<Node>
+                {new CheckFOVRange(_agent),
                 new GoToPlayer(_agent),
             }), 
-            new Patrol(_agent, waypoints),
+             new Patrol(_agent, waypoints),
         });
+
         return root;
     }
-
-
-    // protected override Node SetupTree() 
-    // {
-    //     Node root = new Selector(new List<Node>
-    //         {new Sequence(new List<Node>
-    //             {
-                //     new TakeHit(),
-                //     new KO(),
-                // }),
-            //  new Sequence(new List<Node>
-                // {
-                // new CheckPlayerInRange(transform),
-    //             new Attack(transform),
-    //         }), 
-    //         new Sequence(new List<Node>
-    //             {new CheckFOVRange(transform),
-    //             new GoToPlayer(transform),
-    //         }), 
-    //         new Patrol(transform, waypoints),
-    //     });
-
-    //     return root;
-    // }
 }

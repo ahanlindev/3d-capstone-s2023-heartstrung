@@ -23,7 +23,7 @@ public class EnemyClaw : MonoBehaviour
         Debug.Log($"Enemy claws collided with {other.gameObject.name}");
         var Dodge = other.gameObject.GetComponent<Heart>();
         if (Dodge) {
-            BattleManager.Instance.KittyTakeDmg();
+            
         }
     }
 }

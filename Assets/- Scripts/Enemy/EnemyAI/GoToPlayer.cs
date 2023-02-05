@@ -18,8 +18,8 @@ public class GoToPlayer : Node
         Transform player = (Transform)GetData("player");
 
         if (Vector3.Distance(_agent.transform.position, player.position) > 0.01f) {
-            _agent.transform.position = Vector3.MoveTowards(_agent.transform.position, player.position, EnemyAI.speed * Time.deltaTime);
-            _agent.transform.LookAt(player.position);
+            _agent.destination = player.position;
+            _agent.transform.LookAt(new Vector3(player.position.x, _agent.transform.position.y, player.position.z));
         }
 
         state = NodeState.RUNNING;
