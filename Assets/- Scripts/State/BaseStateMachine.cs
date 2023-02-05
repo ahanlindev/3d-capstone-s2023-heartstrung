@@ -27,10 +27,4 @@ public abstract class BaseStateMachine : MonoBehaviour
         _currentState = newState;
         _currentState.Enter();
     }
-
-    // DEBUG
-    protected virtual void OnGUI() {
-        string content = _currentState != null ? _currentState.name : "(no current state)";
-        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
-    }
 }
