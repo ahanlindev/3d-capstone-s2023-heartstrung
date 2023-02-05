@@ -6,11 +6,11 @@ using BehaviorTree;
 
 public class CheckPlayerInRange : Node
 {
-    private Transform _transform;
+    private UnityEngine.AI.NavMeshAgent _agent;
 
-    public CheckPlayerInRange(Transform transform)
+    public CheckPlayerInRange(UnityEngine.AI.NavMeshAgent agent)
     {
-        _transform = transform;
+        _agent = agent;
     }
 
     public override NodeState Evaluate()
@@ -22,7 +22,7 @@ public class CheckPlayerInRange : Node
         }
 
         Transform player = (Transform)p;
-        if (Vector3.Distance(_transform.position, player.position) <= EnemyAI.attackRange) {
+        if (Vector3.Distance(_agent.transform.position, player.position) <= EnemyAI.attackRange) {
             state = NodeState.SUCCESS;
             return state;
         }

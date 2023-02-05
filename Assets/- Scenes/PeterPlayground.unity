@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -749,6 +749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a201ac73099f5ea47b4b20c37a1de04f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clawHitbox: {fileID: 0}
 --- !u!65 &881096528
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -816,6 +817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 229f250047a7c6042ae2b51c7b46d474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TargetDetectionDistance: 0
 --- !u!33 &940781177
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1695,6 +1697,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a59698dfb521f249935d878d9e7b1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 2
+  delta: 0.2
+  _respawnTime: 10
+  _attackTime: 3
+  _enemyHealth: 10
+  _waypoints: []
 --- !u!136 &1313433411
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1840,7 +1848,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428661150}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -1952,14 +1960,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1428661150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117cd06bf8f1d364aa5cbde45cc4bd85, type: 3}
+  m_Script: {fileID: 11500000, guid: 631f491f506c3d045b1c4ebc7219d777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _agent: {fileID: 0}
   waypoints:
   - {fileID: 190264969}
   - {fileID: 860027152}
   - {fileID: 315892011}
   - {fileID: 1162829627}
+  _health: {fileID: 0}
 --- !u!1 &1873563678
 GameObject:
   m_ObjectHideFlags: 0
