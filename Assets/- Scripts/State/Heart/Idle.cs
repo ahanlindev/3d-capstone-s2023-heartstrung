@@ -12,14 +12,14 @@ namespace Heart
             base.UpdatePhysics();
             if (!IsGrounded())
             {
-                _stateMachine.ChangeState(_stateMachine.fallingState);
+                _sm.ChangeState(_sm.fallingState);
             }
         }
 
         protected override void OnPlayerFling(float power)
         {
             base.OnPlayerFling(power);
-            _stateMachine.ChangeState(_stateMachine.flungState);
+            _sm.ChangeState(_sm.flungState);
         }
 
         protected override bool StateIsFlingable() => true;

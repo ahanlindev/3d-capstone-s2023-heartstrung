@@ -8,7 +8,7 @@ namespace Heart
     {
         // BaseState has _baseStateMachine, but this casts it correctly
         /// <summary>State machine for gathering information and operating on state</summary>
-        protected HeartStateMachine _stateMachine { get => (HeartStateMachine)_baseStateMachine; }
+        protected HeartStateMachine _sm { get => (HeartStateMachine)_baseStateMachine; }
 
         public State(string name, HeartStateMachine stateMachine) : base(name, stateMachine) { }
 
@@ -19,10 +19,10 @@ namespace Heart
         protected virtual void OnPlayerFlingInterrupted() { }
 
         /// <summary>Event handler for when the heart gets hurt by something. Override to ignore or change base behavior.</summary>
-        protected virtual void OnHurt() { _stateMachine.ChangeState(_stateMachine.hurtState); }
+        protected virtual void OnHurt() { _sm.ChangeState(_sm.hurtState); }
 
         /// <summary>Event handler for when the heart dies. Override to ignore or change base behavior. </summary>
-        protected virtual void OnDie() { _stateMachine.ChangeState(_stateMachine.deadState); }
+        protected virtual void OnDie() { _sm.ChangeState(_sm.deadState); }
 
         /// <summary>Event handler to allow this component to react to collisions</summary>
         protected virtual void OnCollisionEnter(Collision other) { }
@@ -34,29 +34,29 @@ namespace Heart
         public override void Enter()
         {
             base.Enter();
-            _stateMachine.player.FlingEvent += OnPlayerFling;
-            _stateMachine.player.FlingInterruptedEvent += OnPlayerFlingInterrupted;
-            _stateMachine.CollisionEnterEvent += OnCollisionEnter;
+            _sm.player.FlingEvent += OnPlayerFling;
+            _sm.player.FlingInterruptedEvent += OnPlayerFlingInterrupted;
+            _sm.CollisionEnterEvent += OnCollisionEnter;
 
             // Todo set up hurt and die
 
             // update state machine
-            _stateMachine.canBeFlung = StateIsFlingable();
+            _sm.canBeFlung = StateIsFlingable();
 
             // update animator state
-            _stateMachine.SetAnimatorBool(name, true);
+            _sm.SetAnimatorBool(name, true);
         }
 
         public override void Exit()
         {
             base.Exit();
-            _stateMachine.player.FlingEvent -= OnPlayerFling;
-            _stateMachine.player.FlingInterruptedEvent -= OnPlayerFlingInterrupted;
-            _stateMachine.CollisionEnterEvent -= OnCollisionEnter;
+            _sm.player.FlingEvent -= OnPlayerFling;
+            _sm.player.FlingInterruptedEvent -= OnPlayerFlingInterrupted;
+            _sm.CollisionEnterEvent -= OnCollisionEnter;
             // Todo tear down hurt and die
 
             // update animator state
-            _stateMachine.SetAnimatorBool(name, false);
+            _sm.SetAnimatorBool(name, false);
         }
 
         // Helper Methods --------------------------------------------
@@ -65,11 +65,11 @@ namespace Heart
         /// <returns>True if player is grounded, false otherwise.</returns>
         protected bool IsGrounded()
         {
-            float distToGround = _stateMachine.coll.bounds.extents.y;
+            float distToGround = _sm.coll.bounds.extents.y;
             bool touchingGround = Physics.BoxCast(
-                center: _stateMachine.transform.position,
+                center: _sm.transform.position,
                 halfExtents: new Vector3(0.5f, 0.1f, 0.5f),
-                direction: -_stateMachine.transform.up,
+                direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
                 maxDistance: distToGround
             );

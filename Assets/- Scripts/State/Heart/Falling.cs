@@ -9,13 +9,13 @@ namespace Heart
 
         public override void UpdatePhysics()
         {
-            if (IsGrounded()) { _stateMachine.ChangeState(_stateMachine.idleState); }
+            if (IsGrounded()) { _sm.ChangeState(_sm.idleState); }
         }
 
         public override void Exit()
         {
             base.Exit();
-            if (IsGrounded()) { _stateMachine.LandedEvent?.Invoke(); }
+            if (IsGrounded()) { _sm.LandedEvent?.Invoke(); }
         }
 
         protected override bool StateIsFlingable() => false;

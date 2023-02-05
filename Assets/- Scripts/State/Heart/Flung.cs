@@ -20,17 +20,17 @@ namespace Heart
         {
             base.Enter();
 
-            _playerTf = _stateMachine.player.transform;
-            _tf = _stateMachine.transform;
+            _playerTf = _sm.player.transform;
+            _tf = _sm.transform;
 
             // temporarily ignore player collision and gravity
             IgnorePlayerCollisions(true);
-            _stateMachine.rbody.useGravity = false;
+            _sm.rbody.useGravity = false;
 
             // get player->me and player->dest vectors
             Vector3 playerToMe = _tf.position - _playerTf.position;
             Vector3 playerToDest = new Vector3(playerToMe.x, 0f, playerToMe.z).normalized;
-            playerToDest *= -playerToMe.magnitude * _stateMachine.flingPower;
+            playerToDest *= -playerToMe.magnitude * _sm.flingPower;
 
             // Lin-alg wizardry to face upward, with stem facing player, so rotation looks nicer
             RotateStemTowardsPlayer(faceUp: true);
@@ -42,8 +42,8 @@ namespace Heart
             _cumulativeAngle = 0.0f;
 
             // make sure radii cannot exceed max. (Can happen in some edge cases)
-            _currentRadius = Mathf.Clamp(_currentRadius, 0f, _stateMachine.player.maxTetherLength);
-            _finalRadius = Mathf.Clamp(_finalRadius, 0f, _stateMachine.player.maxTetherLength);
+            _currentRadius = Mathf.Clamp(_currentRadius, 0f, _sm.player.maxTetherLength);
+            _finalRadius = Mathf.Clamp(_finalRadius, 0f, _sm.player.maxTetherLength);
 
             // Todo prove this covers all edge cases
             // Gets total angle between position and destination. 
@@ -59,14 +59,14 @@ namespace Heart
         public override void Exit()
         {
             base.Exit();
-            _stateMachine.rbody.useGravity = true;
+            _sm.rbody.useGravity = true;
 
             // move from current rotation to upright rotation
             Vector3 newRotEulers = new Vector3(0.0f, _tf.rotation.y, 0.0f);
             _tf.rotation = Quaternion.identity;
             if (IsGrounded())
             {
-                _stateMachine.LandedEvent?.Invoke();
+                _sm.LandedEvent?.Invoke();
             }
 
             // allow player collisions again
@@ -78,7 +78,7 @@ namespace Heart
             base.UpdatePhysics();
 
             // rotate around the player and adjust radius
-            float angleDelta = _stateMachine.flingSpeed * Time.fixedDeltaTime;
+            float angleDelta = _sm.flingSpeed * Time.fixedDeltaTime;
 
             Vector3 playerDirToMe = (_tf.position - _playerTf.position).normalized;
 
@@ -91,21 +91,21 @@ namespace Heart
             _cumulativeAngle += angleDelta;
             if (_cumulativeAngle >= _totalAngleToDest)
             {
-                _stateMachine.ChangeState(_stateMachine.idleState);
+                _sm.ChangeState(_sm.idleState);
             }
         }
 
         protected override void OnPlayerFlingInterrupted()
         {
             base.OnPlayerFlingInterrupted();
-            _stateMachine.ChangeState(_stateMachine.idleState); // idle will also allow falling
+            _sm.ChangeState(_sm.idleState); // idle will also allow falling
         }
 
         protected override void OnCollisionEnter(Collision coll)
         {
             // TODO this should probably have more conditional logic.
             // Handles hitting wall or floor. If IsGrounded fails, idle goes to falling
-            _stateMachine.ChangeState(_stateMachine.idleState);
+            _sm.ChangeState(_sm.idleState);
         }
 
         protected override bool StateIsFlingable() => false;
