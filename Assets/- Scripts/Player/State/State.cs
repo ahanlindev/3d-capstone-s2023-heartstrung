@@ -96,8 +96,9 @@ namespace Player
         protected bool IsGrounded()
         {
             float distToGround = _stateMachine.coll.bounds.extents.y;
+            Vector3 collOffset = _stateMachine.coll.bounds.center - _stateMachine.transform.position;
             bool touchingGround = Physics.BoxCast(
-                center: _stateMachine.transform.position,
+                center: _stateMachine.transform.position + collOffset,
                 halfExtents: new Vector3(0.5f, 0.1f, 0.5f),
                 direction: -_stateMachine.transform.up,
                 orientation: Quaternion.identity,

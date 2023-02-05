@@ -5,7 +5,7 @@ using UnityEngine;
 public class HeartStateMachine : BaseStateMachine
 {
     // Emitted events ----------------------------------
-    
+
     /// <summary>Notifies listeners when landing after being flung</summary> // TODO might be useful to have this go off when landing at all?
     public System.Action LandedEvent;
 
@@ -43,7 +43,6 @@ public class HeartStateMachine : BaseStateMachine
     [SerializeField] private float _hurtTime = 0.5f;
     public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
 
-
     // private fields
     private Animator anim;
 
@@ -71,19 +70,28 @@ public class HeartStateMachine : BaseStateMachine
         }
     }
 
-    private void OnEnable() {
-        player.FlingEvent += UpdateFlingPower;    
+    private void OnEnable()
+    {
+        player.FlingEvent += UpdateFlingPower;
     }
 
-    private void OnDisable() {
-        player.FlingEvent -= UpdateFlingPower;    
+    private void OnDisable()
+    {
+        player.FlingEvent -= UpdateFlingPower;
+    }
+
+    // used to inform state about collision information
+    private void OnCollisionEnter(Collision other)
+    {
+        CollisionEnterEvent?.Invoke(other);
     }
 
     protected override BaseState GetInitialState() => idleState;
 
     // Event handlers ------------------------------------------
 
-    private void UpdateFlingPower(float value) {
+    private void UpdateFlingPower(float value)
+    {
         flingPower = value;
     }
 

@@ -17,6 +17,6 @@ namespace Heart {
             );
         }
 
-        protected override bool CanBeFlung() => true;
+        protected override bool StateIsFlingable() => true;
     }
 }

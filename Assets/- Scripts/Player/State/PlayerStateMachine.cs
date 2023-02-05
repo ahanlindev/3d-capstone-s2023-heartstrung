@@ -8,12 +8,12 @@ public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events
     public event Action PlayerHurtEvent; // Todo replace with heart's health event once implemented
-    
+
     /// <summary>
     /// Event emitted when the player executes a fling. 
     /// First parameter is percentage fling power. 
     /// </summary>
-    public Action<float> FlingEvent; 
+    public Action<float> FlingEvent;
 
     /// <summary>
     ///Event emitted when the player is interrupted while in the flinging state
@@ -108,7 +108,8 @@ public class PlayerStateMachine : BaseStateMachine
 
         // initialize tether (TODO this should either be a method or done elsewhere)
         var tether = GetComponent<ConfigurableJoint>();
-        if (tether) {
+        if (tether)
+        {
             var tetherLimit = tether.linearLimit;
             tetherLimit.limit = maxTetherLength;
             tether.linearLimit = tetherLimit;
@@ -156,10 +157,5 @@ public class PlayerStateMachine : BaseStateMachine
     {
         var matchingParams = anim.parameters.Where((param) => param.name == paramName);
         return matchingParams.Count() > 0;
-    }
-
-    // DEBUG
-    protected override void OnGUI() {
-        
     }
 }

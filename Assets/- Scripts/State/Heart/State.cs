@@ -1,13 +1,14 @@
 using UnityEngine;
 
-namespace Heart {
+namespace Heart
+{
 
     /// <summary>Ties each substate to the heart StateMachine, and handles animation upkeep</summary>
     public abstract class State : BaseState
     {
         // BaseState has _baseStateMachine, but this casts it correctly
         /// <summary>State machine for gathering information and operating on state</summary>
-        protected HeartStateMachine _stateMachine {get => (HeartStateMachine) _baseStateMachine; }
+        protected HeartStateMachine _stateMachine { get => (HeartStateMachine)_baseStateMachine; }
 
         public State(string name, HeartStateMachine stateMachine) : base(name, stateMachine) { }
 
@@ -28,7 +29,7 @@ namespace Heart {
 
         /// <summary>Check if the heart is in a flingable state. Used to update public StateMachine field. </summary>
         /// <returns>True if the heart is ready to fling. Otherwise false.</returns>
-        protected abstract bool CanBeFlung();
+        protected abstract bool StateIsFlingable();
 
         public override void Enter()
         {
@@ -40,8 +41,8 @@ namespace Heart {
             // Todo set up hurt and die
 
             // update state machine
-            _stateMachine.canBeFlung = CanBeFlung();
-            
+            _stateMachine.canBeFlung = StateIsFlingable();
+
             // update animator state
             _stateMachine.SetAnimatorBool(name, true);
         }

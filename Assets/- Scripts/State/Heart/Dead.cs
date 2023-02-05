@@ -1,10 +1,12 @@
 using UnityEngine;
 
-namespace Heart {
+namespace Heart
+{
     /// <summary>State where the heart is dead.</summary>
-    public class Dead : State {
+    public class Dead : State
+    {
         public Dead(HeartStateMachine stateMachine) : base("Dead", stateMachine) { }
 
-        protected override bool CanBeFlung() => false;
+        protected override bool StateIsFlingable() => false;
     }
 }

@@ -22,6 +22,6 @@ namespace Heart
             _stateMachine.ChangeState(_stateMachine.flungState);
         }
 
-        protected override bool CanBeFlung() => true;
+        protected override bool StateIsFlingable() => true;
     }
 }

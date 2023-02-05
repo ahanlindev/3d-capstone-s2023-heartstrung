@@ -18,6 +18,6 @@ namespace Heart
             if (IsGrounded()) { _stateMachine.LandedEvent?.Invoke(); }
         }
 
-        protected override bool CanBeFlung() => false;
+        protected override bool StateIsFlingable() => false;
     }
 }
