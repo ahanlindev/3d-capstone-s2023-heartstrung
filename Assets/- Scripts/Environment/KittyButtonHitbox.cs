@@ -13,7 +13,7 @@ public class KittyButtonHitbox : MonoBehaviour
     void OnCollisionEnter(Collision collision) {
         if(!pressed) {
             Debug.Log("collided with " + collision.gameObject.name);
-            if(collision.gameObject.name == "Kitty") {
+            if(collision.gameObject.tag == "Player") {
                 button.enable();
                 pressed = true;
             }
@@ -24,7 +24,7 @@ public class KittyButtonHitbox : MonoBehaviour
     void OnCollisionExit(Collision collision) {
         if(!persistent) {
             Debug.Log("No longer colliding with " + collision.gameObject.name);
-            if(collision.gameObject.name == "Kitty") {
+            if(collision.gameObject.tag == "Player") {
                 button.disable();
                 pressed = false;
             }
