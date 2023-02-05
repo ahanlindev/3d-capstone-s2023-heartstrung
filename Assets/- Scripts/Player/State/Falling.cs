@@ -15,7 +15,7 @@ namespace Player
             // return to idle if on ground
             if (IsGrounded())
             {
-                _stateMachine.ChangeState(_stateMachine.idleState);
+                _sm.ChangeState(_sm.idleState);
             }
         }
 
@@ -36,14 +36,14 @@ namespace Player
             base.HandlePlayerMove(moveVector);
             if (moveVector == Vector3.zero) { return; }
             // account for player move speed and tick rate
-            moveVector *= _stateMachine.moveSpeed;
+            moveVector *= _sm.moveSpeed;
             moveVector *= Time.fixedDeltaTime;
 
             // find proper position and look rotation
-            var newPos = _stateMachine.transform.position + moveVector;
-            var newRot = Quaternion.LookRotation(moveVector.normalized, _stateMachine.transform.up);
+            var newPos = _sm.transform.position + moveVector;
+            var newRot = Quaternion.LookRotation(moveVector.normalized, _sm.transform.up);
 
-            _stateMachine.rbody.Move(newPos, newRot);
+            _sm.rbody.Move(newPos, newRot);
         }
     }
 }

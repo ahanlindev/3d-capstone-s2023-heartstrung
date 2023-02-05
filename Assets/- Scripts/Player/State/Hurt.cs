@@ -16,8 +16,8 @@ namespace Player
 
             // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
-                delay: _stateMachine.hurtTime,
-                callback: () => _stateMachine.ChangeState(_stateMachine.idleState),
+                delay: _sm.hurtTime,
+                callback: () => _sm.ChangeState(_sm.idleState),
                 ignoreTimeScale: false
             );
         }

@@ -22,7 +22,7 @@ namespace Player
         protected override void OnPlayerFinishCharge(CallbackContext _)
         {
             base.OnPlayerFinishCharge(_);
-            _stateMachine.ChangeState(_stateMachine.flingingState);
+            _sm.ChangeState(_sm.flingingState);
         }
     }
 }

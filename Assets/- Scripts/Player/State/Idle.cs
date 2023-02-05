@@ -13,20 +13,20 @@ namespace Player
             base.UpdatePhysics();
             if (!IsGrounded())
             {
-                _stateMachine.ChangeState(_stateMachine.fallingState);
+                _sm.ChangeState(_sm.fallingState);
             }
         }
 
         protected override void OnPlayerAttack(CallbackContext _)
         {
             base.OnPlayerAttack(_);
-            _stateMachine.ChangeState(_stateMachine.attackingState);
+            _sm.ChangeState(_sm.attackingState);
         }
 
         protected override void OnPlayerJump(CallbackContext _)
         {
             base.OnPlayerJump(_);
-            _stateMachine.ChangeState(_stateMachine.jumpingState);
+            _sm.ChangeState(_sm.jumpingState);
         }
 
         protected override void OnPlayerStartCharge(CallbackContext _)
@@ -34,9 +34,9 @@ namespace Player
             base.OnPlayerStartCharge(_);
 
             // cannot fling if there is no heart set
-            if (_stateMachine.heart)
+            if (_sm.heart)
             {
-                _stateMachine.ChangeState(_stateMachine.chargingState);
+                _sm.ChangeState(_sm.chargingState);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Player
             base.HandlePlayerMove(moveVector);
             if (moveVector != Vector3.zero)
             {
-                _stateMachine.ChangeState(_stateMachine.movingState);
+                _sm.ChangeState(_sm.movingState);
             }
         }
 

@@ -20,8 +20,8 @@ namespace Player
 
 
             // apply appropriate force to jump
-            Vector3 jumpVec = _stateMachine.transform.up * _stateMachine.jumpPower;
-            _stateMachine.rbody.AddForce(jumpVec, ForceMode.Impulse);
+            Vector3 jumpVec = _sm.transform.up * _sm.jumpPower;
+            _sm.rbody.AddForce(jumpVec, ForceMode.Impulse);
             _canLand = false;
             DOVirtual.DelayedCall(0.1f, () => _canLand = true, ignoreTimeScale: false);
         }
@@ -33,7 +33,7 @@ namespace Player
             // return to idle if on ground
             if (IsGrounded() && _canLand)
             {
-                _stateMachine.ChangeState(_stateMachine.idleState);
+                _sm.ChangeState(_sm.idleState);
             }
         }
 
@@ -57,14 +57,14 @@ namespace Player
 
 
             // account for player move speed and tick rate
-            moveVector *= _stateMachine.moveSpeed;
+            moveVector *= _sm.moveSpeed;
             moveVector *= Time.fixedDeltaTime;
 
             // find proper position and look rotation
-            var newPos = _stateMachine.transform.position + moveVector;
-            var newRot = Quaternion.LookRotation(moveVector.normalized, _stateMachine.transform.up);
+            var newPos = _sm.transform.position + moveVector;
+            var newRot = Quaternion.LookRotation(moveVector.normalized, _sm.transform.up);
 
-            _stateMachine.rbody.Move(newPos, newRot);
+            _sm.rbody.Move(newPos, newRot);
         }
     }
 }

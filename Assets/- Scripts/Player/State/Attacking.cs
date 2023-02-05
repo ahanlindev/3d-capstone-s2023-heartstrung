@@ -13,7 +13,7 @@ namespace Player
         {
             base.Enter();
             // perform attack
-            _stateMachine.claws.Claw(_stateMachine.attackTime);
+            _sm.claws.Claw(_sm.attackTime);
 
             // play sound
             AudioManager.instance.playSoundEvent("KittyAttack");
@@ -21,8 +21,8 @@ namespace Player
 
             // return to idle when done
             DOVirtual.DelayedCall(
-                delay: _stateMachine.attackTime,
-                callback: () => _stateMachine.ChangeState(_stateMachine.idleState),
+                delay: _sm.attackTime,
+                callback: () => _sm.ChangeState(_sm.idleState),
                 ignoreTimeScale: false
             );
         }

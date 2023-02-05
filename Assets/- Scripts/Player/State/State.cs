@@ -8,7 +8,7 @@ namespace Player
     {
         // BaseState has _baseStateMachine, but this casts it to PlayerStateMachine
         /// <summary>State machine for gathering information and operating on state</summary>
-        protected PlayerStateMachine _stateMachine { get => (PlayerStateMachine)_baseStateMachine; }
+        protected PlayerStateMachine _sm { get => (PlayerStateMachine)_baseStateMachine; }
 
         public State(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }
 
@@ -29,10 +29,10 @@ namespace Player
         protected virtual void OnPlayerFinishCharge(CallbackContext _) { }
 
         /// <summary>Event handler for when the player gets hurt by something. Override to ignore or change base behavior.</summary>
-        protected virtual void OnHurt() { _stateMachine.ChangeState(_stateMachine.hurtState); }
+        protected virtual void OnHurt() { _sm.ChangeState(_sm.hurtState); }
 
         /// <summary>Event handler for when the player dies. Override to ignore or change base behavior. </summary>
-        protected virtual void OnDie() { _stateMachine.ChangeState(_stateMachine.deadState); }
+        protected virtual void OnDie() { _sm.ChangeState(_sm.deadState); }
 
         /// <summary>Event handler for when the heart lands after being flung</summary>
         protected virtual void OnHeartLanded() { }
@@ -46,19 +46,19 @@ namespace Player
             base.Enter();
 
             // subscribe to events
-            _stateMachine.attackInput.performed += OnPlayerAttack;
-            _stateMachine.jumpInput.performed += OnPlayerJump;
-            _stateMachine.flingInput.performed += OnPlayerStartCharge;
-            _stateMachine.flingInput.canceled += OnPlayerFinishCharge;
-            _stateMachine.PlayerHurtEvent += OnHurt;
+            _sm.attackInput.performed += OnPlayerAttack;
+            _sm.jumpInput.performed += OnPlayerJump;
+            _sm.flingInput.performed += OnPlayerStartCharge;
+            _sm.flingInput.canceled += OnPlayerFinishCharge;
+            _sm.PlayerHurtEvent += OnHurt;
 
-            if (_stateMachine.heart)
+            if (_sm.heart)
             {
-                _stateMachine.heart.LandedEvent += OnHeartLanded;
+                _sm.heart.LandedEvent += OnHeartLanded;
             }
 
             // set animator state
-            _stateMachine.SetAnimatorBool(name, true);
+            _sm.SetAnimatorBool(name, true);
         }
 
         public override void UpdatePhysics()
@@ -66,7 +66,7 @@ namespace Player
             base.UpdatePhysics();
 
             // read in player movement input and send it to handler
-            Vector2 moveVec = _stateMachine.movementInput.ReadValue<Vector2>();
+            Vector2 moveVec = _sm.movementInput.ReadValue<Vector2>();
             Vector3 moveVec3D = new Vector3(moveVec.x, 0.0f, moveVec.y);
             HandlePlayerMove(moveVec3D);
         }
@@ -76,31 +76,31 @@ namespace Player
             base.Exit();
 
             // unsubscribe to input events
-            _stateMachine.attackInput.performed -= OnPlayerAttack;
-            _stateMachine.jumpInput.performed -= OnPlayerJump;
-            _stateMachine.flingInput.performed -= OnPlayerStartCharge;
-            _stateMachine.flingInput.canceled -= OnPlayerFinishCharge;
-            _stateMachine.PlayerHurtEvent -= OnHurt;
+            _sm.attackInput.performed -= OnPlayerAttack;
+            _sm.jumpInput.performed -= OnPlayerJump;
+            _sm.flingInput.performed -= OnPlayerStartCharge;
+            _sm.flingInput.canceled -= OnPlayerFinishCharge;
+            _sm.PlayerHurtEvent -= OnHurt;
 
-            if (_stateMachine.heart)
+            if (_sm.heart)
             {
-                _stateMachine.heart.LandedEvent -= OnHeartLanded;
+                _sm.heart.LandedEvent -= OnHeartLanded;
             }
 
             // reset animator state
-            _stateMachine.SetAnimatorBool(name, false);
+            _sm.SetAnimatorBool(name, false);
         }
 
         /// <summary>Check if the player is touching the ground</summary>
         /// <returns>True if player is grounded, false otherwise.</returns>
         protected bool IsGrounded()
         {
-            float distToGround = _stateMachine.coll.bounds.extents.y;
-            Vector3 collOffset = _stateMachine.coll.bounds.center - _stateMachine.transform.position;
+            float distToGround = _sm.coll.bounds.extents.y;
+            Vector3 collOffset = _sm.coll.bounds.center - _sm.transform.position;
             bool touchingGround = Physics.BoxCast(
-                center: _stateMachine.transform.position + collOffset,
+                center: _sm.transform.position + collOffset,
                 halfExtents: new Vector3(0.5f, 0.1f, 0.5f),
-                direction: -_stateMachine.transform.up,
+                direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
                 maxDistance: distToGround
             );
