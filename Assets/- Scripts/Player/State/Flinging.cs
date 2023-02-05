@@ -15,6 +15,11 @@ namespace Player
             base.Enter();
             _heartHasLanded = false;
 
+            if (!_sm.heart.canBeFlung) {
+                _sm.ChangeState(_sm.idleState);
+                return;
+            }
+
             Transform tf = _sm.transform;
             Transform heartTf = _sm.heart.transform;
 
