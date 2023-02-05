@@ -61,9 +61,11 @@ namespace Heart
             base.Exit();
             _sm.rbody.useGravity = true;
 
-            // move from current rotation to upright rotation
-            Vector3 newRotEulers = new Vector3(0.0f, _tf.rotation.y, 0.0f);
-            _tf.rotation = Quaternion.identity;
+            // move from current rotation to upright rotation facing kitty
+            Vector3 dirToPlayer = (_playerTf.position - _tf.position).normalized;
+            dirToPlayer.y = _tf.position.y;
+            _tf.LookAt(dirToPlayer, Vector3.up);
+            
             if (IsGrounded())
             {
                 _sm.LandedEvent?.Invoke();
