@@ -99,7 +99,7 @@ namespace Player
             Vector3 collOffset = _sm.coll.bounds.center - _sm.transform.position;
             bool touchingGround = Physics.BoxCast(
                 center: _sm.transform.position + collOffset,
-                halfExtents: new Vector3(0.5f, 0.1f, 0.5f),
+                halfExtents: new Vector3(0.25f, 0.1f, 0.25f),
                 direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
                 maxDistance: distToGround
