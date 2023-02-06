@@ -21,9 +21,9 @@ public class EnemyClaw : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) {
         Debug.Log($"Enemy claws collided with {other.gameObject.name}");
-        var Dodge = other.gameObject.GetComponent<Heart>();
-        if (Dodge) {
-            
+        var player = other.gameObject.GetComponent<Health>();
+        if (player) {
+            player.ChangeHealth(-10.0f);
         }
     }
 }

@@ -19,6 +19,8 @@ public class EnemyAI : BTree
 
     public bool _dead = false;
 
+    public bool _attacked = false;
+
     public EnemyClaw _enemyClaw;
 
 
@@ -41,6 +43,7 @@ public class EnemyAI : BTree
 
     private void OnChangeHealth(float newTotal, float delta)
     {
+        _attacked = true;
         if (newTotal  <= 0) {
             _dead = true;
         }
@@ -52,8 +55,8 @@ public class EnemyAI : BTree
             {
              new Sequence(new List<Node>
                 {
-                    new TakeHit(_health, _dead),
-                    new KO(_agent),
+                    new KO(_agent, _dead, _attacked),
+                    new TakeHit(_health),
             }),
              new Sequence(new List<Node>
                 {

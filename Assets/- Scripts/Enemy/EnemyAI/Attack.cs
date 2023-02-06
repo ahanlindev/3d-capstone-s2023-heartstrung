@@ -27,6 +27,7 @@ public class Attack : Node
 
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _attackTime) {
+            // why is this _enemyClaw Null? need to fix this
             _enemyClaw.Claw(1.5f);
             _attackCounter = 0f;
         }

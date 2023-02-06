@@ -8,6 +8,8 @@ public class CheckFOVRange : Node
 {
     private UnityEngine.AI.NavMeshAgent _agent;
     private static int _playerLayerMask = 1 << 6;
+    //add heart layer mask as well i.e. 1 << 6 | 1 << 7
+
     public CheckFOVRange(UnityEngine.AI.NavMeshAgent agent)
     {
         _agent = agent;
