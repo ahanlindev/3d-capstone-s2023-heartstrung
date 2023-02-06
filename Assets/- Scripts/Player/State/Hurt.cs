@@ -10,9 +10,16 @@ namespace Player
     {
         public Hurt(PlayerStateMachine stateMachine) : base("Hurt", stateMachine) { }
 
+        private Renderer rend;
+        private int frameCount = 0;
+
         public override void Enter()
         {
             base.Enter();
+
+            // flash on and off
+            rend = _sm.GetComponentInChildren<Renderer>();
+            rend.enabled = false;
 
             // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
@@ -20,6 +27,22 @@ namespace Player
                 callback: () => _sm.ChangeState(_sm.idleState),
                 ignoreTimeScale: false
             );
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            rend.enabled = true;
+        }
+        
+        public override void UpdateLogic()
+        {
+            base.UpdateLogic();
+            frameCount++;
+
+            if (frameCount % 4 == 0) {
+                rend.enabled = !rend.enabled;
+            }
         }
     }
 }
