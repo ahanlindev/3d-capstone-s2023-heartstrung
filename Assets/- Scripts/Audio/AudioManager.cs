@@ -16,6 +16,9 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
 
     private AudioSource[] audioSources = new AudioSource[5];
+
+    [Tooltip("Global game volume.")]
+    [SerializeField] public float volume = 1f;
     
     private string resourcesPath = "Audio/SFX";
 
@@ -66,6 +69,7 @@ public class AudioManager : MonoBehaviour
             }
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
+                source.volume = volume;
                 // randomize pitch for  v a r i a t i o n (TM)
                 if(sounds[sound].PitchShift) {
                     source.pitch = Random.Range(.75f, 1.25f);

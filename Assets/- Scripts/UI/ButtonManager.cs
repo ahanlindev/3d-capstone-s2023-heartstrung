@@ -23,6 +23,11 @@ public class ButtonManager : MonoBehaviour
         SceneManager.LoadSceneAsync("TutorialLevel");
     }
 
+    public void OptionsButtonClicked() {
+        Debug.Log("Options GO!");
+        OptionsMenuManager.instance.ChangeOptionsState();
+    }
+
     public void UnpauseButtonClicked() {
         Debug.Log("Unpaused");
         PauseMenuManager.instance.Unpause();
@@ -32,5 +37,10 @@ public class ButtonManager : MonoBehaviour
         Debug.Log("Main Menu GO!");
         PauseMenuManager.instance.Unpause();
         SceneManager.LoadSceneAsync("Main Menu");
+    }
+
+    public void QuitButtonClicked() {
+        Debug.Log("Quitting Game...");
+        Application.Quit();
     }
 }
