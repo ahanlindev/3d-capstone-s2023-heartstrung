@@ -39,11 +39,12 @@ public class Patrol : Node
             agentPos.y = 0;
             wpPos.y = 0;
             if (Vector3.Distance(agentPos, wpPos) <= delta) {
+                //if the waypoint is reached, wait for a little and choose next waypoint
                 _waitCounter = 0f;
                 _waiting = true;
-
                 _currentWaypoint = (_currentWaypoint + 1) % _waypoints.Length;
             } else {
+                //if the waypoint is not reached, then continue going to the chosen waypoint
                 _navAgent.destination = wp.position;
                 _navAgent.transform.LookAt(new Vector3(wp.position.x, _navAgent.transform.position.y, wp.position.z));
             }

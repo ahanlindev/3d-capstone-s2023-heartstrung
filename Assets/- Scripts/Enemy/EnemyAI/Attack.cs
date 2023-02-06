@@ -20,18 +20,19 @@ public class Attack : Node
     }
     public override NodeState Evaluate()
     {
+        //find the player to attack
         Transform player = (Transform)GetData("player");
         if (player != _lastTarget) {
             _lastTarget = player;
         }
 
+        //perform attack after waiting attack cooldown 
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _attackTime) {
-            // why is this _enemyClaw Null? need to fix this
+            //play attack animation
             _enemyClaw.Claw(1.5f);
             _attackCounter = 0f;
         }
-        // Debug.LogError("Enemy is performing attacks");
         state = NodeState.RUNNING;
         return state;
     }

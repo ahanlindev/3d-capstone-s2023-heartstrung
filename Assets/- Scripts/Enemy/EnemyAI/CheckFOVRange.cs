@@ -19,8 +19,10 @@ public class CheckFOVRange : Node
     {
         object player = GetData("player");
         if (player == null) {
+            //look for the player using collider and check if they are within the given radius of enemy
             Collider[] colliders = Physics.OverlapSphere(_agent.transform.position, EnemyAI.fovRange, _playerLayerMask);
             if (colliders.Length > 0) {
+                //save the player's information
                 parent.parent.SetData("player", colliders[0].transform);
                 state = NodeState.SUCCESS;
                 return state;

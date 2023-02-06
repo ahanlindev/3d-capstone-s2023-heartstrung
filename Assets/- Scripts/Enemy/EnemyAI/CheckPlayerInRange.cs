@@ -16,12 +16,14 @@ public class CheckPlayerInRange : Node
     public override NodeState Evaluate()
     {
         object p = GetData("player");
+        //check if the target player has been found
         if (p == null) {
             state = NodeState.FAILURE;
             return state;
         }
 
         Transform player = (Transform)p;
+        //check if the found player is within the attack radius of the enemy
         if (Vector3.Distance(_agent.transform.position, player.position) <= EnemyAI.attackRange) {
             state = NodeState.SUCCESS;
             return state;

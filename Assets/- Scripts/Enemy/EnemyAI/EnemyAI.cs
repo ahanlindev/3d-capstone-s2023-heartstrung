@@ -28,7 +28,7 @@ public class EnemyAI : BTree
     {
         _agent = GetComponent<NavMeshAgent>();
         _health = GetComponent<Health>();
-        _enemyClaw = GetComponent<EnemyClaw>();
+        _enemyClaw = GetComponentInChildren<EnemyClaw>();
     }
 
     private void OnEnable()
@@ -45,12 +45,22 @@ public class EnemyAI : BTree
     {
         _attacked = true;
         if (newTotal  <= 0) {
+            //play dead animation
             _dead = true;
+            _agent.isStopped = true;
         }
     }
 
     protected override Node SetupTree() 
     {
+        /*
+            first sequence is checking if enemy is dead, if not dead then take damage
+            second sequence is checking if player is within the attack radius of enemy, if 
+                the player is in range then attack the player
+            third sequence is checking if player is within the POV radius of enemy, if 
+                the player is in range then approach the player
+            last sequence is just basic patrol
+        */
         Node root = new Selector(new List<Node>
             {
              new Sequence(new List<Node>
@@ -60,7 +70,7 @@ public class EnemyAI : BTree
             }),
              new Sequence(new List<Node>
                 {
-                new CheckPlayerInRange(_agent),
+                new CheckPlayerInRange(_agent), 
                 new Attack(_agent, _enemyClaw),
             }), 
              new Sequence(new List<Node>
