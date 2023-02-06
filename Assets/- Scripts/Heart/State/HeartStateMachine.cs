@@ -22,6 +22,7 @@ public class HeartStateMachine : BaseStateMachine
     // Necessary properties ----------------------------------
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
+    public Health health { get; private set; }
 
     /// <summary>Percentage power that the player has thrown the heart. Updated by the player. </summary>
     public float flingPower { get; private set; }
@@ -43,7 +44,7 @@ public class HeartStateMachine : BaseStateMachine
     [SerializeField] private float _hurtTime = 0.5f;
     public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
 
-    // private fields
+    // Private Fields --------------------------------------------
     private Animator anim;
 
     private void Awake()
@@ -58,6 +59,8 @@ public class HeartStateMachine : BaseStateMachine
         // initialize components
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
+        health = GetComponent<Health>();
+
         anim = GetComponentInChildren<Animator>();
 
         if (!player)
@@ -66,7 +69,7 @@ public class HeartStateMachine : BaseStateMachine
         }
         if (!anim)
         {
-            Debug.LogError($"HeartStateMachine cannot find animator component in self or children");
+            Debug.LogError($"HeartStateMachine on <color=yellow>{gameObject.name}</color> cannot find animator component in self or children");
         }
     }
 
