@@ -32,7 +32,7 @@ public class hurtingBush : MonoBehaviour
             if (healthComponent != null)
             {
                 Debug.Log("Hit");
-                healthComponent.ChangeHealth(10f);
+                healthComponent.ChangeHealth(-10f);
 
                 Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
                 if (rb)
