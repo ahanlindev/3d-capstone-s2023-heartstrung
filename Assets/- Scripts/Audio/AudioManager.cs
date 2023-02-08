@@ -19,8 +19,6 @@ public class AudioManager : MonoBehaviour
 
     [Tooltip("Global game volume.")]
     [SerializeField] public float volume = 1f;
-    
-    private string resourcesPath = "Audio/SFX";
 
     void Awake() {
         // Singleton logic
