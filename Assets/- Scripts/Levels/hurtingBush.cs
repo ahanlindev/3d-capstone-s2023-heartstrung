@@ -64,7 +64,7 @@ public class hurtingBush : MonoBehaviour
         Debug.Log("bush is now dead");
 
         //The bush will no longer block the way, may apply change color or disable the whole cube.
-
+        Destroy(transform.parent.GetChild(0).gameObject);
         Destroy(gameObject);
     }
 }
