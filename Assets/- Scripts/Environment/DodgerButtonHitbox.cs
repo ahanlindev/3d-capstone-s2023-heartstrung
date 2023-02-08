@@ -13,7 +13,7 @@ public class DodgerButtonHitbox : MonoBehaviour
     void OnCollisionEnter(Collision collision) {
         if(!pressed) {
             Debug.Log("collided with " + collision.gameObject.name);
-            if(collision.gameObject.name == "Dodger")
+            if(collision.gameObject.tag == "Heart")
             {
                 button.enable();
                 pressed = true;
@@ -25,7 +25,7 @@ public class DodgerButtonHitbox : MonoBehaviour
     void OnCollisionExit(Collision collision) {
         if(!persistent) {
             Debug.Log("No longer colliding with " + collision.gameObject.name);
-            if (collision.gameObject.name == "Dodger")
+            if (collision.gameObject.name == "Heart")
             {
                 button.disable();
                 pressed = false;
