@@ -19,10 +19,10 @@ public class Claws : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log($"Claws collided with {other.gameObject.name}");
-        var enemy = other.gameObject.GetComponent<AI>();
+        //Debug.Log($"Claws collided with {other.gameObject.name}");
+        var enemy = other.gameObject.GetComponent<Health>();
         if (enemy) {
-            enemy.OnDead();
+            enemy.ChangeHealth(-10.0f);
         }
 
         var hurtingbush = other.gameObject.GetComponent<hurtingBush>();

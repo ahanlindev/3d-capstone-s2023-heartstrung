@@ -20,7 +20,7 @@ public class EnemyClaw : MonoBehaviour
         DOVirtual.DelayedCall(duration, () => clawHitbox.enabled = false);
     }
     private void OnTriggerEnter(Collider other) {
-        Debug.Log($"Enemy claws collided with {other.gameObject.name}");
+        //Debug.Log($"Enemy claws collided with {other.gameObject.name}");
         var player = other.gameObject.GetComponent<Health>();
         if (player) {
             player.ChangeHealth(-10.0f);

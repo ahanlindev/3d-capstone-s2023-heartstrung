@@ -6,40 +6,48 @@ using BehaviorTree;
 
 public class KO : Node
 {
-    private bool _isDead = false;
     private float _reviveCounter = 0f;
     private float _reviveTime = 10f;
     private UnityEngine.AI.NavMeshAgent _agent;
-    private bool _attacked = false;
+    private Health _health;
+    private static int _clawLayerMask = 1 << 9;
+    private bool _attacked;
 
-    public KO(UnityEngine.AI.NavMeshAgent agent, bool dead, bool attacked)
+    public KO(UnityEngine.AI.NavMeshAgent agent, Health health)
     {
         _agent = agent;
-        _isDead = dead;
-        _attacked = attacked;
+        _health = health;
     }   
 
     public override NodeState Evaluate()
     {
-        //check if enemy is getting attacked,
-        if (_attacked) {
-            _attacked = false;
-            //check if enemy is dead
-            if (_isDead) {
-                //if enemy is currently dead then stay dead for 10 seconds and then revive after
-                _reviveCounter += Time.deltaTime;
-                if (_reviveCounter >= _reviveTime) {
-                    _isDead = false;
-                    _agent.isStopped = false;
-                    state = NodeState.FAILURE;
-                    return state;
-                }
-            } else {
-                //if enemy is not dead then successfully go to TakeHit node
-                _reviveCounter = 0f;
-                state = NodeState.SUCCESS;
+        bool _isDead = _health.CurrentHealth <= 0;
+        //check if enemy is dead
+        if (_isDead) {
+            //if enemy is currently dead then stay dead for 10 seconds and then revive after
+            _reviveCounter += Time.deltaTime;
+            if (_reviveCounter >= _reviveTime) {
+                _agent.isStopped = false;
+                _health.ChangeHealth(100.0f);
+                state = NodeState.FAILURE;
                 return state;
             }
+        }
+        
+        // look for Kitty's Claw collider
+        Collider[] claw = Physics.OverlapSphere(_agent.transform.position, EnemyAI.attackRange, _clawLayerMask);
+        _attacked = false;
+        // check if enemy is getting clawed right now
+        if (claw.Length > 0) {
+            _attacked = true;
+        }
+
+        if (_attacked) {
+            _attacked = false;
+            //if enemy is not dead then successfully go to TakeHit node
+            _reviveCounter = 0f;
+            state = NodeState.SUCCESS;
+            return state;
         }
         //if not attacked, then go to next sequence
         state = NodeState.FAILURE;

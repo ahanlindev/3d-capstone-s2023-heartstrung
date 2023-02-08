@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 using BehaviorTree;
 
@@ -11,18 +12,14 @@ public class EnemyAI : BTree
 
     public Health _health;
 
-    public static float fovRange = 6f;
+    public static float fovRange = 5f;
 
     public static float speed = 3.5f;
 
     public static float attackRange = 1f;
 
-    public bool _dead = false;
-
-    public bool _attacked = false;
 
     public EnemyClaw _enemyClaw;
-
 
     void Awake()
     {
@@ -43,10 +40,8 @@ public class EnemyAI : BTree
 
     private void OnChangeHealth(float newTotal, float delta)
     {
-        _attacked = true;
         if (newTotal  <= 0) {
             //play dead animation
-            _dead = true;
             _agent.isStopped = true;
         }
     }
@@ -65,7 +60,7 @@ public class EnemyAI : BTree
             {
              new Sequence(new List<Node>
                 {
-                    new KO(_agent, _dead, _attacked),
+                    new KO(_agent, _health),
                     new TakeHit(_health),
             }),
              new Sequence(new List<Node>
