@@ -41,6 +41,26 @@ namespace Player
         /// <param name="moveVector">Desired movement direction</param>
         protected virtual void HandlePlayerMove(Vector3 moveVector) { }
 
+        /// <summary>
+        /// Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate. 
+        /// Note that the player can only die when the heart does.
+        /// </summary>
+        /// <param name="newVal">new health total</param>
+        /// <param name="delta">change from previous health value</param>
+        private void OnChangeHealth(float newVal, float delta)
+        {
+            if (newVal <= 0)
+            {
+                // If health drops to zero, die
+                OnDie();
+            }
+            else if (delta < 0)
+            {
+                // If alive, get hurt if damage was taken
+                OnHurt();
+            }
+        }
+
         public override void Enter()
         {
             base.Enter();
@@ -50,10 +70,11 @@ namespace Player
             _sm.jumpInput.performed += OnPlayerJump;
             _sm.flingInput.performed += OnPlayerStartCharge;
             _sm.flingInput.canceled += OnPlayerFinishCharge;
-            _sm.PlayerHurtEvent += OnHurt;
+            _sm.hitTracker.ChangeHealthEvent += OnChangeHealth;
 
             if (_sm.heart)
             {
+                _sm.heart.health.ChangeHealthEvent += OnChangeHealth;
                 _sm.heart.LandedEvent += OnHeartLanded;
             }
 
@@ -80,10 +101,11 @@ namespace Player
             _sm.jumpInput.performed -= OnPlayerJump;
             _sm.flingInput.performed -= OnPlayerStartCharge;
             _sm.flingInput.canceled -= OnPlayerFinishCharge;
-            _sm.PlayerHurtEvent -= OnHurt;
+            _sm.hitTracker.ChangeHealthEvent -= OnChangeHealth;
 
             if (_sm.heart)
             {
+                _sm.heart.health.ChangeHealthEvent -= OnChangeHealth;
                 _sm.heart.LandedEvent -= OnHeartLanded;
             }
 

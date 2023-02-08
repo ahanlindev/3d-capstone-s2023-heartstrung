@@ -28,13 +28,13 @@ public class hurtingBush : MonoBehaviour
         {
 
             Debug.Log(other.transform.name);
-            var playerComponent = other.gameObject.GetComponent<PlayerStateMachine>();
-            if (playerComponent != null)
+            var healthComponent = other.gameObject.GetComponent<Health>();
+            if (healthComponent != null)
             {
                 Debug.Log("Hit");
-                playerComponent.GetHurt();
+                healthComponent.ChangeHealth(-10f);
 
-                Rigidbody rb = other.gameObject.GetComponent< Rigidbody>();
+                Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
                 if (rb)
                 {
                     Debug.Log("pushed");

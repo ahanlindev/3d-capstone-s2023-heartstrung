@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 /// <summary>Runs player states and contains information required to maintain those states.</summary>
 public class PlayerStateMachine : BaseStateMachine
 {
-    // Emitted events
-    public event Action PlayerHurtEvent; // Todo replace with heart's health event once implemented
+    // Emitted events -----------------------------------------------------
 
     /// <summary>
     /// Event emitted when the player executes a fling. 
@@ -20,7 +19,7 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Action FlingInterruptedEvent;
 
-    // Possible States
+    // Possible States ----------------------------------------------------
     public Player.Idle idleState { get; private set; }
     public Player.Moving movingState { get; private set; }
     public Player.Attacking attackingState { get; private set; }
@@ -31,18 +30,24 @@ public class PlayerStateMachine : BaseStateMachine
     public Player.Hurt hurtState { get; private set; }
     public Player.Dead deadState { get; private set; }
 
-    // Shortcuts for input actions
+    // Shortcuts for input actions ----------------------------------------
     public InputAction movementInput { get; private set; }
     public InputAction attackInput { get; private set; }
     public InputAction flingInput { get; private set; }
     public InputAction jumpInput { get; private set; }
 
-    // Other necessary components
+    // Other necessary components -----------------------------------------
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
     public Claws claws { get; private set; }
 
-    // Inspector-visible values
+    /// <summary>
+    /// Note that on the player, this is not truly a health count. 
+    /// It is simply an interface to register hits from enemies.
+    /// </summary>
+    public Health hitTracker { get; private set; }
+
+    // Inspector-visible values -------------------------------------------
     [Tooltip("Heart connected to this player")]
     [SerializeField] private HeartStateMachine _heart;
     public HeartStateMachine heart { get => _heart; private set => _heart = value; }
@@ -73,11 +78,10 @@ public class PlayerStateMachine : BaseStateMachine
     [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.85f;
     public float powerPerSecond { get => _powerPerSecond; private set => _powerPerSecond = value; }
 
-    // Private fields
+    // Private fields ----------------------------------------------------
     private PlayerInput _playerInput;
     private Animator anim;
 
-    // Player Controller
     private void Awake()
     {
         // construct each state
@@ -103,8 +107,10 @@ public class PlayerStateMachine : BaseStateMachine
         // initialize components
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
-        anim = GetComponentInChildren<Animator>();
+        hitTracker = GetComponent<Health>();
         claws = GetComponentInChildren<Claws>();
+
+        anim = GetComponentInChildren<Animator>();
 
         // initialize tether (TODO this should either be a method or done elsewhere)
         var tether = GetComponent<ConfigurableJoint>();
@@ -140,12 +146,6 @@ public class PlayerStateMachine : BaseStateMachine
         {
             Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
         }
-    }
-
-    /// <summary>Informs the player that they have been hit by something.</summary>
-    public void GetHurt()
-    {
-        PlayerHurtEvent?.Invoke();
     }
 
     /// <summary>
