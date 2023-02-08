@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class hurtingBush : MonoBehaviour
+public class HurtingBush : MonoBehaviour
 {
 
     private bool alive = true;
     public float radius = 5.0F;
+    public float damage = 10.0F;
     public float power = 5.0F;
     private HashSet<Transform> collidedBodies;
 
@@ -22,22 +23,19 @@ public class hurtingBush : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (alive)
         {
 
-            Debug.Log(other.transform.name);
             var healthComponent = other.gameObject.GetComponent<Health>();
             if (healthComponent != null)
             {
-                Debug.Log("Hit");
-                healthComponent.ChangeHealth(-10f);
+                healthComponent.ChangeHealth(-damage);
 
                 Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
                 if (rb)
                 {
-                    Debug.Log("pushed");
                     Vector3 dir = other.transform.position - transform.position;
                     rb.AddForce(dir.normalized * power, ForceMode.VelocityChange);
                 }
@@ -58,13 +56,11 @@ public class hurtingBush : MonoBehaviour
         }
     }
 
-    public void bushDie()
+    public void BushDie()
     {
         alive = false;
-        Debug.Log("bush is now dead");
 
         //The bush will no longer block the way, may apply change color or disable the whole cube.
-        Destroy(transform.parent.GetChild(0).gameObject);
-        Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
     }
 }
