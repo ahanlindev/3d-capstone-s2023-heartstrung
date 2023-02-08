@@ -71,10 +71,10 @@ namespace Player
             _sm.flingInput.performed += OnPlayerStartCharge;
             _sm.flingInput.canceled += OnPlayerFinishCharge;
             _sm.hitTracker.ChangeHealthEvent += OnChangeHealth;
-            _sm.heart.health.ChangeHealthEvent += OnChangeHealth;
 
             if (_sm.heart)
             {
+                _sm.heart.health.ChangeHealthEvent += OnChangeHealth;
                 _sm.heart.LandedEvent += OnHeartLanded;
             }
 
