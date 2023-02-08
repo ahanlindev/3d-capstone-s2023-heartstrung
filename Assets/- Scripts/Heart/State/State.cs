@@ -31,14 +31,30 @@ namespace Heart
         /// <returns>True if the heart is ready to fling. Otherwise false.</returns>
         protected abstract bool StateIsFlingable();
 
+        /// <summary>Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate.</summary>
+        /// <param name="newVal">new health total</param>
+        /// <param name="delta">change from previous health value</param>
+        private void OnChangeHealth(float newVal, float delta)
+        {
+            if (newVal <= 0)
+            {
+                // If health drops to zero, die
+                OnDie();
+            }
+            else if (delta < 0)
+            {
+                // If alive, get hurt if damage was taken
+                OnHurt();
+            }
+        }
+
         public override void Enter()
         {
             base.Enter();
             _sm.player.FlingEvent += OnPlayerFling;
             _sm.player.FlingInterruptedEvent += OnPlayerFlingInterrupted;
             _sm.CollisionEnterEvent += OnCollisionEnter;
-
-            // Todo set up hurt and die
+            _sm.health.ChangeHealthEvent += OnChangeHealth;
 
             // update state machine
             _sm.canBeFlung = StateIsFlingable();
@@ -53,7 +69,7 @@ namespace Heart
             _sm.player.FlingEvent -= OnPlayerFling;
             _sm.player.FlingInterruptedEvent -= OnPlayerFlingInterrupted;
             _sm.CollisionEnterEvent -= OnCollisionEnter;
-            // Todo tear down hurt and die
+            _sm.health.ChangeHealthEvent -= OnChangeHealth;
 
             // update animator state
             _sm.SetAnimatorBool(name, false);

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1135832175287445714}
+  - component: {fileID: 9195814934157926450}
   m_Layer: 0
   m_Name: RotatingWheel
   m_TagString: Untagged
@@ -28,12 +29,26 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3138738633382755260}
   - {fileID: 6294292223797095992}
   - {fileID: 5385800101033452377}
+  - {fileID: 3138738633382755260}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9195814934157926450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942845068090256321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b5e13a8033d0e41bb8a9b29bcb981d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 10
+  clockwise: 0
 --- !u!1 &4851431939451803686
 GameObject:
   m_ObjectHideFlags: 0
