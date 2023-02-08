@@ -16,13 +16,16 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
 
     private AudioSource[] audioSources = new AudioSource[5];
+
+    [Tooltip("Global game volume.")]
+    [SerializeField] public float volume = 1f;
     
     private string resourcesPath = "Audio/SFX";
 
     void Awake() {
         // Singleton logic
         if(instance != null && instance != this) {
-            Destroy(this);
+            Destroy(this.gameObject);
         } else {
             instance = this;
         }
@@ -33,10 +36,7 @@ public class AudioManager : MonoBehaviour
             audioSources[0].playOnAwake = false;
         }
 
-        // Don't destroy this between scenes
-        DontDestroyOnLoad(this.transform.parent.gameObject);
-
-        Debug.Log("Done loading sounds.");
+        // Debug.Log("Done loading sounds.");
     }
 
     void Start() {
@@ -48,10 +48,10 @@ public class AudioManager : MonoBehaviour
             sounds.Add(audioEvent.EventName, audioEvent);
         }
 
-        // DEBUG: Print sounds dict to console
-        foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
-            Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
-        }
+        // // DEBUG: Print sounds dict to console
+        // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
+        //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
+        // }
     }
 
     /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
@@ -69,12 +69,13 @@ public class AudioManager : MonoBehaviour
             }
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
+                source.volume = volume;
                 // randomize pitch for  v a r i a t i o n (TM)
                 if(sounds[sound].PitchShift) {
                     source.pitch = Random.Range(.75f, 1.25f);
                 } else {
                     source.pitch = 1f;
-                    Debug.Log("not doing pitch shift for " + sound);
+                    // Debug.Log("not doing pitch shift for " + sound);
                 }
                 source.Play();
                 return true;
