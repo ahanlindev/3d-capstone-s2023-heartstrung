@@ -57,13 +57,13 @@ public class AudioManager : MonoBehaviour
     public bool playSoundEvent(string sound) {
         AudioClip soundToPlay = sounds[sound].poolSound();
         if(soundToPlay == null) {
-            Debug.LogError(sound + " is not a sound event!");
+            // Debug.LogError(sound + " is not a sound event!");
             return false;
         }
         // find an available AudioSource to play the sound
         foreach(AudioSource source in gameObject.GetComponents<AudioSource>()) {
             if(!source) {
-                Debug.LogError("source is null bruh");
+                // Debug.LogError("source is null bruh");
             }
             if(!source.isPlaying) {
                 source.clip = soundToPlay;
