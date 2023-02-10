@@ -1,5 +1,6 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
+using DG.Tweening;
 
 namespace Player
 {
@@ -12,6 +13,21 @@ namespace Player
         {
             base.Enter();
             _sm.ChargeFlingEvent?.Invoke();
+
+            // tween rotate away from heart in anticipation of fling
+            Vector3 vecFromHeart = _sm.transform.position - _sm.heart.transform.position;
+            Vector3 lookAtPoint = _sm.transform.position + vecFromHeart;
+
+            _sm.transform.DOLookAt(lookAtPoint, 0.2f, AxisConstraint.Y)
+                .SetEase(Ease.InOutCubic);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            // completes rotation tween if incomplete
+            _sm.transform.DOComplete(); 
         }
 
         public override void UpdateLogic()
