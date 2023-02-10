@@ -11,7 +11,7 @@ namespace Heart
         private Transform _playerTf;
         private Transform _tf;
         private Vector3 _destination;
-        private float _currentRadius;
+        private float _startRadius;
         private float _finalRadius;
         private float _totalAngleToDest;
         private float _cumulativeAngle = 0f;
@@ -29,20 +29,20 @@ namespace Heart
 
             // get player->me and player->dest vectors
             Vector3 playerToMe = _tf.position - _playerTf.position;
-            Vector3 playerToDest = new Vector3(playerToMe.x, 0f, playerToMe.z).normalized;
-            playerToDest *= -playerToMe.magnitude * _sm.flingPower;
+            Vector3 playerToDest = new Vector3(-playerToMe.x, 0f, -playerToMe.z).normalized;
+            playerToDest *= _sm.player.maxTetherLength * _sm.flingPower;
 
             // Lin-alg wizardry to face upward, with stem facing player, so rotation looks nicer
             RotateStemTowardsPlayer(faceUp: true);
 
             // set field values
             _destination = playerToDest;
-            _currentRadius = playerToMe.magnitude;
+            _startRadius = playerToMe.magnitude;
             _finalRadius = playerToDest.magnitude;
             _cumulativeAngle = 0.0f;
 
             // make sure radii cannot exceed max. (Can happen in some edge cases)
-            _currentRadius = Mathf.Clamp(_currentRadius, 0f, _sm.player.maxTetherLength);
+            _startRadius = Mathf.Clamp(_startRadius, 0f, _sm.player.maxTetherLength);
             _finalRadius = Mathf.Clamp(_finalRadius, 0f, _sm.player.maxTetherLength);
 
             // Todo prove this covers all edge cases
@@ -65,7 +65,7 @@ namespace Heart
             Vector3 lookAtPoint = _playerTf.position;
             lookAtPoint.y = _tf.position.y;
             _tf.LookAt(lookAtPoint);
-            
+
             if (IsGrounded())
             {
                 _sm.LandedEvent?.Invoke();
@@ -84,8 +84,10 @@ namespace Heart
 
             Vector3 playerDirToMe = (_tf.position - _playerTf.position).normalized;
 
+            float currentRadius = Mathf.Lerp(_startRadius, _finalRadius, _cumulativeAngle / _totalAngleToDest);
+
             playerDirToMe = Quaternion.AngleAxis(angleDelta, _playerTf.right) * playerDirToMe;
-            _tf.position = _playerTf.position + playerDirToMe * _currentRadius;
+            _tf.position = _playerTf.position + playerDirToMe * currentRadius;
 
             RotateStemTowardsPlayer();
 

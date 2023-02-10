@@ -78,11 +78,11 @@ public class PlayerStateMachine : BaseStateMachine
     public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
 
     [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
-    [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.85f;
+    [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.55f;
     public float powerPerSecond { get => _powerPerSecond; private set => _powerPerSecond = value; }
 
     [Tooltip("Minimum percentage of fling power that a fling can have")]
-    [Range(0f, 1f)][SerializeField] private float _minPower = 0.15f;
+    [Range(0f, 1f)][SerializeField] private float _minPower = 0.35f;
     public float minPower { get => _minPower; private set => _minPower = value; }
 
     [Tooltip("Maximum percentage of fling power that a fling can have")]
@@ -128,7 +128,7 @@ public class PlayerStateMachine : BaseStateMachine
         if (tether)
         {
             var tetherLimit = tether.linearLimit;
-            tetherLimit.limit = maxTetherLength;
+            tetherLimit.limit = maxTetherLength + 0.01f; // add delta for safety when working with limit
             tether.linearLimit = tetherLimit;
         }
 
