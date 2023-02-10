@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events -----------------------------------------------------
+    
+    /// <summary>Event emitted when the player starts charging a fling.</summary>
+    public Action ChargeFlingEvent;
 
     /// <summary>
     /// Event emitted when the player executes a fling. 

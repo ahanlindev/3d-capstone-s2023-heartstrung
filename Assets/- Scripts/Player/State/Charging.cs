@@ -11,6 +11,7 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
+            _sm.ChargeFlingEvent?.Invoke();
         }
 
         public override void UpdateLogic()
