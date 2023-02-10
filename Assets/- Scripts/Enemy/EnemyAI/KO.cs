@@ -10,8 +10,9 @@ public class KO : Node
     private float _reviveTime = 10f;
     private UnityEngine.AI.NavMeshAgent _agent;
     private Health _health;
-    private static int _clawLayerMask = 1 << 9;
+    private static int _clawLayerMask = 1 << 6;
     private bool _attacked;
+    private float _healToFullHP = 100.0f;
 
     public KO(UnityEngine.AI.NavMeshAgent agent, Health health)
     {
@@ -28,20 +29,18 @@ public class KO : Node
             _reviveCounter += Time.deltaTime;
             if (_reviveCounter >= _reviveTime) {
                 _agent.isStopped = false;
-                _health.ChangeHealth(100.0f);
+                _health.ChangeHealth(_healToFullHP);
                 state = NodeState.FAILURE;
                 return state;
             }
-        }
-        
-        // look for Kitty's Claw collider
-        Collider[] claw = Physics.OverlapSphere(_agent.transform.position, EnemyAI.attackRange, _clawLayerMask);
+        }        
+        // look for Kitty's claws
+        Collider[] KittyClaw = Physics.OverlapSphere(_agent.transform.position, EnemyAI.attackRange, _clawLayerMask);
         _attacked = false;
         // check if enemy is getting clawed right now
-        if (claw.Length > 0) {
+        if (KittyClaw.Length > 0) {
             _attacked = true;
         }
-
         if (_attacked) {
             _attacked = false;
             //if enemy is not dead then successfully go to TakeHit node
