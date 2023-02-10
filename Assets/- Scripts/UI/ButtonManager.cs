@@ -20,7 +20,7 @@ public class ButtonManager : MonoBehaviour
 
     public void StartGameButtonClicked() {
         Debug.Log("Tutorial GO!");
-        SceneManager.LoadSceneAsync("TutorialLevel");
+        SceneManager.LoadSceneAsync(1);
     }
 
     public void OptionsButtonClicked() {
