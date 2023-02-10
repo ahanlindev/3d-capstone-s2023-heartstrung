@@ -38,9 +38,12 @@ public class TrajectoryRenderer : MonoBehaviour
 
         Vector3 axis = GetBinormal(localStartPos, localDestPos);
 
-        // calculate total angle to destination
+        // calculate total angle to destination, and fix axis and angle if needed
         float totalAngle = Vector3.Angle(localStartPos, localDestPos);
-        if (localStartPos.y < localDestPos.y) { totalAngle = 360.0f - totalAngle; }
+        if (localStartPos.y < localDestPos.y) { 
+            totalAngle = 360.0f - totalAngle; 
+            axis = -axis;
+        }
 
         // set up loop variables
         float degPerTick = totalAngle / _resolution;
@@ -87,6 +90,6 @@ public class TrajectoryRenderer : MonoBehaviour
         Vector3.OrthoNormalize(ref orthoNorm, ref orthoTan);
 
         Debug.Log($"Normal: {normal}\t Tangent: {tangent}\t OrthoNorm: {orthoNorm}\t OrthoTan: {orthoTan}\t Axis: {Vector3.Cross(orthoNorm, orthoTan).normalized}");
-        return Vector3.Cross(orthoTan, orthoNorm).normalized;
+        return Vector3.Cross(orthoNorm, orthoTan).normalized;
     }
 }

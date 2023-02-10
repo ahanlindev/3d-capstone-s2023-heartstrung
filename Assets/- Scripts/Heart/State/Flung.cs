@@ -93,7 +93,8 @@ namespace Heart
 
             // update cumulative angle and check if destination is reached
             _cumulativeAngle += angleDelta;
-            if (_cumulativeAngle >= _totalAngleToDest)
+            //if (_cumulativeAngle >= _totalAngleToDest)
+            if (_cumulativeAngle >= 360.0f) // stop flinging if a complete arc has occured
             {
                 _sm.ChangeState(_sm.idleState);
             }
