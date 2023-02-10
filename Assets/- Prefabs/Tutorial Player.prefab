@@ -134,7 +134,7 @@ Transform:
   - {fileID: 4377686482493911263}
   - {fileID: 6339876753318308954}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6339876754733217044
 MonoBehaviour:
@@ -154,7 +154,9 @@ MonoBehaviour:
   _moveSpeed: 3
   _jumpPower: 5
   _maxTetherLength: 5
-  _powerPerSecond: 0.85
+  _powerPerSecond: 0.55
+  _minPower: 0.27
+  _maxPower: 1
 --- !u!54 &6339876754733217046
 Rigidbody:
   m_ObjectHideFlags: 0
