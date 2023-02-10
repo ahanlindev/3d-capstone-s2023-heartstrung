@@ -62,9 +62,9 @@ namespace Heart
             _sm.rbody.useGravity = true;
 
             // move from current rotation to upright rotation facing kitty
-            Vector3 dirToPlayer = (_playerTf.position - _tf.position).normalized;
-            dirToPlayer.y = _tf.position.y;
-            _tf.LookAt(dirToPlayer, Vector3.up);
+            Vector3 lookAtPoint = _playerTf.position;
+            lookAtPoint.y = _tf.position.y;
+            _tf.LookAt(lookAtPoint);
             
             if (IsGrounded())
             {
