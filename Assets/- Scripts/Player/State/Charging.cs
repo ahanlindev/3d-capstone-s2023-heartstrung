@@ -19,7 +19,6 @@ namespace Player
             base.Enter();
             _sm.ChargeFlingEvent?.Invoke();
 
-
             // fluctuate power
             float periodLength = (_sm.maxPower - _sm.minPower) / _sm.powerPerSecond;
             _fluxTween = DOVirtual.Float(_sm.minPower, _sm.maxPower, periodLength, (val) => _power = val)
@@ -40,7 +39,7 @@ namespace Player
 
             // completes tweens if incomplete
             _sm.transform.DOComplete();
-            _fluxTween.Complete(); 
+            _fluxTween.Complete();
         }
 
         int DEBUGCOUNTER = 0;
@@ -55,13 +54,15 @@ namespace Player
         protected override void OnPlayerFinishCharge(CallbackContext _)
         {
             base.OnPlayerFinishCharge(_);
-            Debug.Log($"Flinging with power {_power}");
 
             // Fling heart if able. Can do this in Flinging.Enter, but will be harder to get power value
-            if (_sm.heart.canBeFlung) {
+            if (_sm.heart.canBeFlung)
+            {
                 _sm.FlingEvent?.Invoke(_power);
                 _sm.ChangeState(_sm.flingingState);
-            } else {
+            }
+            else
+            {
                 _sm.ChangeState(_sm.idleState);
             }
         }
