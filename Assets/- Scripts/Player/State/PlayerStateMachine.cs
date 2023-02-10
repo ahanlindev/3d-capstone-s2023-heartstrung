@@ -131,7 +131,7 @@ public class PlayerStateMachine : BaseStateMachine
         if (tether)
         {
             var tetherLimit = tether.linearLimit;
-            tetherLimit.limit = maxTetherLength + 0.01f; // add delta for safety when working with limit
+            tetherLimit.limit = maxTetherLength + 0.2f; // add delta for safety when working with limit
             tether.linearLimit = tetherLimit;
         }
 

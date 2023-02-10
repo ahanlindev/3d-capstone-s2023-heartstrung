@@ -44,15 +44,11 @@ namespace Player
             StopPowerFlux();
         }
 
-        int DEBUGCOUNTER = 0;
         public override void UpdateLogic()
         {
             base.UpdateLogic();
 
             UpdateFlingTrajectory();
-    
-            DEBUGCOUNTER++;
-            if (DEBUGCOUNTER % 4 == 0) Debug.Log($"Current Power! {_power}");
         }
 
         protected override void OnPlayerFinishCharge(CallbackContext _)
@@ -103,7 +99,7 @@ namespace Player
         private void UpdateFlingTrajectory() {
             Vector3 vecToHeart = _sm.heart.transform.position - _sm.transform.position;
             Vector3 vecToDest = -vecToHeart.normalized * _power * _sm.maxTetherLength;
-            Debug.Log($"Power is {_power}");
+
             vecToDest.y = 0;
 
             _sm.trajectoryRenderer.UpdateTrajectory(

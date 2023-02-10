@@ -31,7 +31,7 @@ public class TrajectoryRenderer : MonoBehaviour
     /// </param>
     public void UpdateTrajectory(Vector3 pivot, Vector3 localStartPos, Vector3 localDestPos, float objRadius = 0.0f) {
         RefreshResolution();
-        Debug.Log($"Pivot {pivot}, StartPos {localStartPos}, Dest {localDestPos}");
+
         // initialize necessary vector info
         float startRad = localStartPos.magnitude;
         float destRad = localDestPos.magnitude;
@@ -59,7 +59,7 @@ public class TrajectoryRenderer : MonoBehaviour
             pivotDirToPoint = Quaternion.AngleAxis(degPerTick, axis) * pivotDirToPoint;
             
             _positions[i] = pivot + (pivotDirToPoint * currentRadius);
-            Debug.Log($"i is {i}\t _resolution is {_resolution}\t currentRadius {currentRadius}");
+
             // TODO spherecast to check for early collision
         }
 
@@ -89,7 +89,6 @@ public class TrajectoryRenderer : MonoBehaviour
         var orthoTan = tangent;
         Vector3.OrthoNormalize(ref orthoNorm, ref orthoTan);
 
-        Debug.Log($"Normal: {normal}\t Tangent: {tangent}\t OrthoNorm: {orthoNorm}\t OrthoTan: {orthoTan}\t Axis: {Vector3.Cross(orthoNorm, orthoTan).normalized}");
         return Vector3.Cross(orthoNorm, orthoTan).normalized;
     }
 }
