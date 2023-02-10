@@ -27,6 +27,7 @@ namespace Player
         public override void Exit()
         {
             base.Exit();
+            _sm.trajectoryRenderer.ToggleRender(false);
             if (!_heartHasLanded)
             {
                 _sm.FlingInterruptedEvent?.Invoke();

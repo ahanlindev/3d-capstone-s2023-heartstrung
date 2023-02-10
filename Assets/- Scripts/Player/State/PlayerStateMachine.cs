@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events -----------------------------------------------------
-    
+
     /// <summary>Event emitted when the player starts charging a fling.</summary>
     public Action ChargeFlingEvent;
 
@@ -43,6 +43,9 @@ public class PlayerStateMachine : BaseStateMachine
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
     public Claws claws { get; private set; }
+
+    /// <summary>Trajectory renderer for charge and fling</summary>
+    public TrajectoryRenderer trajectoryRenderer { get; private set; }
 
     /// <summary>
     /// Note that on the player, this is not truly a health count. 
@@ -120,7 +123,7 @@ public class PlayerStateMachine : BaseStateMachine
         coll = GetComponent<Collider>();
         hitTracker = GetComponent<Health>();
         claws = GetComponentInChildren<Claws>();
-
+        trajectoryRenderer = GetComponentInChildren<TrajectoryRenderer>();
         anim = GetComponentInChildren<Animator>();
 
         // initialize tether (TODO this should either be a method or done elsewhere)
@@ -135,6 +138,8 @@ public class PlayerStateMachine : BaseStateMachine
         // validate non-guaranteed values
         if (!anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
         if (!claws) { Debug.LogError("PlayerStateMachine cannot find Claws component in children"); }
+        if (!trajectoryRenderer) { Debug.LogError("PlayerStateMachine cannot find TrajectoryRenderer component in children!"); }
+        if (!hitTracker) { Debug.LogError("PlayerStateMachine cannot find a Health component!"); }
         if (!heart) { Debug.LogWarning("Player does not have a heart set!"); }
     }
 
