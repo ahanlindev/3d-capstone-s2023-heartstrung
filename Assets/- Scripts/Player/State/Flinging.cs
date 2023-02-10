@@ -15,11 +15,6 @@ namespace Player
             base.Enter();
             _heartHasLanded = false;
 
-            if (!_sm.heart.canBeFlung) {
-                _sm.ChangeState(_sm.idleState);
-                return;
-            }
-
             Transform tf = _sm.transform;
             Transform heartTf = _sm.heart.transform;
 
@@ -27,8 +22,6 @@ namespace Player
             Vector3 vecToHeart = heartTf.position - tf.position;
             vecToHeart.y = 0.0f; // don't want to rotate player too much
             _sm.rbody.MoveRotation(Quaternion.LookRotation(-vecToHeart, tf.up));
-
-            _sm.FlingEvent?.Invoke(1.0f);
         }
 
         public override void Exit()

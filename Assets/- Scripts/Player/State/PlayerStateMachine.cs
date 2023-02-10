@@ -81,6 +81,14 @@ public class PlayerStateMachine : BaseStateMachine
     [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.85f;
     public float powerPerSecond { get => _powerPerSecond; private set => _powerPerSecond = value; }
 
+    [Tooltip("Minimum percentage of fling power that a fling can have")]
+    [Range(0f, 1f)][SerializeField] private float _minPower = 0.15f;
+    public float minPower { get => _minPower; private set => _minPower = value; }
+
+    [Tooltip("Maximum percentage of fling power that a fling can have")]
+    [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
+    public float maxPower { get => _maxPower; private set => _maxPower = value; }
+
     // Private fields ----------------------------------------------------
     private PlayerInput _playerInput;
     private Animator anim;
