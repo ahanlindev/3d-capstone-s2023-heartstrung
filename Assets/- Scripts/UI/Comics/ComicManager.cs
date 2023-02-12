@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class ComicManager : MonoBehaviour
 {
@@ -23,9 +24,12 @@ public class ComicManager : MonoBehaviour
 
     public void Next() {
         if(index >= slideShow.Length - 1) {
-            // SceneManager.LoadSceneAsync("Tutorial1");
+            int index = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadSceneAsync(index + 1);
         } else {
             transform.GetChild(index).gameObject.SetActive(false);
+            var image = transform.GetChild(index).gameObject;
+            // image.GetComponent<Image>().DOColor(new Color(0,0,0), 0.25f);
             index++;
             transform.GetChild(index).gameObject.SetActive(true);
         }
@@ -37,5 +41,10 @@ public class ComicManager : MonoBehaviour
             index--;
             transform.GetChild(index).gameObject.SetActive(true);
         }
+    }
+
+    public void Skip() {
+        int index = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadSceneAsync(index + 1);
     }
 }
