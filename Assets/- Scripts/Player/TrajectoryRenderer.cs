@@ -10,16 +10,14 @@ using System;
 public class TrajectoryRenderer : MonoBehaviour
 {
     [Tooltip("Number of points that compose the line renderer")]
-    [SerializeField] private int _resolution = 100;
+    [SerializeField] private int _resolution = 32;
 
 
     private LineRenderer _renderer;
-    private Vector3[] _positions;
 
     private void Awake() {
         _renderer = GetComponent<LineRenderer>();
         _renderer.enabled = false; // only show trajectory when explicitly told to
-        RefreshResolution();
     }
 
     /// <summary>Update the trajectory that this component will model</summary>
@@ -30,7 +28,7 @@ public class TrajectoryRenderer : MonoBehaviour
     /// premature collisions. By default, assumes object has no volume.
     /// </param>
     public void UpdateTrajectory(Vector3 pivot, Vector3 localStartPos, Vector3 localDestPos, float objRadius = 0.0f) {
-        RefreshResolution();
+        var positions = new List<Vector3>();
 
         // initialize necessary vector info
         float startRad = localStartPos.magnitude;
@@ -49,34 +47,42 @@ public class TrajectoryRenderer : MonoBehaviour
         float degPerTick = totalAngle / _resolution;
 
         // calculate starting point
-        _positions[0] = pivot + localStartPos;
+        positions.Add(pivot + localStartPos);
 
         // calculate appropriate points along the line
         for (int i = 1; i < _resolution; i++) {
             float currentRadius = Mathf.Lerp(startRad, destRad, ((float)i / _resolution));
-
-            Vector3 pivotDirToPoint = (_positions[i-1] - pivot).normalized;
-            pivotDirToPoint = Quaternion.AngleAxis(degPerTick, axis) * pivotDirToPoint;
+            Vector3 lastPos = positions[i-1];
             
-            _positions[i] = pivot + (pivotDirToPoint * currentRadius);
+            Vector3 pivotDirToPos = (lastPos - pivot).normalized;
+            pivotDirToPos = Quaternion.AngleAxis(degPerTick, axis) * pivotDirToPos;
+            
+            Vector3 currentPos = pivot + (pivotDirToPos * currentRadius); 
+            
+            Vector3 vecToCurrentPos = (currentPos - lastPos);
 
-            // TODO spherecast to check for early collision
+            positions.Add(currentPos);
+
+            // spherecast to check for early collision
+            Ray ray = new Ray(lastPos, vecToCurrentPos.normalized);
+            bool willHit = Physics.SphereCast(
+                ray: ray, 
+                radius: objRadius, 
+                maxDistance: vecToCurrentPos.magnitude, 
+                layerMask: 1
+            );
+
+            // exit the loop if the spherecast hits something
+            if (willHit) { break; }
         }
 
         // Apply changes to renderer
-        _renderer.SetPositions(_positions);
+        _renderer.positionCount = positions.Count;
+        _renderer.SetPositions(positions.ToArray());
     }
 
     // <summary>Toggle whether the trajectory line will be rendered</summary>
     public void ToggleRender(bool enabled) => _renderer.enabled = enabled;
-
-    /// <summary>Set renderer resolution to whatever is currently set in editor</summary>
-    private void RefreshResolution() {
-        if (_renderer.positionCount != _resolution) {
-            _renderer.positionCount = _resolution; 
-            Array.Resize(ref _positions, _resolution);
-        }
-    }
 
     /// <summary>
     /// Gets a normalized vector orthogonal to both parameter vectors. 
