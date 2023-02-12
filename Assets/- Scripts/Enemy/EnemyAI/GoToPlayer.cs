@@ -19,7 +19,7 @@ public class GoToPlayer : Node
         Transform player = (Transform)GetData("player");
 
         //go to players location
-        if (Vector3.Distance(_agent.transform.position, player.position) > 0.01f) {
+        if (Vector3.Distance(_agent.transform.position, player.position) > 0.5f) {
             _agent.destination = player.position;
             _agent.transform.LookAt(new Vector3(player.position.x, _agent.transform.position.y, player.position.z));
         }
