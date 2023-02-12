@@ -18,7 +18,9 @@ public class TutorialBubble : MonoBehaviour
     private float localTimer;
 
     [SerializeField]
-    public Sprite[] hintSprites; 
+    public Sprite[] hintSprites;
+
+    public HurtingBush attackedBush;
 
     void Start()
     {
@@ -58,7 +60,8 @@ public class TutorialBubble : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(true);
             spriteIndex = 2 * i;
-            called[i] = true;
+            if (attackedBush == null || i != 2)
+                called[i] = true;
             localTimer = 3f;
         }
     }
