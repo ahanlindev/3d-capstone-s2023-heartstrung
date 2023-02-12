@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 namespace Heart
 {
@@ -16,10 +17,25 @@ namespace Heart
             }
         }
 
+        protected override void OnPlayerChargeFling()
+        {
+            base.OnPlayerChargeFling();
+
+            // tween rotate away from player in anticipation of fling
+            Vector3 vecFromPlayer = _sm.transform.position - _sm.player.transform.position;
+            Vector3 lookAtPoint = _sm.transform.position + vecFromPlayer;
+
+            _sm.transform.DOLookAt(lookAtPoint, 0.2f, AxisConstraint.Y)
+                .SetEase(Ease.InOutCubic);
+        }
+
         protected override void OnPlayerFling(float power)
         {
             base.OnPlayerFling(power);
             _sm.ChangeState(_sm.flungState);
+
+            // finish rotation tween if fling happens prematurely
+            _sm.transform.DOComplete();
         }
 
         protected override bool StateIsFlingable() => true;
