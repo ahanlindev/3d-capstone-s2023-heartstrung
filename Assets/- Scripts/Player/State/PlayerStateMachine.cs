@@ -8,6 +8,9 @@ public class PlayerStateMachine : BaseStateMachine
 {
     // Emitted events -----------------------------------------------------
 
+    /// <summary>Event emitted when the player starts charging a fling.</summary>
+    public Action ChargeFlingEvent;
+
     /// <summary>
     /// Event emitted when the player executes a fling. 
     /// First parameter is percentage fling power. 
@@ -40,6 +43,9 @@ public class PlayerStateMachine : BaseStateMachine
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
     public Claws claws { get; private set; }
+
+    /// <summary>Trajectory renderer for charge and fling</summary>
+    public TrajectoryRenderer trajectoryRenderer { get; private set; }
 
     /// <summary>
     /// Note that on the player, this is not truly a health count. 
@@ -75,8 +81,16 @@ public class PlayerStateMachine : BaseStateMachine
     public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
 
     [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
-    [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.85f;
+    [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.55f;
     public float powerPerSecond { get => _powerPerSecond; private set => _powerPerSecond = value; }
+
+    [Tooltip("Minimum percentage of fling power that a fling can have")]
+    [Range(0f, 1f)][SerializeField] private float _minPower = 0.35f;
+    public float minPower { get => _minPower; private set => _minPower = value; }
+
+    [Tooltip("Maximum percentage of fling power that a fling can have")]
+    [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
+    public float maxPower { get => _maxPower; private set => _maxPower = value; }
 
     // Private fields ----------------------------------------------------
     private PlayerInput _playerInput;
@@ -109,7 +123,7 @@ public class PlayerStateMachine : BaseStateMachine
         coll = GetComponent<Collider>();
         hitTracker = GetComponent<Health>();
         claws = GetComponentInChildren<Claws>();
-
+        trajectoryRenderer = GetComponentInChildren<TrajectoryRenderer>();
         anim = GetComponentInChildren<Animator>();
 
         // initialize tether (TODO this should either be a method or done elsewhere)
@@ -117,13 +131,15 @@ public class PlayerStateMachine : BaseStateMachine
         if (tether)
         {
             var tetherLimit = tether.linearLimit;
-            tetherLimit.limit = maxTetherLength;
+            tetherLimit.limit = maxTetherLength + 0.2f; // add delta for safety when working with limit
             tether.linearLimit = tetherLimit;
         }
 
         // validate non-guaranteed values
         if (!anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
         if (!claws) { Debug.LogError("PlayerStateMachine cannot find Claws component in children"); }
+        if (!trajectoryRenderer) { Debug.LogError("PlayerStateMachine cannot find TrajectoryRenderer component in children!"); }
+        if (!hitTracker) { Debug.LogError("PlayerStateMachine cannot find a Health component!"); }
         if (!heart) { Debug.LogWarning("Player does not have a heart set!"); }
     }
 
