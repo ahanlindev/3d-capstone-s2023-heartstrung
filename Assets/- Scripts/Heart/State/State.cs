@@ -12,7 +12,11 @@ namespace Heart
 
         public State(string name, HeartStateMachine stateMachine) : base(name, stateMachine) { }
 
+        /// <summary>Event handler for when the player starts charging a fling. </summary>
+        protected virtual void OnPlayerChargeFling() { }
+
         /// <summary>Event handler for when the player attempts to fling the heart. </summary>
+        /// <param name="power">percentage power of the fling</param>
         protected virtual void OnPlayerFling(float power) { }
 
         /// <summary>Event handler for when the player is interrupted while flinging the heart</summary>
@@ -51,6 +55,7 @@ namespace Heart
         public override void Enter()
         {
             base.Enter();
+            _sm.player.ChargeFlingEvent += OnPlayerChargeFling;
             _sm.player.FlingEvent += OnPlayerFling;
             _sm.player.FlingInterruptedEvent += OnPlayerFlingInterrupted;
             _sm.CollisionEnterEvent += OnCollisionEnter;
