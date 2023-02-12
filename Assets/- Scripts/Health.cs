@@ -13,6 +13,7 @@ public class Health : MonoBehaviour
     
     [Tooltip("Max health for this entity")]
     [SerializeField] private float _maxHealth = 100f;
+    public float MaxHealth {get => _maxHealth; private set => _maxHealth = value; }
 
     /// <summary>current health value</summary>
     public float CurrentHealth { get; private set; }
