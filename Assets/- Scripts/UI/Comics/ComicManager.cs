@@ -9,7 +9,7 @@ using DG.Tweening;
 public class ComicManager : MonoBehaviour
 {
     [Tooltip("Time in seconds that each new panel will fade in")]
-    [SerializeField] private float _fadeInTime = 0.25f;
+    [SerializeField] private float _fadeInTime = 0.5f;
 
     [Tooltip("Time in seconds that each new panel will fade out")]
     [SerializeField] private float _fadeOutTime = 0.25f;
