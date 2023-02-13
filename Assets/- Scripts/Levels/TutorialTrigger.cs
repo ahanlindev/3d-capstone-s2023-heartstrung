@@ -8,6 +8,7 @@ public class TutorialTrigger : MonoBehaviour
 
     public int HintIndex;
     TutorialBubble tutorialBubble;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +33,10 @@ public class TutorialTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+    
         if (other.gameObject.tag == "Player")
         {
+            tutorialBubble.checktheBush(HintIndex);
             DOVirtual.DelayedCall(2f, () => tutorialBubble.cleanText(), false);
         }
     }
