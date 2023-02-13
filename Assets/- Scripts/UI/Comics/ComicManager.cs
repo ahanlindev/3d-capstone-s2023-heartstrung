@@ -41,8 +41,7 @@ public class ComicManager : MonoBehaviour
     public void Next() {
         if (_index >= transform.childCount - 1)
         {
-            int index = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadSceneAsync(index + 1);
+            FadeIntoNextScene();
         } else {
             //transform.GetChild(_index).gameObject.SetActive(false);
             //FadeCurrentSlide(fadeIn: false);
@@ -66,8 +65,7 @@ public class ComicManager : MonoBehaviour
     }
 
     public void Skip() {
-        int index = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadSceneAsync(index + 1);
+        FadeIntoNextScene();
     }
 
     private void FadeCurrentSlide(bool fadeIn)
@@ -100,5 +98,22 @@ public class ComicManager : MonoBehaviour
             // deactivate game object at end of fade out
             fade.OnComplete(() => { image.gameObject.SetActive(false); });
         }
+    }
+
+    private void FadeIntoNextScene() {
+        foreach(Transform t in transform) {
+            var image = t.gameObject.GetComponent<RawImage>(); 
+            if (image && image.isActiveAndEnabled) {
+                image.DOFade(0, _fadeOutTime);
+            }
+        }
+        DOVirtual.DelayedCall(
+            _fadeOutTime * 1.5f,
+            () => {
+                int index = SceneManager.GetActiveScene().buildIndex;
+                SceneManager.LoadSceneAsync(index + 1);
+            },
+            false
+         );
     }
 }
