@@ -19,8 +19,9 @@ public class ButtonManager : MonoBehaviour
     }
 
     public void StartGameButtonClicked() {
-        Debug.Log("Tutorial GO!");
-        SceneManager.LoadSceneAsync(1);
+        Debug.Log("Let us Start the Game");
+        int index = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadSceneAsync(index + 1);
     }
 
     public void OptionsButtonClicked() {
