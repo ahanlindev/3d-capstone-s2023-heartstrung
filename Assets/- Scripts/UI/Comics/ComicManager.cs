@@ -8,10 +8,6 @@ using DG.Tweening;
 /// <summary>Controls displaying and hiding comic pages in sequence</summary>
 public class ComicManager : MonoBehaviour
 {
-    // TODO might be more efficient to have many images one one canvas
-    [Tooltip("Array of comic panels that will be shown in order")]
-    [SerializeField] private Canvas[] _slideShow;
-
     [Tooltip("Time in seconds that each new panel will fade in")]
     [SerializeField] private float _fadeInTime = 0.25f;
 
@@ -25,9 +21,8 @@ public class ComicManager : MonoBehaviour
     void Start() {
         // set all child canvases to be inactive
         foreach(Transform child in transform) {
-            if(child.gameObject.name != "Button" && child.gameObject.name != "Background") {
-                child.gameObject.SetActive(false);
-            }
+            child.gameObject.SetActive(false);
+            child.GetComponent<RawImage>().material.color = Color.white;
         }
 
         // initialize fade parameters
@@ -35,7 +30,8 @@ public class ComicManager : MonoBehaviour
             .SetEase(Ease.InOutCubic);
 
         // activate the starting index
-        transform.GetChild(_index).gameObject.SetActive(true);
+        FadeCurrentSlide(fadeIn: true);
+        //transform.GetChild(_index).gameObject.SetActive(true);
     }
 
     private void OnDestroy() {
@@ -43,24 +39,29 @@ public class ComicManager : MonoBehaviour
     }
     
     public void Next() {
-        if (_index >= _slideShow.Length - 1)
+        if (_index >= transform.childCount - 1)
         {
             int index = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadSceneAsync(index + 1);
         } else {
-            transform.GetChild(_index).gameObject.SetActive(false);
-            var image = transform.GetChild(_index).gameObject;
-            // image.GetComponent<Image>().DOColor(new Color(0,0,0), 0.25f);
+            //transform.GetChild(_index).gameObject.SetActive(false);
+            //FadeCurrentSlide(fadeIn: false);
             _index++;
-            transform.GetChild(_index).gameObject.SetActive(true);
+            // transform.GetChild(_index).gameObject.SetActive(true);
+            FadeCurrentSlide(fadeIn: true);
         }
     }
 
     public void Previous() {
+        // if(_index > 0) {
+        //     transform.GetChild(_index).gameObject.SetActive(false);
+        //     _index--;
+        //     transform.GetChild(_index).gameObject.SetActive(true);
+        // }
         if(_index > 0) {
-            transform.GetChild(_index).gameObject.SetActive(false);
+            FadeCurrentSlide(fadeIn: false);
             _index--;
-            transform.GetChild(_index).gameObject.SetActive(true);
+            //FadeCurrentSlide(fadeIn: true);
         }
     }
 
@@ -72,32 +73,32 @@ public class ComicManager : MonoBehaviour
     private void FadeCurrentSlide(bool fadeIn)
     {
         // set up variables
-        Canvas canvas = _slideShow[_index];
-        Image[] images = canvas.GetComponentsInChildren<Image>();
+        Debug.Log($"index {_index}");
+        RawImage image = transform.GetChild(_index)?.GetComponent<RawImage>();
         float startAlpha = (fadeIn) ? 0.0f : 1.0f;
         float endAlpha = (fadeIn) ? 1.0f : 0.0f;
         float fadeTime = (fadeIn) ? _fadeInTime : _fadeOutTime;
-        
-        // fade in or fade out each image as appropriate
-        foreach (Image image in images)
-        {
-            // start tween sequence
-            Sequence fade = DOTween.Sequence()
-                .Append(image.material.DOFade(startAlpha, 0))
-                .Append(image.material.DOFade(endAlpha, fadeTime))
-                .SetAs(_fadeParams)
-            ;
 
-            if (fadeIn)
-            {
-                // activate game object at start of fade in
-                fade.OnStart(() => { image.gameObject.SetActive(true); });
-            }
-            else
-            {
-                // deactivate game object at end of fade out
-                fade.OnComplete(() => { image.gameObject.SetActive(false); });
-            }
+        // fade in or fade out image as appropriate
+        Color startColor = image.color;
+        startColor.a = startAlpha;
+        image.color = startColor;
+        
+        // start tween sequence
+        Debug.Log($"fadeInTime {fadeTime}");
+        Tween fade = image.DOFade(endAlpha, fadeTime)
+            .SetAs(_fadeParams)
+        ;
+
+        if (fadeIn)
+        {
+            // activate game object at start of fade in
+            fade.OnStart(() => { image.gameObject.SetActive(true); });
+        }
+        else
+        {
+            // deactivate game object at end of fade out
+            fade.OnComplete(() => { image.gameObject.SetActive(false); });
         }
     }
 }
