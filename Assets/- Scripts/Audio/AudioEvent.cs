@@ -17,9 +17,9 @@ public class AudioEvent : MonoBehaviour
     [SerializeField] public bool PitchShift = true;
 
     void Awake() {
-        Debug.Log("setting name to " + this.gameObject.name);
+        // Debug.Log("setting name to " + this.gameObject.name);
         EventName = this.gameObject.name;
-        Debug.Log("name has been set to " + EventName);
+        // Debug.Log("name has been set to " + EventName);
     }
 
     /// <summary>Returns a randomly selected AudioClip from SoundPool.</summary>

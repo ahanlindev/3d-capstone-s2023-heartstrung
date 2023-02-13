@@ -71,10 +71,10 @@ namespace Player
             _sm.flingInput.performed += OnPlayerStartCharge;
             _sm.flingInput.canceled += OnPlayerFinishCharge;
             _sm.hitTracker.ChangeHealthEvent += OnChangeHealth;
-            _sm.heart.health.ChangeHealthEvent += OnChangeHealth;
 
             if (_sm.heart)
             {
+                _sm.heart.health.ChangeHealthEvent += OnChangeHealth;
                 _sm.heart.LandedEvent += OnHeartLanded;
             }
 
@@ -102,10 +102,10 @@ namespace Player
             _sm.flingInput.performed -= OnPlayerStartCharge;
             _sm.flingInput.canceled -= OnPlayerFinishCharge;
             _sm.hitTracker.ChangeHealthEvent -= OnChangeHealth;
-            _sm.heart.health.ChangeHealthEvent -= OnChangeHealth;
 
             if (_sm.heart)
             {
+                _sm.heart.health.ChangeHealthEvent -= OnChangeHealth;
                 _sm.heart.LandedEvent -= OnHeartLanded;
             }
 
@@ -119,13 +119,18 @@ namespace Player
         {
             float distToGround = _sm.coll.bounds.extents.y;
             Vector3 collOffset = _sm.coll.bounds.center - _sm.transform.position;
+
+            Vector3 center = _sm.coll.bounds.center;
+            center.y -= (distToGround - 0.4f);
+
             bool touchingGround = Physics.BoxCast(
-                center: _sm.transform.position + collOffset,
+                center: center,
                 halfExtents: new Vector3(0.25f, 0.1f, 0.25f),
                 direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
-                maxDistance: distToGround
+                maxDistance: 0.4f
             );
+
             return touchingGround;
         }
     }

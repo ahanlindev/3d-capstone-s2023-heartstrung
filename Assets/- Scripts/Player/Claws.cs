@@ -24,11 +24,11 @@ public class Claws : MonoBehaviour
         if (enemy) {
             enemy.ChangeHealth(-10.0f);
         }
-
-        var hurtingbush = other.gameObject.GetComponent<hurtingBush>();
+        Debug.Log($"Claws collided with {other.gameObject.name}");        
+        var hurtingbush = other.gameObject.GetComponent<HurtingBush>();
         if (hurtingbush)
         {
-            hurtingbush.bushDie();
+            hurtingbush.BushDie();
         }
     }
 }

@@ -17,7 +17,7 @@ public class PfMovingList : MonoBehaviour
     private Vector3 lastPosition;
     private int tgtLength = 0;
 
-    private HashSet<Transform> collidedBodies;
+    private HashSet<Rigidbody> collidedBodies;
 
     [Tooltip("Time for the platform waiting at one waypoint.")] 
     [SerializeField] public float hangTime = 3.0f;
@@ -26,8 +26,11 @@ public class PfMovingList : MonoBehaviour
     void Start()
     { 
         lastPosition = transform.position;
-        collidedBodies = new HashSet<Transform>();
+        collidedBodies = new HashSet<Rigidbody>();
         tgtLength = target.Length;
+
+        transform.DOMove(target[index].position, 1 / speed);
+
     }
 
     // Update is called once per frame
@@ -53,11 +56,10 @@ public class PfMovingList : MonoBehaviour
             //{
             //    Debug.Log(index);
             //}
-            localTimer = hangTime;
+            transform.DOMove(target[index].position, 1 / speed);
+            localTimer = hangTime + 1 / speed;
         }
-        else
-        {
-
+ 
             //target[index].position = new Vector3(target[index].position.x,
             //    target[index].position.y, target[index].position.z);
             //Vector3 direction = target[index].position - thisPlatform.position;
@@ -66,27 +68,25 @@ public class PfMovingList : MonoBehaviour
             //thisPlatform.Translate(offset);
 
             
-            float duration = 1f / speed;
+        
             //SetEase(Ease.InOutSine)
-            transform.DOMove(target[index].position, duration);
-            Vector3 offset = transform.position - lastPosition;
-            lastPosition = transform.position;
-            foreach(Transform attached in collidedBodies)
-            {
-                attached.GetComponent<Rigidbody>().transform.position += offset;
-            }
-
+        Vector3 offset = transform.position - lastPosition;
+        lastPosition = transform.position;
+        foreach(Rigidbody attached in collidedBodies)
+        {
+            attached.transform.position += offset;
         }
+
+        
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Transform collidedObj = collision.collider.transform;
-        collidedBodies.Add(collidedObj);
+        collidedBodies.Add(collision.collider.attachedRigidbody);
     }
 
-    private void OnCollisionExit(Collision other)
+    private void OnCollisionExit(Collision collision)
     {
-        collidedBodies.Remove(other.transform);
+        collidedBodies.Remove(collision.collider.attachedRigidbody);
     }
 }
