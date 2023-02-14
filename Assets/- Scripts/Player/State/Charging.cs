@@ -60,23 +60,23 @@ namespace Player
             UpdateFlingTrajectory();
         }
 
-        protected override void OnPlayerAttack(CallbackContext _)
+        protected override void OnPlayerAttackInput(CallbackContext _)
         {
             // allow attack to cancel a charge
-            base.OnPlayerAttack(_);
+            base.OnPlayerAttackInput(_);
             _sm.ChangeState(_sm.attackingState);
         }
 
-        protected override void OnPlayerJump(CallbackContext _)
+        protected override void OnPlayerJumpInput(CallbackContext _)
         {
             // allow jump to cancel a charge
-            base.OnPlayerJump(_);
+            base.OnPlayerJumpInput(_);
             _sm.ChangeState(_sm.jumpingState);
         }
 
-        protected override void OnPlayerFinishCharge(CallbackContext _)
+        protected override void OnPlayerFinishChargeInput(CallbackContext _)
         {
-            base.OnPlayerFinishCharge(_);
+            base.OnPlayerFinishChargeInput(_);
 
             // Fling heart if able. Can do this in Flinging.Enter, but will be harder to get power value
             if (_sm.heart.canBeFlung)

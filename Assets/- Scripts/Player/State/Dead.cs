@@ -28,29 +28,29 @@ namespace Player
             base.Exit();
         }
 
-        protected override void OnPlayerAttack(CallbackContext _)
+        protected override void OnPlayerAttackInput(CallbackContext _)
         {
-            base.OnPlayerAttack(_);
+            base.OnPlayerAttackInput(_);
         }
 
-        protected override void OnPlayerJump(CallbackContext _)
+        protected override void OnPlayerJumpInput(CallbackContext _)
         {
-            base.OnPlayerJump(_);
+            base.OnPlayerJumpInput(_);
         }
 
-        protected override void OnPlayerStartCharge(CallbackContext _)
+        protected override void OnPlayerStartChargeInput(CallbackContext _)
         {
-            base.OnPlayerStartCharge(_);
+            base.OnPlayerStartChargeInput(_);
         }
 
-        protected override void OnPlayerFinishCharge(CallbackContext _)
+        protected override void OnPlayerFinishChargeInput(CallbackContext _)
         {
-            base.OnPlayerFinishCharge(_);
+            base.OnPlayerFinishChargeInput(_);
         }
 
-        protected override void HandlePlayerMove(Vector3 moveVector)
+        protected override void HandlePlayerMoveInput(Vector3 moveVector)
         {
-            base.HandlePlayerMove(moveVector);
+            base.HandlePlayerMoveInput(moveVector);
         }
     }
 }
