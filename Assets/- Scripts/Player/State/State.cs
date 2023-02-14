@@ -65,11 +65,16 @@ namespace Player
         {
             base.Enter();
 
-            // subscribe to events
-            _sm.attackInput.performed += OnPlayerAttackInput;
-            _sm.jumpInput.performed += OnPlayerJumpInput;
-            _sm.flingInput.performed += OnPlayerStartChargeInput;
-            _sm.flingInput.canceled += OnPlayerFinishChargeInput;
+            // subscribe to necessary events
+            
+            // input
+            SubscribeToInputEvents();
+
+            // pause
+            PauseMenuManager.UnpauseEvent += SubscribeToInputEvents;
+            PauseMenuManager.PauseEvent += UnsubscribeFromInputEvents;
+
+            // health and heart
             _sm.hitTracker.ChangeHealthEvent += OnChangeHealth;
 
             if (_sm.heart)
@@ -96,11 +101,16 @@ namespace Player
         {
             base.Exit();
 
-            // unsubscribe to input events
-            _sm.attackInput.performed -= OnPlayerAttackInput;
-            _sm.jumpInput.performed -= OnPlayerJumpInput;
-            _sm.flingInput.performed -= OnPlayerStartChargeInput;
-            _sm.flingInput.canceled -= OnPlayerFinishChargeInput;
+            // unsubscribe from events
+
+            // input
+            UnsubscribeFromInputEvents();
+
+            // pause
+            PauseMenuManager.UnpauseEvent -= SubscribeToInputEvents;
+            PauseMenuManager.PauseEvent -= UnsubscribeFromInputEvents;
+
+            // health & heart
             _sm.hitTracker.ChangeHealthEvent -= OnChangeHealth;
 
             if (_sm.heart)
@@ -132,6 +142,20 @@ namespace Player
             );
 
             return touchingGround;
+        }
+
+        private void SubscribeToInputEvents() {
+            _sm.attackInput.performed += OnPlayerAttackInput;
+            _sm.jumpInput.performed += OnPlayerJumpInput;
+            _sm.flingInput.performed += OnPlayerStartChargeInput;
+            _sm.flingInput.canceled += OnPlayerFinishChargeInput;
+        }
+
+        private void UnsubscribeFromInputEvents() {
+            _sm.attackInput.performed -= OnPlayerAttackInput;
+            _sm.jumpInput.performed -= OnPlayerJumpInput;
+            _sm.flingInput.performed -= OnPlayerStartChargeInput;
+            _sm.flingInput.canceled -= OnPlayerFinishChargeInput;
         }
     }
 }
