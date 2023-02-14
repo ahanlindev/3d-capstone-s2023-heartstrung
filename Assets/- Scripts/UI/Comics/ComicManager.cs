@@ -18,9 +18,11 @@ public class ComicManager : MonoBehaviour
 
     private TweenParams _fadeParams;
 
-    void Start() {
+    void Start()
+    {
         // set all child canvases to be inactive
-        foreach(Transform child in transform) {
+        foreach (Transform child in transform)
+        {
             child.gameObject.SetActive(false);
             child.GetComponent<RawImage>().material.color = Color.white;
         }
@@ -31,43 +33,49 @@ public class ComicManager : MonoBehaviour
 
         // activate the starting index
         FadeCurrentSlide(fadeIn: true);
-        //transform.GetChild(_index).gameObject.SetActive(true);
     }
 
-    private void OnDestroy() {
-        DOTween.KillAll();    
+    private void OnDestroy()
+    {
+        DOTween.KillAll();
     }
-    
-    public void Next() {
+
+    /// <summary>
+    /// Continues to the next page of the comic. 
+    /// If the last page is reached, loads the next scene.
+    /// </summary>
+    public void Next()
+    {
         if (_index >= transform.childCount - 1)
         {
             FadeIntoNextScene();
-        } else {
-            //transform.GetChild(_index).gameObject.SetActive(false);
-            //FadeCurrentSlide(fadeIn: false);
+        }
+        else
+        {
             _index++;
-            // transform.GetChild(_index).gameObject.SetActive(true);
             FadeCurrentSlide(fadeIn: true);
         }
     }
 
-    public void Previous() {
-        // if(_index > 0) {
-        //     transform.GetChild(_index).gameObject.SetActive(false);
-        //     _index--;
-        //     transform.GetChild(_index).gameObject.SetActive(true);
-        // }
-        if(_index > 0) {
+    /// <summary>Return to the previous page of the comic, if it exists/</summary>
+    public void Previous()
+    {
+        if (_index > 0)
+        {
             FadeCurrentSlide(fadeIn: false);
             _index--;
             //FadeCurrentSlide(fadeIn: true);
         }
     }
 
-    public void Skip() {
+    /// <summary>Skips the comic and loads the next scene</summary>
+    public void Skip()
+    {
         FadeIntoNextScene();
     }
 
+    /// <summary>Gradually fades the slide at the current index either in or out</summary>
+    /// <param name="fadeIn">If true, the slide at the current index is enabled, otherwise it is disabled.</param>
     private void FadeCurrentSlide(bool fadeIn)
     {
         // set up variables
@@ -81,7 +89,7 @@ public class ComicManager : MonoBehaviour
         Color startColor = image.color;
         startColor.a = startAlpha;
         image.color = startColor;
-        
+
         // start tween sequence
         Debug.Log($"fadeInTime {fadeTime}");
         Tween fade = image.DOFade(endAlpha, fadeTime)
@@ -100,16 +108,21 @@ public class ComicManager : MonoBehaviour
         }
     }
 
-    private void FadeIntoNextScene() {
-        foreach(Transform t in transform) {
-            var image = t.gameObject.GetComponent<RawImage>(); 
-            if (image && image.isActiveAndEnabled) {
+    /// <summary>Fades out all active slides and loads the next scene</summary>
+    private void FadeIntoNextScene()
+    {
+        foreach (Transform t in transform)
+        {
+            var image = t.gameObject.GetComponent<RawImage>();
+            if (image && image.isActiveAndEnabled)
+            {
                 image.DOFade(0, _fadeOutTime);
             }
         }
         DOVirtual.DelayedCall(
             _fadeOutTime * 1.5f,
-            () => {
+            () =>
+            {
                 int index = SceneManager.GetActiveScene().buildIndex;
                 SceneManager.LoadSceneAsync(index + 1);
             },
