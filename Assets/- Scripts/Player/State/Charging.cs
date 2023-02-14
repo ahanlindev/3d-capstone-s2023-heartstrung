@@ -40,6 +40,8 @@ namespace Player
         {
             base.Exit();
 
+            AudioManager.instance.finishFlingSoundEffect();
+
             // completes tweens if incomplete
             _sm.transform.DOComplete();
             StopPowerFlux();
@@ -62,7 +64,6 @@ namespace Player
             {
                 // execute fling
                 _sm.FlingEvent?.Invoke(_power);
-                AudioManager.instance.finishFlingSoundEffect();
                 AudioManager.instance.playSoundEvent("DodgerFling");
                 _sm.ChangeState(_sm.flingingState);
             }
