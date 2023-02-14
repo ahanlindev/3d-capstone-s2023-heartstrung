@@ -27,21 +27,21 @@ namespace Player
             }
         }
 
-        protected override void OnPlayerAttack(CallbackContext _)
+        protected override void OnPlayerAttackInput(CallbackContext _)
         {
-            base.OnPlayerAttack(_);
+            base.OnPlayerAttackInput(_);
             _sm.ChangeState(_sm.attackingState);
         }
 
-        protected override void OnPlayerJump(CallbackContext _)
+        protected override void OnPlayerJumpInput(CallbackContext _)
         {
-            base.OnPlayerJump(_);
+            base.OnPlayerJumpInput(_);
             _sm.ChangeState(_sm.jumpingState);
         }
 
-        protected override void OnPlayerStartCharge(CallbackContext _)
+        protected override void OnPlayerStartChargeInput(CallbackContext _)
         {
-            base.OnPlayerStartCharge(_);
+            base.OnPlayerStartChargeInput(_);
 
             // cannot fling if there is no heart set
             if (_sm.heart)
@@ -50,9 +50,9 @@ namespace Player
             }
         }
 
-        protected override void HandlePlayerMove(Vector3 moveVector)
+        protected override void HandlePlayerMoveInput(Vector3 moveVector)
         {
-            base.HandlePlayerMove(moveVector);
+            base.HandlePlayerMoveInput(moveVector);
             // go to idle if no longer moving
             if (moveVector == Vector3.zero)
             {

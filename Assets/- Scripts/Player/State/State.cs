@@ -14,19 +14,19 @@ namespace Player
 
         /// <summary>Event handler for when the player performs an attack input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerAttack(CallbackContext _) { }
+        protected virtual void OnPlayerAttackInput(CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a jump input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerJump(CallbackContext _) { }
+        protected virtual void OnPlayerJumpInput(CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerStartCharge(CallbackContext _) { }
+        protected virtual void OnPlayerStartChargeInput(CallbackContext _) { }
 
         /// <summary>Event handler for when the player finishes performing a fling input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerFinishCharge(CallbackContext _) { }
+        protected virtual void OnPlayerFinishChargeInput(CallbackContext _) { }
 
         /// <summary>Event handler for when the player gets hurt by something. Override to ignore or change base behavior.</summary>
         protected virtual void OnHurt() { _sm.ChangeState(_sm.hurtState); }
@@ -39,7 +39,7 @@ namespace Player
 
         /// <summary>Handler for whatever per-physics-tick movement event the player performs</summary>
         /// <param name="moveVector">Desired movement direction</param>
-        protected virtual void HandlePlayerMove(Vector3 moveVector) { }
+        protected virtual void HandlePlayerMoveInput(Vector3 moveVector) { }
 
         /// <summary>
         /// Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate. 
@@ -65,11 +65,16 @@ namespace Player
         {
             base.Enter();
 
-            // subscribe to events
-            _sm.attackInput.performed += OnPlayerAttack;
-            _sm.jumpInput.performed += OnPlayerJump;
-            _sm.flingInput.performed += OnPlayerStartCharge;
-            _sm.flingInput.canceled += OnPlayerFinishCharge;
+            // subscribe to necessary events
+            
+            // input
+            SubscribeToInputEvents();
+
+            // pause
+            PauseMenuManager.UnpauseEvent += SubscribeToInputEvents;
+            PauseMenuManager.PauseEvent += UnsubscribeFromInputEvents;
+
+            // health and heart
             _sm.hitTracker.ChangeHealthEvent += OnChangeHealth;
 
             if (_sm.heart)
@@ -89,18 +94,23 @@ namespace Player
             // read in player movement input and send it to handler
             Vector2 moveVec = _sm.movementInput.ReadValue<Vector2>();
             Vector3 moveVec3D = new Vector3(moveVec.x, 0.0f, moveVec.y);
-            HandlePlayerMove(moveVec3D);
+            HandlePlayerMoveInput(moveVec3D);
         }
 
         public override void Exit()
         {
             base.Exit();
 
-            // unsubscribe to input events
-            _sm.attackInput.performed -= OnPlayerAttack;
-            _sm.jumpInput.performed -= OnPlayerJump;
-            _sm.flingInput.performed -= OnPlayerStartCharge;
-            _sm.flingInput.canceled -= OnPlayerFinishCharge;
+            // unsubscribe from events
+
+            // input
+            UnsubscribeFromInputEvents();
+
+            // pause
+            PauseMenuManager.UnpauseEvent -= SubscribeToInputEvents;
+            PauseMenuManager.PauseEvent -= UnsubscribeFromInputEvents;
+
+            // health & heart
             _sm.hitTracker.ChangeHealthEvent -= OnChangeHealth;
 
             if (_sm.heart)
@@ -132,6 +142,20 @@ namespace Player
             );
 
             return touchingGround;
+        }
+
+        private void SubscribeToInputEvents() {
+            _sm.attackInput.performed += OnPlayerAttackInput;
+            _sm.jumpInput.performed += OnPlayerJumpInput;
+            _sm.flingInput.performed += OnPlayerStartChargeInput;
+            _sm.flingInput.canceled += OnPlayerFinishChargeInput;
+        }
+
+        private void UnsubscribeFromInputEvents() {
+            _sm.attackInput.performed -= OnPlayerAttackInput;
+            _sm.jumpInput.performed -= OnPlayerJumpInput;
+            _sm.flingInput.performed -= OnPlayerStartChargeInput;
+            _sm.flingInput.canceled -= OnPlayerFinishChargeInput;
         }
     }
 }
