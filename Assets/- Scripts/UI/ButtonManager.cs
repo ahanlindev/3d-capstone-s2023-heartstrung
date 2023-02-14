@@ -19,18 +19,18 @@ public class ButtonManager : MonoBehaviour
     }
 
     public void StartGameButtonClicked() {
-        Debug.Log("Let us Start the Game");
+        // Debug.Log("Let us Start the Game");
         int index = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadSceneAsync(index + 1);
     }
 
     public void OptionsButtonClicked() {
-        Debug.Log("Options GO!");
+        // Debug.Log("Options GO!");
         OptionsMenuManager.instance.ChangeOptionsState();
     }
 
     public void UnpauseButtonClicked() {
-        Debug.Log("Unpaused");
+        // Debug.Log("Unpaused");
         PauseMenuManager.instance.Unpause();
     }
 
