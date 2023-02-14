@@ -73,6 +73,11 @@ public class TutorialBubble : MonoBehaviour
         transform.GetChild(1).gameObject.SetActive(false);
     }
 
+    public void checktheBush(int i)
+    {
+        if (attackedBush == null || i == 2)
+            called[i] = true;
+    }
 
     private void flicker()
     {

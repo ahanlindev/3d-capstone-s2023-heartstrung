@@ -10,7 +10,7 @@ public class DeathPitCollider : MonoBehaviour
 
     void OnCollisionEnter(Collision col) {
         Debug.Log("DeathPitCollider collided with " + col.gameObject.name);
-        if(col.gameObject.tag == "Kitty" || col.gameObject.tag == "Heart") {
+        if(col.gameObject.tag == "Kitty" || col.gameObject.tag == "Player"  || col.gameObject.tag == "Heart") {
             Pit.Death();
         }
     }

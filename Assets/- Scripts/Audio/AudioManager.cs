@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 // Attach this script to the LevelManager.
 // 
@@ -15,7 +16,14 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
 
-    private AudioSource[] audioSources = new AudioSource[5];
+    // Specifies the music that should play in each scene.
+    // No entry in this dict means no music will play.
+
+    [SerializeField] public Dictionary<string, string> perSceneMusic = new Dictionary<string, string>();
+
+    private AudioSource[] audioSources;
+
+    private float flingPower = 0f;
 
     [Tooltip("Global game volume.")]
     [SerializeField] public float volume = 1f;
@@ -28,12 +36,20 @@ public class AudioManager : MonoBehaviour
             instance = this;
         }
 
-        // Instantiate the AudioSources
-        for(int i = 0; i < numAudioSources; i++) {
-            audioSources[0] = gameObject.AddComponent<AudioSource>();
-            audioSources[0].playOnAwake = false;
-        }
+        // Add entries to the perSceneMusic dictionary
+        perSceneMusic["TutorialLevel"] = "OverworldMusic";
+        perSceneMusic["TutorialLevel2"] = "OverworldMusic";
+        perSceneMusic["Level1"] = "OverworldMusic";
 
+        // Instantiate the AudioSources
+        // audioSources[0] is implicitly the fling audio source
+        // audioSources[1] is implicitly the music audio source
+        audioSources = new AudioSource[numAudioSources + 2];
+
+        for(int i = 0; i < numAudioSources + 2; i++) {
+            audioSources[i] = gameObject.AddComponent<AudioSource>();
+            audioSources[i].playOnAwake = false;
+        }
         // Debug.Log("Done loading sounds.");
     }
 
@@ -46,10 +62,33 @@ public class AudioManager : MonoBehaviour
             sounds.Add(audioEvent.EventName, audioEvent);
         }
 
+        audioSources[0].clip = sounds["ChargeFling"].poolSound();
+        audioSources[0].loop = true;
+        audioSources[1].loop = true;
+
         // // DEBUG: Print sounds dict to console
         // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
         //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
         // }
+    }
+
+    // called first
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // called second
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log(mode);
+        if(perSceneMusic.ContainsKey(scene.name)) {
+            // Debug.Log("Starting song " + scene.name);
+            startMusic(perSceneMusic[scene.name]);
+        } else {
+            stopMusic();
+        }
     }
 
     /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
@@ -61,25 +100,72 @@ public class AudioManager : MonoBehaviour
             return false;
         }
         // find an available AudioSource to play the sound
-        foreach(AudioSource source in gameObject.GetComponents<AudioSource>()) {
-            if(!source) {
+        // we start at index one because audioSources[0] is reserved for fling
+        for(int i = 2; i < audioSources.Length; i++) {
+            if(!audioSources[i]) {
                 // Debug.LogError("source is null bruh");
             }
-            if(!source.isPlaying) {
-                source.clip = soundToPlay;
-                source.volume = volume;
+            if(!audioSources[i].isPlaying) {
+                audioSources[i].clip = soundToPlay;
+                audioSources[i].volume = volume;
                 // randomize pitch for  v a r i a t i o n (TM)
                 if(sounds[sound].PitchShift) {
-                    source.pitch = Random.Range(.75f, 1.25f);
+                    audioSources[i].pitch = Random.Range(.75f, 1.25f);
                 } else {
-                    source.pitch = 1f;
+                    audioSources[i].pitch = 1f;
                     // Debug.Log("not doing pitch shift for " + sound);
                 }
-                source.Play();
+                audioSources[i].Play();
                 return true;
             }
         }
         // all audiosources are taken; do not play the sound effect
         return false;
+    }
+
+    ///<summary>Starts playing the audio fling sound effect.</summary>
+    public void startFlingSoundEffect(float power) {
+        // Debug.Log("Fling Started");
+        audioSources[0].pitch = convertFlingPowerToPitch(power);
+        audioSources[0].volume = volume / 10f;
+        audioSources[0].Play();
+    }
+
+    ///<summary>Updates the pitch the audio fling sound effect.</summary>
+    public void continueFlingSoundEffect(float power) {
+        // Debug.Log("Fling Continuing...");
+        audioSources[0].pitch = convertFlingPowerToPitch(power);
+    }
+
+    ///<summary>Disables the audio fling sound effect.</summary>
+    public void finishFlingSoundEffect() {
+        // Debug.Log("Fling Finished");
+        audioSources[0].Stop();
+    }
+
+    ///<sumary>Internal function that converts the fling power from the player into a pitch for the audioManager to use.</summary>
+    private float convertFlingPowerToPitch(float power) {
+        return power * 2 + 1f;
+    }
+
+    public void startMusic(string name) {
+        // Debug.Log("Music Started:" + name);
+        audioSources[1].clip = sounds[name].poolSound();
+        audioSources[1].pitch = 1f;
+        audioSources[1].volume = volume;
+        audioSources[1].Play();
+    }
+
+    public void stopMusic() {
+        // Debug.Log("Music Stopped");
+        audioSources[1].Stop();
+    }
+
+    public void pauseMusic() {
+        audioSources[1].Pause();
+    }
+
+    public void unPauseMusic() {
+        audioSources[1].UnPause();
     }
 }
