@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.InputSystem.InputAction;
+using DG.Tweening;
 
 namespace Player
 {
@@ -11,6 +13,16 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
+            // TODO this is a hard-coded value. Likely better to handle this in some scene manager class
+            DOVirtual.DelayedCall(
+                1f,
+                () =>
+                {
+                    int index = SceneManager.GetActiveScene().buildIndex;
+                    SceneManager.LoadSceneAsync(index);
+                }, 
+                false
+            );
         }
 
         public override void UpdateLogic()
