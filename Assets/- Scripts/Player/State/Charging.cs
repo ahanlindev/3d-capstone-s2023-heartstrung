@@ -25,6 +25,7 @@ namespace Player
             }
 
             _sm.ChargeFlingEvent?.Invoke();
+            AudioManager.instance.startFlingSoundEffect(_power);
 
             // fluctuate power
             StartPowerFlux();
@@ -47,8 +48,9 @@ namespace Player
         public override void UpdateLogic()
         {
             base.UpdateLogic();
-
+            AudioManager.instance.continueFlingSoundEffect(_power);
             UpdateFlingTrajectory();
+
         }
 
         protected override void OnPlayerFinishCharge(CallbackContext _)
@@ -60,6 +62,8 @@ namespace Player
             {
                 // execute fling
                 _sm.FlingEvent?.Invoke(_power);
+                AudioManager.instance.finishFlingSoundEffect();
+                AudioManager.instance.playSoundEvent("DodgerFling");
                 _sm.ChangeState(_sm.flingingState);
             }
             else
