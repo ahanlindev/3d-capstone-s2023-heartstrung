@@ -60,6 +60,20 @@ namespace Player
             UpdateFlingTrajectory();
         }
 
+        protected override void OnPlayerAttack(CallbackContext _)
+        {
+            // allow attack to cancel a charge
+            base.OnPlayerAttack(_);
+            _sm.ChangeState(_sm.attackingState);
+        }
+
+        protected override void OnPlayerJump(CallbackContext _)
+        {
+            // allow jump to cancel a charge
+            base.OnPlayerJump(_);
+            _sm.ChangeState(_sm.jumpingState);
+        }
+
         protected override void OnPlayerFinishCharge(CallbackContext _)
         {
             base.OnPlayerFinishCharge(_);
