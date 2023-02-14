@@ -37,7 +37,8 @@ public class TutorialTrigger : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             tutorialBubble.checktheBush(HintIndex);
-            DOVirtual.DelayedCall(2f, () => tutorialBubble.cleanText(), false);
+            tutorialBubble.cleanText();
+            //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
         }
     }
 
