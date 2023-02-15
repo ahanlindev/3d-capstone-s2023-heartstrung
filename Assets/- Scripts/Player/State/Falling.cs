@@ -19,21 +19,21 @@ namespace Player
             }
         }
 
-        protected override void OnPlayerAttack(CallbackContext _)
+        protected override void OnPlayerAttackInput(CallbackContext _)
         {
             // TODO should the player be able to attack in midair?
-            base.OnPlayerAttack(_);
+            base.OnPlayerAttackInput(_);
         }
 
-        protected override void OnPlayerStartCharge(CallbackContext _)
+        protected override void OnPlayerStartChargeInput(CallbackContext _)
         {
             // TODO should the player be able to fling in midair?
-            base.OnPlayerStartCharge(_);
+            base.OnPlayerStartChargeInput(_);
         }
 
-        protected override void HandlePlayerMove(Vector3 moveVector)
+        protected override void HandlePlayerMoveInput(Vector3 moveVector)
         {
-            base.HandlePlayerMove(moveVector);
+            base.HandlePlayerMoveInput(moveVector);
             if (moveVector == Vector3.zero) { return; }
             // account for player move speed and tick rate
             moveVector *= _sm.moveSpeed;

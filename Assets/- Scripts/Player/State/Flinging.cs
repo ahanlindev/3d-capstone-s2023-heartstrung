@@ -39,6 +39,7 @@ namespace Player
             base.OnHeartLanded();
             _heartHasLanded = true;
             _sm.ChangeState(_sm.idleState);
+            AudioManager.instance.playSoundEvent("DodgerLand");
         }
     }
 }

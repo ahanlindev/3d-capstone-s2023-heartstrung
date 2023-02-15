@@ -22,6 +22,8 @@ public class TutorialBubble : MonoBehaviour
 
     public HurtingBush attackedBush;
 
+    private Tween lastcall;
+
     void Start()
     {
         called = new bool[4];
@@ -47,7 +49,7 @@ public class TutorialBubble : MonoBehaviour
             }
             else
             {
-                //cleanText();
+                doClean();
             }
         }
     }
@@ -62,17 +64,27 @@ public class TutorialBubble : MonoBehaviour
             spriteIndex = 2 * i;
             if (attackedBush == null || i != 2)
                 called[i] = true;
-            localTimer = 3f;
+            localTimer = 6f;
         }
     }
 
     public void cleanText()
+    {
+        localTimer = 2.5f;
+    }
+
+    private void doClean()
     {
         spriteIndex = -1;
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
     }
 
+    public void checktheBush(int i)
+    {
+        if (attackedBush == null || i == 2)
+            called[i] = true;
+    }
 
     private void flicker()
     {

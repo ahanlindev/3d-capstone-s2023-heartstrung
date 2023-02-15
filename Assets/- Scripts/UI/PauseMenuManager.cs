@@ -67,6 +67,7 @@ public class PauseMenuManager : MonoBehaviour
         paused = true;
         Time.timeScale = 0f;
         AudioManager.instance.playSoundEvent("PauseOn");
+        AudioManager.instance.pauseMusic();
         PauseEvent?.Invoke();
         pauseUI.SetActive(true);
     }
@@ -76,6 +77,7 @@ public class PauseMenuManager : MonoBehaviour
         paused = false;
         Time.timeScale = 1f;
         AudioManager.instance.playSoundEvent("PauseOff");
+        AudioManager.instance.unPauseMusic();
         UnpauseEvent?.Invoke();
         // to be safe, also close the options menu
         OptionsMenuManager.instance.CloseOptions();
