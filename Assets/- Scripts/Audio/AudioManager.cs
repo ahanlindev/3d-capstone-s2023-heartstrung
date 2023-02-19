@@ -37,9 +37,8 @@ public class AudioManager : MonoBehaviour
         }
 
         // Add entries to the perSceneMusic dictionary
-        perSceneMusic["TutorialLevel"] = "OverworldMusic";
-        perSceneMusic["TutorialLevel2"] = "OverworldMusic";
-        perSceneMusic["Level1"] = "OverworldMusic";
+        perSceneMusic["Tut1 sprint3"] = "OverworldMusic";
+        perSceneMusic["level1 sprint3"] = "OverworldMusic";
 
         // Instantiate the AudioSources
         // audioSources[0] is implicitly the fling audio source
