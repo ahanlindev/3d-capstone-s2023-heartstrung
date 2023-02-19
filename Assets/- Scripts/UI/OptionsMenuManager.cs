@@ -9,6 +9,9 @@ public class OptionsMenuManager : MonoBehaviour
 
     public GameObject OptionsUI;
 
+    [Tooltip("First button that will be selected when this menu is enabled.")]
+    [SerializeField] private UnityEngine.UI.Button defaultSelection;
+
     [Tooltip("Whether the game is paused.")]
     [SerializeField] public bool optionsOpen {get; private set;}
 
@@ -39,6 +42,10 @@ public class OptionsMenuManager : MonoBehaviour
         optionsOpen = true;
         OptionsUI.SetActive(true);
         PauseMenuManager.instance.HidePauseMenu();
+
+        if (!defaultSelection) { Debug.LogError("Options menu has no default button selected!"); }
+        defaultSelection.Select();
+
     }
 
     public void CloseOptions() {
@@ -50,7 +57,7 @@ public class OptionsMenuManager : MonoBehaviour
         }
         // re-enable the title screen if we're on the title screen
         if(SceneManager.GetActiveScene().name == "Main Menu") {
-            TitleScreenManager.instance.titleScreen.SetActive(true);
+            TitleScreenManager.instance.EnableMenu();
         }
     }
 }

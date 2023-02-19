@@ -562,8 +562,8 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.5294118, g: 0.7019608, b: 0.43529412, a: 1}
+    m_SelectedColor: {r: 0.7510611, g: 0.990566, b: 0.62144, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -633,7 +633,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0eec4fbfe1f344fb9d397d56250f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TitleScreen: {fileID: 1020123729}
 --- !u!1 &817469794
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,8 +697,8 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.5294118, g: 0.7019608, b: 0.43529412, a: 1}
+    m_SelectedColor: {r: 0.7510611, g: 0.990566, b: 0.62144, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1074,8 +1073,8 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.5294118, g: 0.7019608, b: 0.43529412, a: 1}
+    m_SelectedColor: {r: 0.7510611, g: 0.990566, b: 0.62144, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1499,16 +1498,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4118530270468140659, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
+    - target: {fileID: 6403805443145320432, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
         type: 3}
-      propertyPath: PitchShift
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5481638107789321870, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
-        type: 3}
-      propertyPath: PitchShift
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: m_FirstSelected
+      value: 
+      objectReference: {fileID: 1025525561}
     - target: {fileID: 6840051294994143659, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1579,6 +1573,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8526964313507135354, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
+        type: 3}
+      propertyPath: pauseBlacklist.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8526964313507135354, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
+        type: 3}
+      propertyPath: pauseBlacklist.Array.data[1]
+      value: Main Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 8802622052338729956, guid: e9b58e33a0fbc9b4cb197289f3a29ca3,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1595,7 +1599,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2611190860805856023, guid: e9b58e33a0fbc9b4cb197289f3a29ca3, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9b58e33a0fbc9b4cb197289f3a29ca3, type: 3}
@@ -1629,6 +1634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   titleScreen: {fileID: 1020123729}
+  defaultSelection: {fileID: 1025525564}
 --- !u!224 &1474362872
 RectTransform:
   m_ObjectHideFlags: 0
