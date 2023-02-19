@@ -28,7 +28,7 @@ namespace Player
 
             _goingToFling = false;
             _sm.ChargeFlingEvent?.Invoke();
-            AudioManager.instance.startFlingSoundEffect(_power);
+            AudioManager.instance?.startFlingSoundEffect(_power);
 
             // fluctuate power
             StartPowerFlux();
@@ -43,7 +43,7 @@ namespace Player
         {
             base.Exit();
 
-            AudioManager.instance.finishFlingSoundEffect();
+            AudioManager.instance?.finishFlingSoundEffect();
 
             // completes tweens if incomplete
             _sm.transform.DOComplete();
@@ -59,7 +59,7 @@ namespace Player
         public override void UpdateLogic()
         {
             base.UpdateLogic();
-            AudioManager.instance.continueFlingSoundEffect(_power);
+            AudioManager.instance?.continueFlingSoundEffect(_power);
             UpdateFlingTrajectory();
 
         }
@@ -88,7 +88,7 @@ namespace Player
                 // execute fling
                 _goingToFling = true;
                 _sm.FlingEvent?.Invoke(_power);
-                AudioManager.instance.playSoundEvent("DodgerFling");
+                AudioManager.instance?.playSoundEvent("DodgerFling");
                 _sm.ChangeState(_sm.flingingState);
             }
             else
