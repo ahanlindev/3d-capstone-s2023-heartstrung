@@ -16,7 +16,7 @@ namespace Player
         {
             base.Enter();
             // play sound
-            AudioManager.instance.playSoundEvent("KittyJump");
+            AudioManager.instance?.playSoundEvent("KittyJump");
 
 
             // apply appropriate force to jump
