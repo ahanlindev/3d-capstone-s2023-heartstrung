@@ -133,14 +133,20 @@ namespace Player
             Vector3 center = _sm.coll.bounds.center;
             center.y -= (distToGround - 0.4f);
 
+            RaycastHit hitInfo;
             bool touchingGround = Physics.BoxCast(
                 center: center,
                 halfExtents: new Vector3(0.25f, 0.1f, 0.25f),
                 direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
-                maxDistance: 0.4f
+                maxDistance: 0.4f,
+                hitInfo: out hitInfo
             );
 
+            // prevent trigger volumes from falsely grounding the player.
+            if (hitInfo.collider && hitInfo.collider.isTrigger) {
+                touchingGround = false;
+            }
             return touchingGround;
         }
 
