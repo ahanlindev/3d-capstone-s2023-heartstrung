@@ -31,7 +31,6 @@ public class OptionsMenuManager : MonoBehaviour
     }
 
     private void Update() {
-        Debug.Log(EventSystem.current.currentSelectedGameObject );
         if (optionsOpen && EventSystem.current.currentSelectedGameObject == null) {
             defaultSelection?.Select();
         }
