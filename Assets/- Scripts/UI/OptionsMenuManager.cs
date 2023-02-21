@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class OptionsMenuManager : MonoBehaviour
 {
@@ -27,6 +28,13 @@ public class OptionsMenuManager : MonoBehaviour
     void Start() {
         optionsOpen = false;
         OptionsUI.SetActive(false);
+    }
+
+    private void Update() {
+        Debug.Log(EventSystem.current.currentSelectedGameObject );
+        if (optionsOpen && EventSystem.current.currentSelectedGameObject == null) {
+            defaultSelection?.Select();
+        }
     }
 
     public void ChangeOptionsState() {
