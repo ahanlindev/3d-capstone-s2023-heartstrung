@@ -13,6 +13,9 @@ public class PauseMenuManager : MonoBehaviour
     private PlayerInput inputActions;
     public GameObject pauseUI;
 
+    [Tooltip("First button that will be selected when this menu is enabled.")]
+    [SerializeField] private UnityEngine.UI.Button defaultSelection;
+
     [Tooltip("A list of scenes where the pause menu cannot be enabled.")]
     [SerializeField] public List<string> pauseBlacklist = new List<string>();
 
@@ -69,7 +72,7 @@ public class PauseMenuManager : MonoBehaviour
         AudioManager.instance.playSoundEvent("PauseOn");
         AudioManager.instance.pauseMusic();
         PauseEvent?.Invoke();
-        pauseUI.SetActive(true);
+        ShowPauseMenu();
     }
 
     public void Unpause() {
@@ -81,11 +84,14 @@ public class PauseMenuManager : MonoBehaviour
         UnpauseEvent?.Invoke();
         // to be safe, also close the options menu
         OptionsMenuManager.instance.CloseOptions();
-        pauseUI.SetActive(false);
+        HidePauseMenu();
     }
 
     public void ShowPauseMenu() {
         pauseUI.SetActive(true);
+        
+        if (!defaultSelection) { Debug.LogError("Pause menu has no default button selected!"); }
+        defaultSelection.Select();
     }
 
     public void HidePauseMenu() {

@@ -22,6 +22,11 @@ public class PfMovingList : MonoBehaviour
     [Tooltip("Time for the platform waiting at one waypoint.")] 
     [SerializeField] public float hangTime = 3.0f;
 
+    [Tooltip("If it stop after reach the final wp of the list")]
+    [SerializeField] public bool onwWay;
+    
+    private bool _moved;
+
     // Start is called before the first frame update
     void Start()
     { 
@@ -51,13 +56,20 @@ public class PfMovingList : MonoBehaviour
         
         else if ((transform.position - target[index].position).magnitude < delta)
         {
-            index = (index + 1) % tgtLength;
-            //if (speed == 1.5f)
-            //{
-            //    Debug.Log(index);
-            //}
-            transform.DOMove(target[index].position, 1 / speed);
-            localTimer = hangTime + 1 / speed;
+            if (!_moved)
+            {
+                index = (index + 1) % tgtLength;
+                //if (speed == 1.5f)
+                //{
+                //    Debug.Log(index);
+                //}
+                transform.DOMove(target[index].position, 1 / speed);
+                localTimer = hangTime + 1 / speed;
+                if (index == tgtLength - 1 && onwWay)
+                {
+                    _moved = true;
+                }
+            }
         }
  
             //target[index].position = new Vector3(target[index].position.x,

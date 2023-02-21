@@ -9,6 +9,7 @@ public class OptionsSoundSlider : MonoBehaviour
     void Start()
     {
         VolumeSlider.onValueChanged.AddListener(delegate {Slide();});
+        VolumeSlider.value = AudioManager.instance.soundVolume;
     }
 
     void Slide() {
