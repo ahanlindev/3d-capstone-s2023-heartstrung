@@ -29,8 +29,20 @@ public class ButtonManager : MonoBehaviour
         OptionsMenuManager.instance.ChangeOptionsState();
     }
 
+    public void ControlsButtonClicked() {
+        // Debug.Log("Controls GO!");
+        ControlsMenuManager.instance.ChangeControlsState();
+    }
+
     public void UnpauseButtonClicked() {
         // Debug.Log("Unpaused");
+        PauseMenuManager.instance.Unpause();
+    }
+
+    public void ResetButtonClicked() {
+        // Debug.Log("Reset");
+        CheckpointManager manager = FindObjectsOfType<CheckpointManager>()[0];
+        manager.ResetToCheckpoint();
         PauseMenuManager.instance.Unpause();
     }
 

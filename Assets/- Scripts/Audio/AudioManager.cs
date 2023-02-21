@@ -25,8 +25,13 @@ public class AudioManager : MonoBehaviour
 
     private float flingPower = 0f;
 
-    [Tooltip("Global game volume.")]
-    [SerializeField] public float volume = 1f;
+    public bool musicPlaying = false;
+
+    [Tooltip("Global game sound volume.")]
+    [SerializeField] public float soundVolume = .7f;
+
+    [Tooltip("Global game music volume.")]
+    [SerializeField] public float musicVolume = .7f;
 
     void Awake() {
         // Singleton logic
@@ -37,9 +42,14 @@ public class AudioManager : MonoBehaviour
         }
 
         // Add entries to the perSceneMusic dictionary
-        perSceneMusic["Tut1 sprint3"] = "OverworldMusic";
-        perSceneMusic["level1 sprint3"] = "OverworldMusic";
-
+        perSceneMusic["Tutorial1"] = "OverworldMusic";
+        perSceneMusic["Tutorial2"] = "OverworldMusic";
+        perSceneMusic["Tutorial 1"] = "OverworldMusic";
+        perSceneMusic["Tutorial 2"] = "OverworldMusic";
+        perSceneMusic["StrawberryField1"] = "OverworldMusic";
+        perSceneMusic["StrawberryField2"] = "OverworldMusic";
+        perSceneMusic["CatKingdom1"] = "OverworldMusic";
+        perSceneMusic["CatKingdom2"] = "OverworldMusic";
         // Instantiate the AudioSources
         // audioSources[0] is implicitly the fling audio source
         // audioSources[1] is implicitly the music audio source
@@ -80,7 +90,7 @@ public class AudioManager : MonoBehaviour
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log("OnSceneLoaded: " + scene.name);
         Debug.Log(mode);
         if(perSceneMusic.ContainsKey(scene.name)) {
             // Debug.Log("Starting song " + scene.name);
@@ -106,7 +116,7 @@ public class AudioManager : MonoBehaviour
             }
             if(!audioSources[i].isPlaying) {
                 audioSources[i].clip = soundToPlay;
-                audioSources[i].volume = volume;
+                audioSources[i].volume = soundVolume;
                 // randomize pitch for  v a r i a t i o n (TM)
                 if(sounds[sound].PitchShift) {
                     audioSources[i].pitch = Random.Range(.75f, 1.25f);
@@ -126,7 +136,7 @@ public class AudioManager : MonoBehaviour
     public void startFlingSoundEffect(float power) {
         // Debug.Log("Fling Started");
         audioSources[0].pitch = convertFlingPowerToPitch(power);
-        audioSources[0].volume = volume / 10f;
+        audioSources[0].volume = soundVolume / 10f;
         audioSources[0].Play();
     }
 
@@ -151,20 +161,29 @@ public class AudioManager : MonoBehaviour
         // Debug.Log("Music Started:" + name);
         audioSources[1].clip = sounds[name].poolSound();
         audioSources[1].pitch = 1f;
-        audioSources[1].volume = volume;
+        audioSources[1].volume = musicVolume;
         audioSources[1].Play();
+        musicPlaying = true;
+    }
+
+    public void updateMusicVolume() {
+        Debug.Log("updating music volume");
+        audioSources[1].volume = musicVolume;
     }
 
     public void stopMusic() {
         // Debug.Log("Music Stopped");
         audioSources[1].Stop();
+        musicPlaying = false;
     }
 
     public void pauseMusic() {
         audioSources[1].Pause();
+        musicPlaying = false;
     }
 
     public void unPauseMusic() {
         audioSources[1].UnPause();
+        musicPlaying = true;
     }
 }

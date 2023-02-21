@@ -16,13 +16,7 @@ public class DeathPit : MonoBehaviour
         heart.health.ChangeHealth(-damageTaken);
 
         // move Kitty and Dodger to safety
-        player.gameObject.transform.position = new Vector3(
-            KittyRespawnPoint.transform.position.x,
-            KittyRespawnPoint.transform.position.y,
-            KittyRespawnPoint.transform.position.z);
-        heart.gameObject.transform.position = new Vector3(
-            DodgerRespawnPoint.transform.position.x,
-            DodgerRespawnPoint.transform.position.y,
-            DodgerRespawnPoint.transform.position.z);
+        CheckpointManager cm = FindObjectsOfType<CheckpointManager>()[0];
+        cm.ResetToCheckpoint();
     }
 }

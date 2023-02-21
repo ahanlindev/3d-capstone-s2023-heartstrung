@@ -53,4 +53,12 @@ public class OptionsMenuManager : MonoBehaviour
             TitleScreenManager.instance.titleScreen.SetActive(true);
         }
     }
+
+    public void ShowOptionsMenu() {
+        OptionsUI.SetActive(true);
+    }
+
+    public void HideOptionsMenu() {
+        OptionsUI.SetActive(false);
+    }
 }
