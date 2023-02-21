@@ -47,6 +47,9 @@ public class ComicManager : MonoBehaviour
         _input.Comic.Skip.performed += OnSkipStartInput;
         _input.Comic.Skip.canceled += OnSkipCancelInput;
 
+        PauseMenuManager.PauseEvent += _input.Disable;        
+        PauseMenuManager.UnpauseEvent += _input.Enable;        
+
         // ensure fade out image exists, then make it transparent
         if (!_fadeOutOverlay) { Debug.LogError("fadeOutOverlay is not set in ComicManager!"); }
         _fadeOutOverlay?.DOFade(endValue: 0f, duration: 0f);
