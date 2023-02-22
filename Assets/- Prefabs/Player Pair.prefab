@@ -196,11 +196,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2792d6c668bf2634aa7c30a979dcafce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  Kitty: {fileID: 2595317218204527734}
-  Dodger: {fileID: 7741046872445439369}
-  KittyRespawnLocation: {x: 0, y: 0, z: 0}
-  DodgerRespawnLocation: {x: 0, y: 0, z: 0}
+  _kitty: {fileID: 2595317218204527734}
+  _dodger: {fileID: 7741046872445439369}
+  _tutorialPlayer: 0
 --- !u!1001 &1165010813718196291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -438,7 +436,8 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.082837105
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3026780967149980713, guid: 64e9063960af45e489e3ff445702c102, type: 3}
     m_RemovedGameObjects:
     - {fileID: 887760428297016802, guid: 64e9063960af45e489e3ff445702c102, type: 3}
     - {fileID: 6828214028649248533, guid: 64e9063960af45e489e3ff445702c102, type: 3}

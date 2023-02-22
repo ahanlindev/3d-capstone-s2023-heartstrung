@@ -19,21 +19,12 @@ public class CheckpointManager : MonoBehaviour
         // If this is a player pair, get the transforms of
         // Kitty and Dodger as initial checkpoints
         if(_dodger && !_tutorialPlayer) {
-            _dodgerRespawnLocation = new Vector3(
-                _dodger.transform.position.x,
-                _dodger.transform.position.y,
-                _dodger.transform.position.z);
-            _kittyRespawnLocation = new Vector3(
-                _kitty.transform.position.x,
-                _kitty.transform.position.y,
-                _kitty.transform.position.z);
+            _dodgerRespawnLocation = _dodger.transform.position;
+            _kittyRespawnLocation = _kitty.transform.position;
         } else {
             // use the transform of the gameobject this script is attached to
             Debug.LogWarning("Dodger not located! Are we in Tutorial 1?");
-            _kittyRespawnLocation = new Vector3(
-                this.gameObject.transform.position.x,
-                this.gameObject.transform.position.y,
-                this.gameObject.transform.position.z);
+            _kittyRespawnLocation = gameObject.transform.position;
         }
     }
 

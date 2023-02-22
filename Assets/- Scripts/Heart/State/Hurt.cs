@@ -45,7 +45,6 @@ namespace Heart
             // flicker on every 4th frame
             if (_frameCount % 4 == 0)
             {
-                Debug.Log(_currentlyOn);
                 _currentlyOn = !_currentlyOn;
                 Flicker(_currentlyOn);
             }

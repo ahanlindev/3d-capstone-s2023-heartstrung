@@ -82,8 +82,8 @@ public class PauseMenuManager : MonoBehaviour
         // Pause the game
         paused = true;
         Time.timeScale = 0f;
-        AudioManager.instance.playSoundEvent("PauseOn");
-        AudioManager.instance.pauseMusic();
+        AudioManager.instance?.playSoundEvent("PauseOn");
+        AudioManager.instance?.pauseMusic();
         PauseEvent?.Invoke();
         ShowPauseMenu();
     }
@@ -92,8 +92,8 @@ public class PauseMenuManager : MonoBehaviour
         // Unpause the game
         paused = false;
         Time.timeScale = 1f;
-        AudioManager.instance.playSoundEvent("PauseOff");
-        AudioManager.instance.unPauseMusic();
+        AudioManager.instance?.playSoundEvent("PauseOff");
+        AudioManager.instance?.unPauseMusic();
         UnpauseEvent?.Invoke();
         // to be safe, also close the options menu
         OptionsMenuManager.instance.CloseOptions();
