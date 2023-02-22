@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TitleScreenManager : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class TitleScreenManager : MonoBehaviour
     
     void Start() {
         EnableMenu();
+    }
+
+    private void Update() {
+        if (titleScreen.activeSelf && EventSystem.current.currentSelectedGameObject == null) {
+            defaultSelection?.Select();
+        }
     }
 
     public void DisableMenu() {

@@ -159,6 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5244844852357987823}
+  - component: {fileID: 3108856177813524916}
   m_Layer: 0
   m_Name: Player Pair
   m_TagString: Untagged
@@ -183,6 +184,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3108856177813524916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6267179479699875539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2792d6c668bf2634aa7c30a979dcafce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  Kitty: {fileID: 2595317218204527734}
+  Dodger: {fileID: 7741046872445439369}
+  KittyRespawnLocation: {x: 0, y: 0, z: 0}
+  DodgerRespawnLocation: {x: 0, y: 0, z: 0}
 --- !u!1001 &1165010813718196291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -289,12 +307,18 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1165010813718196291}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7741046872445439369}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48df4e571235642478743b5b9ef5d439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7741046872445439369 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8883150378333060554, guid: 9920f1abb6fe3204592a615b7926ab5e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1165010813718196291}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8358591930017782120
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1758,6 +1782,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8325900741303470833, guid: 80e6e0aab23a70642a3543d69e4e8921,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0020250408
+      objectReference: {fileID: 0}
+    - target: {fileID: 8325900741303470833, guid: 80e6e0aab23a70642a3543d69e4e8921,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.0609274
       objectReference: {fileID: 0}
     - target: {fileID: 8325900741303470833, guid: 80e6e0aab23a70642a3543d69e4e8921,
         type: 3}

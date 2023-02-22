@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class PauseMenuManager : MonoBehaviour
 {
@@ -39,6 +40,18 @@ public class PauseMenuManager : MonoBehaviour
         paused = false;
         pauseUI.SetActive(false);
     }
+
+    // TODO I would definitely like to put these menus into a parent class
+    // TODO this "check all menus are inactive" is awful and Alex's fault
+    private void Update() {
+        if (paused && 
+            !OptionsMenuManager.instance.optionsOpen &&
+            !ControlsMenuManager.instance.controlsOpen &&
+            EventSystem.current.currentSelectedGameObject == null) {
+            defaultSelection?.Select();
+        }
+    }
+
 
     private void OnEnable() {
         inputActions.Gameplay.Pause.performed += OnPauseKeyPressed;
