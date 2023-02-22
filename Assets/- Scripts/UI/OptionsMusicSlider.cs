@@ -12,6 +12,7 @@ public class OptionsMusicSlider : MonoBehaviour
     }
 
     void Slide() {
+        if (!AudioManager.instance) { return; }
         Debug.Log("Music volume changed to " + VolumeSlider.value);
         AudioManager.instance.musicVolume = VolumeSlider.value;
         AudioManager.instance.updateMusicVolume();

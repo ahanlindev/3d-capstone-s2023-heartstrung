@@ -16,7 +16,7 @@ namespace Player
             _sm.claws.Claw(_sm.attackTime);
 
             // play sound
-            AudioManager.instance.playSoundEvent("KittyAttack");
+            AudioManager.instance?.playSoundEvent("KittyAttack");
 
 
             // return to idle when done
