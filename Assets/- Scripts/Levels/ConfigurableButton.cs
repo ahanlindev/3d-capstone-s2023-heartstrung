@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ConfigurableButton : MonoBehaviour
 {
@@ -30,7 +31,9 @@ public class ConfigurableButton : MonoBehaviour
     [Tooltip("If enabled, the script attached will be switched with this button")]
     [SerializeField] public bool functionalitySwitch;
 
-
+    /// <summary>color that the button is when the game begins. Used in tweening.</summary>
+    private Color _originalColor;
+    private Renderer _buttonBodyRenderer;
 
     private void Start()
     {
@@ -38,7 +41,10 @@ public class ConfigurableButton : MonoBehaviour
         {
             _button = gameObject.GetComponent<Button>();
         }
+        _buttonBodyRenderer = GetComponent<Renderer>();
+        _originalColor = _buttonBodyRenderer.material.color;
     }
+
     void OnCollisionEnter(Collision collision)
     {
         if (!_pressed)
@@ -46,11 +52,9 @@ public class ConfigurableButton : MonoBehaviour
             Debug.Log("collided with " + collision.gameObject.name);
             if (collision.gameObject.tag == triggeringObject.ToString())
             {
-                _button.enable();
                 _pressed = true;
-                DoTrigger();
+                PressTween();
             }
-
         }
     }
 
@@ -61,9 +65,8 @@ public class ConfigurableButton : MonoBehaviour
             Debug.Log("No longer colliding with " + collision.gameObject.name);
             if (collision.gameObject.name == triggeringObject.ToString())
             {
-                _button.disable();
                 _pressed = false;
-                DoTrigger();
+                PressTween();
             }
         }
     }
@@ -90,11 +93,11 @@ public class ConfigurableButton : MonoBehaviour
         Collider[] _colliders = target.GetComponentsInChildren<Collider>();
 
         // Can't use that question mark but Idky
-        foreach (MeshRenderer mesh in _meshes) mesh.enabled = !mesh.enabled;
+        foreach (MeshRenderer mesh in _meshes) { mesh.enabled = !mesh.enabled; }
 
-        foreach (MeshCollider meshCollider in _meshColliders) meshCollider.enabled = !meshCollider.enabled;
+        foreach (MeshCollider meshCollider in _meshColliders) { meshCollider.enabled = !meshCollider.enabled; }
 
-        foreach (Collider collider in _colliders) collider.enabled = !collider.enabled;
+        foreach (Collider collider in _colliders) { collider.enabled = !collider.enabled; }
     }
 
     private void Functionality(GameObject target)
@@ -106,6 +109,35 @@ public class ConfigurableButton : MonoBehaviour
             Debug.Log("Change state " + script.name);
             script.enabled = !script.enabled;
         }
+    }
+    
+    private void PressTween() {
+        const float PRESS_DURATION = 0.25f;
+
+        // fade color 
+        Color newColor = _originalColor * .6f;
+        _buttonBodyRenderer.material.DOColor(newColor, PRESS_DURATION);
+        
+        // "press" button
+        Vector3 newScale = transform.localScale;
+        newScale.y *= .5f;
+        
+        transform.DOScale(newScale, PRESS_DURATION)
+            .OnComplete(DoTrigger);
+    }
+
+    private void UnpressTween() {
+        const float PRESS_DURATION = 0.25f;
+
+        // restore color 
+        _buttonBodyRenderer.material.DOColor(_originalColor, PRESS_DURATION);
+
+        // "unpress" button
+        Vector3 newScale = transform.localScale;
+        newScale.y *= 2f;
+
+        transform.DOScale(newScale, PRESS_DURATION)
+            .OnComplete(DoTrigger);
     }
 }
 
