@@ -23,7 +23,7 @@ public class PfMovingList : MonoBehaviour
     [SerializeField] public float hangTime = 3.0f;
 
     [Tooltip("If it stop after reach the final wp of the list")]
-    [SerializeField] public bool onwWay;
+    [SerializeField] public bool oneWay;
     
     private bool _moved;
 
@@ -65,7 +65,7 @@ public class PfMovingList : MonoBehaviour
                 //}
                 transform.DOMove(target[index].position, 1 / speed);
                 localTimer = hangTime + 1 / speed;
-                if (index == tgtLength - 1 && onwWay)
+                if (index == tgtLength - 1 && oneWay)
                 {
                     _moved = true;
                 }
@@ -82,11 +82,13 @@ public class PfMovingList : MonoBehaviour
             
         
             //SetEase(Ease.InOutSine)
-        Vector3 offset = transform.position - lastPosition;
-        lastPosition = transform.position;
-        foreach(Rigidbody attached in collidedBodies)
-        {
-            attached.transform.position += offset;
+        if (!_moved) {
+            Vector3 offset = transform.position - lastPosition;
+            lastPosition = transform.position;
+            foreach(Rigidbody attached in collidedBodies)
+            {
+                attached.transform.position += offset;
+            }
         }
 
         
