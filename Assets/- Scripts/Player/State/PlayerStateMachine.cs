@@ -53,11 +53,6 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Health hitTracker { get; private set; }
 
-    /// <summary>
-    /// Stores the last checkpoint the player reached.
-    /// </summary>
-    public CheckpointManager checkpointManager;
-
     // Inspector-visible values -------------------------------------------
     [Tooltip("Heart connected to this player")]
     [SerializeField] private HeartStateMachine _heart;
