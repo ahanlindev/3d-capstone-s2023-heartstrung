@@ -10,7 +10,7 @@ public class DeathPit : MonoBehaviour
     public void Death() {
         PlayerStateMachine player = FindObjectOfType<PlayerStateMachine>();
         HeartStateMachine heart = player.heart;
-        heart.health.ChangeHealth(-damageTaken);
+        heart?.health.ChangeHealth(-damageTaken);
 
         // move Kitty and Dodger to safety
         CheckpointManager cm = FindObjectOfType<CheckpointManager>();
