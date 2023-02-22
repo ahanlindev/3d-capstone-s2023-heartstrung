@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class CheckpointManager : MonoBehaviour
 {
-    private GameObject _kitty;
-    private GameObject _dodger;
+    [SerializeField] private GameObject _kitty;
+    [SerializeField] private GameObject _dodger;
     private Vector3 _kittyRespawnLocation;
     private Vector3 _dodgerRespawnLocation;
     [SerializeField] private bool _tutorialPlayer;
@@ -18,7 +18,7 @@ public class CheckpointManager : MonoBehaviour
     void Start() {
         // If this is a player pair, get the transforms of
         // Kitty and Dodger as initial checkpoints
-        if(!_tutorialPlayer) {
+        if(_dodger && !_tutorialPlayer) {
             _dodgerRespawnLocation = new Vector3(
                 _dodger.transform.position.x,
                 _dodger.transform.position.y,
