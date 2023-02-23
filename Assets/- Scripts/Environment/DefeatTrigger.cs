@@ -9,7 +9,7 @@ public class DefeatTrigger : MonoBehaviour
             Debug.Log("Collided with " + collision.gameObject.name);
             if(collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Heart") ) {
                 Debug.Log("Defeat!");
-                SceneManager.LoadSceneAsync("DefeatScene");
+                TransitionManager.TransitionScene(SceneID.GAME_OVER);
             }
     }
 }

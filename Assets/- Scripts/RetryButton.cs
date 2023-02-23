@@ -24,6 +24,6 @@ public class RetryButton : MonoBehaviour
 
     // Update is called once per frame
     void Retry(InputAction.CallbackContext ctx) {
-        SceneManager.LoadSceneAsync(0);
+        TransitionManager.ResetScene();
     }
 }
