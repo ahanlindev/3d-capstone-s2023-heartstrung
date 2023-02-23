@@ -20,7 +20,7 @@ public class ButtonManager : MonoBehaviour
 
     public void StartGameButtonClicked() {
         // Debug.Log("Let us Start the Game");
-        TransitionManager.TransitionScene(SceneID.COMIC1);
+        TransitionManager.TransitionToScene(SceneID.COMIC1);
     }
 
     public void OptionsButtonClicked() {
@@ -48,7 +48,7 @@ public class ButtonManager : MonoBehaviour
     public void MainMenuButtonClicked() {
         Debug.Log("Main Menu GO!");
         PauseMenuManager.instance.Unpause();
-        TransitionManager.TransitionScene(SceneID.MAINMENU);
+        TransitionManager.TransitionToScene(SceneID.MAINMENU);
     }
 
     public void QuitButtonClicked() {

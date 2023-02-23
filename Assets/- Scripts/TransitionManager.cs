@@ -37,7 +37,7 @@ public class TransitionManager : MonoBehaviour {
     /// </param>
     public static void ResetScene(int fadeTimeOverride = 0) {
         int idx = SceneManager.GetActiveScene().buildIndex;
-        _instance?.DoTransitionScene(
+        _instance?.DoTransitionToScene(
             SceneManager.GetSceneByBuildIndex(idx).name, 
             fadeTimeOverride
         );
@@ -57,7 +57,7 @@ public class TransitionManager : MonoBehaviour {
         string sceneName = SceneUtility.GetScenePathByBuildIndex(idx);
         Debug.Log($"Scene name {sceneName}");
         
-        _instance?.DoTransitionScene(sceneName, fadeTimeOverride);
+        _instance?.DoTransitionToScene(sceneName, fadeTimeOverride);
     } 
     
     /// <summary>Transition to the scene specified by the enum value</summary>
@@ -65,8 +65,8 @@ public class TransitionManager : MonoBehaviour {
     /// <param name="fadeTimeOverride">
     /// If nonzero, overrides normal fadeout time of the scene transition
     /// </param>
-    public static void TransitionScene(SceneID sceneID, float fadeTimeOverride = 0) {
-        _instance?.DoTransitionScene(sceneID.GetName(), fadeTimeOverride);
+    public static void TransitionToScene(SceneID sceneID, float fadeTimeOverride = 0) {
+        _instance?.DoTransitionToScene(sceneID.GetName(), fadeTimeOverride);
     }
 
     /// <summary>Cancel any current scene transition and reverses screen fadeout.</summary>
@@ -85,7 +85,7 @@ public class TransitionManager : MonoBehaviour {
     /// <param name="fadeTimeOverride">
     /// If nonzero, overrides normal fadeout time of the scene transition
     /// </param>
-    private void DoTransitionScene(string sceneName, float fadeTimeOverride = 0) {
+    private void DoTransitionToScene(string sceneName, float fadeTimeOverride = 0) {
         // handle param
         float fadeTime =(fadeTimeOverride == 0) ? _fadeTime : fadeTimeOverride;
 
