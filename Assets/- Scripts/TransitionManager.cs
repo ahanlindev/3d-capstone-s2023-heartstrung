@@ -4,19 +4,30 @@ using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class TransitionManager : MonoBehaviour {
-    private static TransitionManager _instance;
- 
+    
+    #region EVENTS
+
     /// <summary>Event emitted when entering a scene and screen has fully faded in</summary>
     public static event System.Action FadeinFinishEvent;
+    
+    #endregion
 
-    [Tooltip("Time that the screen will take to fade in/out between scenes")]
-    [SerializeField] private float _fadeTime;
+    #region FIELDS
 
+    private static TransitionManager _instance;
+    
     private RawImage _screenFadeOverlay;
     private Tween _fadeoutTween;
     
+    [Tooltip("Time that the screen will take to fade in/out between scenes")]
+    [SerializeField] private float _fadeTime;
+    
     [Tooltip("Color that the screen will fade to when transitioning between scenes")]
     [SerializeField] private Color _fadeoutColor = Color.black;
+
+    #endregion
+
+    #region SETUP_TEARDOWN
 
     private void Awake() {
         if (!_instance) {
@@ -30,6 +41,10 @@ public class TransitionManager : MonoBehaviour {
         if (!_screenFadeOverlay) { Debug.LogError("TransitionManager cannot find screen fade overlay image"); }
         _screenFadeOverlay.DOFade(0,0); // start transparent
     }
+
+    #endregion
+
+    #region PUBLIC_METHODS
 
     /// <summary>Transition to the current scene, restarting it.</summary>
     /// <param name="fadeTimeOverride">
@@ -80,6 +95,10 @@ public class TransitionManager : MonoBehaviour {
         }
     }
 
+    #endregion
+
+    #region PRIVATE_METHODS
+
     /// <summary>Fade the screen out and transition scenes, then fade back in.</summary>
     /// <param name="sceneName">the string name of the specified scene</param>
     /// <param name="fadeTimeOverride">
@@ -112,5 +131,5 @@ public class TransitionManager : MonoBehaviour {
                 .OnComplete(() =>FadeinFinishEvent?.Invoke());
     }
 
-    
+    #endregion
 }
