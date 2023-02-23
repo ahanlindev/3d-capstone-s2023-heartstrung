@@ -41,6 +41,8 @@ public class PfMovingList : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+        
         moveTo();
     }
 
@@ -96,11 +98,13 @@ public class PfMovingList : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        collidedBodies.Add(collision.collider.attachedRigidbody);
+        var temp = collision.collider.attachedRigidbody;
+        if (temp != null) collidedBodies.Add(temp);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        collidedBodies.Remove(collision.collider.attachedRigidbody);
+        var temp = collision.collider.attachedRigidbody;
+        if (temp != null) collidedBodies.Remove(temp);
     }
 }

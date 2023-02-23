@@ -6,6 +6,13 @@ using DG.Tweening;
 public class ConfigurableButton : MonoBehaviour
 {
 
+
+    [Tooltip("Disappear totally after being triggered")]
+    [SerializeField] public bool disappear;
+
+    [Tooltip("If enabled, once pressed the button will stay pressed permanently.")]
+    [SerializeField] public bool persistent;
+
     public enum TriggeringObject {Player, Heart };
 
     [Tooltip("What will trigger this button?")]
@@ -16,9 +23,6 @@ public class ConfigurableButton : MonoBehaviour
 
     [Tooltip("Targets connected with")]
     public List<GameObject> targets;
-
-    [Tooltip("If enabled, once pressed the button will stay pressed permanently.")]
-    [SerializeField] public bool persistent;
 
     private bool _pressed;
 
@@ -54,6 +58,11 @@ public class ConfigurableButton : MonoBehaviour
             {
                 _pressed = true;
                 PressTween();
+                if (disappear)
+                {
+                    GetComponent<MeshRenderer>().enabled = false;
+                    GetComponent<MeshCollider>().enabled = false;
+                }
             }
         }
     }
@@ -139,5 +148,6 @@ public class ConfigurableButton : MonoBehaviour
         transform.DOScale(newScale, PRESS_DURATION)
             .OnComplete(DoTrigger);
     }
+
 }
 
