@@ -21,6 +21,8 @@ namespace Player
             rend = _sm.GetComponentInChildren<Renderer>();
             rend.enabled = false;
 
+            AudioManager.instance.playSoundEvent("KittyHurt");
+
             // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
                 delay: _sm.hurtTime,

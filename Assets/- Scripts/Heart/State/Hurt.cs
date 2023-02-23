@@ -23,6 +23,8 @@ namespace Heart
             // flash on and off
             rig = _sm.transform.GetChild(0).gameObject;
 
+            AudioManager.instance.playSoundEvent("DodgerHurt");
+
             // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
                 delay: _sm.hurtTime,
