@@ -105,7 +105,7 @@ public class TransitionManager : MonoBehaviour {
                 .OnComplete(() => SceneManager.LoadSceneAsync(sceneName)))
             
             // wait a little bit
-            .AppendInterval(1f)
+            .AppendInterval(0.5f)
 
             // fade back in
             .Append(_screenFadeOverlay.DOFade(0, fadeTime))
