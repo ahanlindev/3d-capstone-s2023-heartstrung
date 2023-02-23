@@ -18,8 +18,7 @@ namespace Player
                 1f,
                 () =>
                 {
-                    int index = SceneManager.GetActiveScene().buildIndex;
-                    SceneManager.LoadSceneAsync(index);
+                    TransitionManager.ResetScene();
                 }, 
                 false
             );

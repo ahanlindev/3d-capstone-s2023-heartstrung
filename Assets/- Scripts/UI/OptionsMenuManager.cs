@@ -63,7 +63,7 @@ public class OptionsMenuManager : MonoBehaviour
             PauseMenuManager.instance.ShowPauseMenu();
         }
         // re-enable the title screen if we're on the title screen
-        if(SceneManager.GetActiveScene().name == "Main Menu") {
+        if(SceneManager.GetActiveScene().name == SceneID.MAINMENU.GetName()) {
             TitleScreenManager.instance.EnableMenu();
         }
     }
