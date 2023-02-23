@@ -22,11 +22,7 @@ namespace Player
             rend.enabled = false;
 
             // return to idle when done with hurt animation
-            DOVirtual.DelayedCall(
-                delay: _sm.hurtTime,
-                callback: () => _sm.ChangeState(_sm.idleState),
-                ignoreTimeScale: false
-            );
+            _sm.StartCoroutine(StartTransitionTween());
         }
 
         public override void Exit()
@@ -43,6 +39,25 @@ namespace Player
             if (frameCount % 4 == 0) {
                 rend.enabled = !rend.enabled;
             }
+        }
+
+        /// <summary>description</summary>
+        private IEnumerator StartTransitionTween() {
+            float duration = 0;
+
+            // wait a short time so animator enters attack state
+            yield return null;
+            yield return new WaitUntil(() => {
+                duration = _sm.GetAnimatorClipLength();
+                return duration > 0;
+            }); 
+
+            // return to idle when done
+            DOVirtual.DelayedCall(
+                delay: duration,
+                callback: () => _sm.ChangeState(_sm.idleState),
+                ignoreTimeScale: false
+            );
         }
     }
 }

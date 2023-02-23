@@ -7,10 +7,6 @@ using DG.Tweening;
 /// <summary>Controls displaying and hiding comic pages in sequence</summary>
 public class ComicManager : MonoBehaviour
 {
-    /// TODO: replace with version in scene management class
-    [Tooltip("Image used to cover the screen when fading out of the scene. ")]
-    [SerializeField] private RawImage _fadeOutOverlay;
-
     [Tooltip("Time in seconds that each new panel will fade in")]
     [SerializeField] private float _panelFadeInTime = 0.5f;
 
@@ -30,29 +26,16 @@ public class ComicManager : MonoBehaviour
     /// <summary>Input bindings for controller/keyboard comic control</summary>
     private PlayerInput _input;
 
-    /// <summary>Tween used to measure how long the player has been holding skip</summary>
-    private Tween _skipTimer;
-
     /// <summary>Id string that allows fade tweens to be tracked and controlled</summary>
     private readonly string _fadeId = "ComicManagerFade";
 
+    #region SETUP_TEARDOWN
+
     void Start()
     {
-        // initialize input and input events
+        // initialize input and input events after scene fades in
         _input = new PlayerInput();
-        _input.Enable();
-
-        _input.Comic.Next.performed += OnNextInput;
-        _input.Comic.Prev.performed += OnPrevInput;
-        _input.Comic.Skip.performed += OnSkipStartInput;
-        _input.Comic.Skip.canceled += OnSkipCancelInput;
-
-        PauseMenuManager.PauseEvent += _input.Disable;        
-        PauseMenuManager.UnpauseEvent += _input.Enable;        
-
-        // ensure fade out image exists, then make it transparent
-        if (!_fadeOutOverlay) { Debug.LogError("fadeOutOverlay is not set in ComicManager!"); }
-        _fadeOutOverlay?.DOFade(endValue: 0f, duration: 0f);
+        TransitionManager.FadeinFinishEvent += SetupInput;
 
         // set all child canvases to be inactive
         foreach (Transform child in transform)
@@ -74,41 +57,61 @@ public class ComicManager : MonoBehaviour
         // cancel all in-progress tweens if relevant
         DOTween.Kill(_fadeId);
 
+        // clean up event subscriptions
+        TransitionManager.FadeinFinishEvent -= SetupInput;
+
         // teardown input and input events
+        TeardownInput();
+    }
+
+    #endregion
+    #region INPUT_HANDLERS
+
+    private void SetupInput() {
+        _input.Comic.Next.performed += OnNextInput;
+        _input.Comic.Prev.performed += OnPrevInput;
+        _input.Comic.Skip.performed += OnSkipStartInput;
+        _input.Comic.Skip.canceled += OnSkipCancelInput;
+
+        PauseMenuManager.PauseEvent += _input.Disable;        
+        PauseMenuManager.UnpauseEvent += _input.Enable; 
+
+        _input.Enable(); 
+    }
+
+    private void TeardownInput() {
         _input.Comic.Next.performed -= OnNextInput;
         _input.Comic.Prev.performed -= OnPrevInput;
+        _input.Comic.Skip.performed -= OnSkipStartInput;
+        _input.Comic.Skip.canceled -= OnSkipCancelInput;
+
+        PauseMenuManager.PauseEvent -= _input.Disable;        
+        PauseMenuManager.UnpauseEvent -= _input.Enable;
 
         _input.Disable();
     }
-    
-    // Input handlers
     private void OnNextInput(CallbackContext _) => Next();
     private void OnPrevInput(CallbackContext _) => Previous();
 
     private void OnSkipStartInput(CallbackContext _) {
-        _skipTimer?.Kill(); // clean up existing tweens
-        _skipTimer = _fadeOutOverlay.DOFade(endValue: 1, duration: _skipHoldTime)
-            .SetAs(_fadeParams)
-            .OnComplete(LoadNextScene);
+        TransitionManager.TransitionToNextScene(_skipHoldTime);
     }
 
     private void OnSkipCancelInput(CallbackContext _) {
-        _skipTimer?.Flip(); // fade back in 
-        _skipTimer?.OnComplete(() => {}); // cancels the scene load
+        TransitionManager.CancelTransition();
     }
 
+    #endregion
+
     /// <summary>
-    /// Continues to the next page of the comic. 
+    /// Continue to the next page of the comic. 
     /// If the last page is reached, loads the next scene.
     /// </summary>
     public void Next()
     {
         if (_index >= transform.childCount - 1)
         {
-            // TODO really want a scene-control singleton for this stuff
-            _fadeOutOverlay.DOFade(endValue: 1, duration: _panelFadeInTime)
-                .SetAs(_fadeParams)
-                .OnComplete(LoadNextScene);
+            TransitionManager.TransitionToNextScene();
         }
         else
         {
@@ -128,13 +131,10 @@ public class ComicManager : MonoBehaviour
         }
     }
 
-    /// <summary>Skips the comic and loads the next scene</summary>
-    public void Skip()
-    {
-        LoadNextScene();
-    }
+    /// <summary>Skip the comic and transitions to the next scene/</summary>
+    public void Skip() => TransitionManager.TransitionToNextScene();
 
-    /// <summary>Gradually fades the comic panel at the current index either in or out</summary>
+    /// <summary>Gradually fade the comic panel at the current index either in or out</summary>
     /// <param name="fadeIn">If true, the comic panel at the current index is enabled, otherwise it is disabled.</param>
     private void FadeCurrentPanel(bool fadeIn)
     {
@@ -166,13 +166,5 @@ public class ComicManager : MonoBehaviour
             // deactivate game object at end of fade out
             fade.OnComplete(() => { image.gameObject.SetActive(false); });
         }
-    }
-
-    /// <summary>Fades out all active panels and loads the next scene</summary>
-    // TODO replace with SceneManager
-    private void LoadNextScene()
-    {
-        int index = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadSceneAsync(index + 1);
     }
 }

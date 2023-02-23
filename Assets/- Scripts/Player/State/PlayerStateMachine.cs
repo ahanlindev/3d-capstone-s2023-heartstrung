@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 /// <summary>Runs player states and contains information required to maintain those states.</summary>
 public class PlayerStateMachine : BaseStateMachine
 {
-    // Emitted events -----------------------------------------------------
+    #region EVENTS
 
     /// <summary>Event emitted when the player starts charging a fling.</summary>
     public Action ChargeFlingEvent;
@@ -22,7 +22,10 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Action FlingInterruptedEvent;
 
-    // Possible States ----------------------------------------------------
+    #endregion
+
+    #region POSSIBLE STATES
+
     public Player.Idle idleState { get; private set; }
     public Player.Moving movingState { get; private set; }
     public Player.Attacking attackingState { get; private set; }
@@ -33,13 +36,19 @@ public class PlayerStateMachine : BaseStateMachine
     public Player.Hurt hurtState { get; private set; }
     public Player.Dead deadState { get; private set; }
 
-    // Shortcuts for input actions ----------------------------------------
+    #endregion
+
+    #region PUBLIC PROPERTIES
+   
+    // INPUT SHORTCUTS
+
     public InputAction movementInput { get; private set; }
     public InputAction attackInput { get; private set; }
     public InputAction flingInput { get; private set; }
     public InputAction jumpInput { get; private set; }
 
-    // Other necessary components -----------------------------------------
+    // NON-INSPECTOR PROPERTIES
+
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
     public Claws claws { get; private set; }
@@ -53,20 +62,11 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Health hitTracker { get; private set; }
 
-    // Inspector-visible values -------------------------------------------
+    // INSPECTOR PROPERTIES
+
     [Tooltip("Heart connected to this player")]
     [SerializeField] private HeartStateMachine _heart;
     public HeartStateMachine heart { get => _heart; private set => _heart = value; }
-
-    // TODO this is sloppy. Refactor soon.
-    [Tooltip("Amount of time in seconds that the player will be in the attack state")]
-    [SerializeField] private float _attackTime = 0.5f;
-    public float attackTime { get => _attackTime; private set => _attackTime = value; }
-
-    // TODO this is sloppy. Refactor soon.
-    [Tooltip("Amount of time in seconds that the player will be in the hurt state")]
-    [SerializeField] private float _hurtTime = 0.5f;
-    public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
 
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float _moveSpeed = 2f;
@@ -92,9 +92,16 @@ public class PlayerStateMachine : BaseStateMachine
     [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
     public float maxPower { get => _maxPower; private set => _maxPower = value; }
 
-    // Private fields ----------------------------------------------------
+    #endregion
+
+    #region PRIVATE FIELDS
+ 
     private PlayerInput _playerInput;
     private Animator anim;
+
+    #endregion
+
+    #region  SETUP_TEARDOWN
 
     private void Awake()
     {
@@ -146,6 +153,10 @@ public class PlayerStateMachine : BaseStateMachine
     // Initial state for player should be idle
     protected override BaseState GetInitialState() => idleState;
 
+    #endregion
+
+    #region PUBLIC METHODS
+
     /// <summary>
     /// If an animator parameter of the desired name exists, sets it to value. 
     /// If the desired parameter does not exists, a warning is logged to console. 
@@ -165,6 +176,31 @@ public class PlayerStateMachine : BaseStateMachine
     }
 
     /// <summary>
+    /// Get the length of the current animation clip, scaled by animator speed.
+    ///</summary>
+    /// <returns>
+    /// The length in seconds of the current animation clip. 
+    /// If no clip was found, returns -1.
+    /// </returns>
+    public float GetAnimatorClipLength() {
+        AnimationClip clip = null; 
+        for(int i = 0; i < anim.layerCount; i++) {
+            var clipArray = anim.GetCurrentAnimatorClipInfo(i);
+            if (clipArray.Count() > 0) {
+                clip = clipArray[0].clip;
+                break; // exit loop early if a clip is found
+            }
+        }
+
+        // scale clip length by runtime. If none exists, return -1
+        return clip?.length / anim.speed ?? -1f;
+    }
+
+    #endregion
+
+    #region PRIVATE METHODS
+
+    /// <summary>
     /// Helper method to check whether the state machine's 
     /// animator has a parameter with the desired name.
     /// </summary>
@@ -174,4 +210,6 @@ public class PlayerStateMachine : BaseStateMachine
         var matchingParams = anim.parameters.Where((param) => param.name == paramName);
         return matchingParams.Count() > 0;
     }
+    
+    #endregion
 }

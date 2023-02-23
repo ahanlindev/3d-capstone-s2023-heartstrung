@@ -20,8 +20,7 @@ public class ButtonManager : MonoBehaviour
 
     public void StartGameButtonClicked() {
         // Debug.Log("Let us Start the Game");
-        int index = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadSceneAsync(index + 1);
+        TransitionManager.TransitionToScene(SceneID.COMIC1);
     }
 
     public void OptionsButtonClicked() {
@@ -49,7 +48,7 @@ public class ButtonManager : MonoBehaviour
     public void MainMenuButtonClicked() {
         Debug.Log("Main Menu GO!");
         PauseMenuManager.instance.Unpause();
-        SceneManager.LoadSceneAsync("Main Menu");
+        TransitionManager.TransitionToScene(SceneID.MAINMENU);
     }
 
     public void QuitButtonClicked() {
