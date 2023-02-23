@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MainMenuOptionsButton : MonoBehaviour
 {
     UnityEngine.UI.Button MenuButton;
-    public GameObject TitleScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +16,6 @@ public class MainMenuOptionsButton : MonoBehaviour
 
     void Clicked() {
         ButtonManager.instance.OptionsButtonClicked();
-        TitleScreen.SetActive(false);
+        TitleScreenManager.instance.DisableMenu();
     }
 }

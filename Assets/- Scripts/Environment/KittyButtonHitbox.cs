@@ -10,6 +10,14 @@ public class KittyButtonHitbox : MonoBehaviour
     [SerializeField] public bool persistent;
     bool pressed;
 
+
+    private void Start()
+    {
+        if (button == null)
+        {
+            button = gameObject.GetComponent<Button>();
+        }
+    }
     void OnCollisionEnter(Collision collision) {
         if(!pressed) {
             Debug.Log("collided with " + collision.gameObject.name);
