@@ -1,6 +1,6 @@
 #region SCENE_NAMES
 /// <summary>Enum that maps to the string names of given scenes. Call ToName to get string version</summary>
-public enum SceneNames {
+public enum SceneID {
     MAINMENU,
     VICTORY,
     GAME_OVER,
@@ -22,27 +22,27 @@ public enum SceneNames {
     KINGDOM_2,
 }
 
-public static class SceneNamesToString {
-    public static string ToName(this SceneNames name) => name switch {
-        SceneNames.MAINMENU => "Main Menu",
-        SceneNames.VICTORY => "Victory",
-        SceneNames.GAME_OVER => "Defeat",
-        SceneNames.COMIC1 => "Comic1",
-        SceneNames.COMIC2 => "Comic2",
-        SceneNames.COMIC3 => "Comic3",
-        SceneNames.COMIC4 => "Comic4",
-        SceneNames.COMIC5 => "Comic5",
-        SceneNames.COMIC6 => "Comic6",
-        SceneNames.TUTORIAL_1 => "Tutorial 1",
-        SceneNames.TUTORIAL_2 => "Tutorial 2",  // TODO remove
-        SceneNames.TUTORIAL_2_1 => "Tutorial 2.1",
-        SceneNames.TUTORIAL_2_2 => "Tutorial 2.2",
-        SceneNames.TUTORIAL_2_3 => "Tutorial 2.3",
-        SceneNames.TUTORIAL_2_4 => "Tutorial 2.4",
-        SceneNames.STRAWBERRY_1 => "Strawberry 1",
-        SceneNames.STRAWBERRY_2 => "Strawberry 2",
-        SceneNames.KINGDOM_1 => "Kingdom 1",
-        SceneNames.KINGDOM_2 => "Kingdom 2",
+public static class SceneIDsToString {
+    public static string GetName(this SceneID name) => name switch {
+        SceneID.MAINMENU => "Main Menu",
+        SceneID.VICTORY => "Victory",
+        SceneID.GAME_OVER => "Defeat",
+        SceneID.COMIC1 => "Comic1",
+        SceneID.COMIC2 => "Comic2",
+        SceneID.COMIC3 => "Comic3",
+        SceneID.COMIC4 => "Comic4",
+        SceneID.COMIC5 => "Comic5",
+        SceneID.COMIC6 => "Comic6",
+        SceneID.TUTORIAL_1 => "Tutorial 1",
+        SceneID.TUTORIAL_2 => "Tutorial 2",  // TODO remove
+        SceneID.TUTORIAL_2_1 => "Tutorial 2.1",
+        SceneID.TUTORIAL_2_2 => "Tutorial 2.2",
+        SceneID.TUTORIAL_2_3 => "Tutorial 2.3",
+        SceneID.TUTORIAL_2_4 => "Tutorial 2.4",
+        SceneID.STRAWBERRY_1 => "Strawberry 1",
+        SceneID.STRAWBERRY_2 => "Strawberry 2",
+        SceneID.KINGDOM_1 => "Kingdom 1",
+        SceneID.KINGDOM_2 => "Kingdom 2",
         _ => UnhandledEnum(),
     };
 
