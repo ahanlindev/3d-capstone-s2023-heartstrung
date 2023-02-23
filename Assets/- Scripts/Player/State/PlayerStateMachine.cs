@@ -58,16 +58,6 @@ public class PlayerStateMachine : BaseStateMachine
     [SerializeField] private HeartStateMachine _heart;
     public HeartStateMachine heart { get => _heart; private set => _heart = value; }
 
-    // TODO this is sloppy. Refactor soon.
-    [Tooltip("Amount of time in seconds that the player will be in the attack state")]
-    [SerializeField] private float _attackTime = 0.5f;
-    public float attackTime { get => _attackTime; private set => _attackTime = value; }
-
-    // TODO this is sloppy. Refactor soon.
-    [Tooltip("Amount of time in seconds that the player will be in the hurt state")]
-    [SerializeField] private float _hurtTime = 0.5f;
-    public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
-
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float _moveSpeed = 2f;
     public float moveSpeed { get => _moveSpeed; private set => _moveSpeed = value; }
@@ -162,6 +152,27 @@ public class PlayerStateMachine : BaseStateMachine
         {
             Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
         }
+    }
+
+    /// <summary>
+    /// Get the length of the current animation clip, scaled by animator speed.
+    ///</summary>
+    /// <returns>
+    /// The length in seconds of the current animation clip. 
+    /// If no clip was found, returns -1.
+    /// </returns>
+    public float GetAnimatorClipLength() {
+        AnimationClip clip = null; 
+        for(int i = 0; i < anim.layerCount; i++) {
+            var clipArray = anim.GetCurrentAnimatorClipInfo(i);
+            if (clipArray.Count() > 0) {
+                clip = clipArray[0].clip;
+                break; // exit loop early if a clip is found
+            }
+        }
+
+        // scale clip length by runtime. If none exists, return -1
+        return clip?.length / anim.speed ?? -1f;
     }
 
     /// <summary>
