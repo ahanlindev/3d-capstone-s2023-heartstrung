@@ -1,6 +1,10 @@
+using System;
+
 #region SCENE_NAMES
 /// <summary>Enum that maps to the string names of given scenes. Call ToName to get string version</summary>
+[Serializable]
 public enum SceneID {
+    INVALID = -1,
     MAINMENU,
     VICTORY,
     GAME_OVER,
@@ -23,7 +27,9 @@ public enum SceneID {
 }
 
 public static class SceneIDsToString {
+    /// <summary>Get the scene name associated with this SceneID</summary>
     public static string GetName(this SceneID name) => name switch {
+        SceneID.INVALID => "Invalid", 
         SceneID.MAINMENU => "Main Menu",
         SceneID.VICTORY => "Victory",
         SceneID.GAME_OVER => "Defeat",
@@ -48,7 +54,15 @@ public static class SceneIDsToString {
 
     private static string UnhandledEnum() {
         UnityEngine.Debug.LogError("unhandled scene name enum value");
-        return "";
+        return "Invalid";
+    }
+
+    /// <summary>Get the SceneID value associated with this scene, or invalid if none exists.</summary>
+    public static SceneID ToSceneID(this UnityEngine.SceneManagement.Scene scene) {
+        foreach (SceneID id in Enum.GetValues(typeof(SceneID))) {
+            if (id.GetName() == scene.name) { return id; }
+        }
+        return SceneID.INVALID;
     }
 }
 #endregion
