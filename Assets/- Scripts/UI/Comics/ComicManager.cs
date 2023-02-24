@@ -109,6 +109,7 @@ public class ComicManager : MonoBehaviour
     /// </summary>
     public void Next()
     {
+        AudioManager.instance.playSoundEvent("ComicAdvance");
         if (_index >= transform.childCount - 1)
         {
             TransitionManager.TransitionToNextScene();
@@ -126,13 +127,17 @@ public class ComicManager : MonoBehaviour
     {
         if (_index > 0)
         {
+            AudioManager.instance.playSoundEvent("ComicAdvance");
             FadeCurrentPanel(fadeIn: false);
             _index--;
         }
     }
 
     /// <summary>Skip the comic and transitions to the next scene/</summary>
-    public void Skip() => TransitionManager.TransitionToNextScene();
+    public void Skip() {
+        AudioManager.instance.playSoundEvent("ComicAdvance");
+        TransitionManager.TransitionToNextScene();
+    }
 
     /// <summary>Gradually fade the comic panel at the current index either in or out</summary>
     /// <param name="fadeIn">If true, the comic panel at the current index is enabled, otherwise it is disabled.</param>
