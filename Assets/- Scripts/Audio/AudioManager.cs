@@ -19,7 +19,7 @@ public class AudioManager : MonoBehaviour
     // Specifies the music that should play in each scene.
     // No entry in this dict means no music will play.
 
-    [SerializeField] public Dictionary<string, string> perSceneMusic = new Dictionary<string, string>();
+    [SerializeField] public Dictionary<SceneID, string> perSceneMusic = new Dictionary<SceneID, string>();
 
     private AudioSource[] audioSources;
 
@@ -42,14 +42,16 @@ public class AudioManager : MonoBehaviour
         }
 
         // Add entries to the perSceneMusic dictionary
-        perSceneMusic["Tutorial1"] = "OverworldMusic";
-        perSceneMusic["Tutorial2"] = "OverworldMusic";
-        perSceneMusic["Tutorial 1"] = "OverworldMusic";
-        perSceneMusic["Tutorial 2"] = "OverworldMusic";
-        perSceneMusic["StrawberryField1"] = "OverworldMusic";
-        perSceneMusic["StrawberryField2"] = "OverworldMusic";
-        perSceneMusic["CatKingdom1"] = "OverworldMusic";
-        perSceneMusic["CatKingdom2"] = "OverworldMusic";
+        perSceneMusic[SceneID.TUTORIAL_1] = "OverworldMusic";
+        perSceneMusic[SceneID.TUTORIAL_2_1] = "OverworldMusic";
+        perSceneMusic[SceneID.TUTORIAL_2_2] = "OverworldMusic";
+        perSceneMusic[SceneID.TUTORIAL_2_3] = "OverworldMusic";
+        perSceneMusic[SceneID.TUTORIAL_2_4] = "OverworldMusic";
+        perSceneMusic[SceneID.STRAWBERRY_1] = "OverworldMusic";
+        perSceneMusic[SceneID.STRAWBERRY_2] = "OverworldMusic";
+        perSceneMusic[SceneID.KINGDOM_1] = "OverworldMusic";
+        perSceneMusic[SceneID.KINGDOM_2] = "OverworldMusic";
+
         // Instantiate the AudioSources
         // audioSources[0] is implicitly the fling audio source
         // audioSources[1] is implicitly the music audio source
@@ -92,9 +94,8 @@ public class AudioManager : MonoBehaviour
     {
         Debug.Log("OnSceneLoaded: " + scene.name);
         Debug.Log(mode);
-        if(perSceneMusic.ContainsKey(scene.name)) {
-            // Debug.Log("Starting song " + scene.name);
-            startMusic(perSceneMusic[scene.name]);
+        if(perSceneMusic.ContainsKey(scene.ToSceneID())) {
+            startMusic(perSceneMusic[scene.ToSceneID()]);
         } else {
             stopMusic();
         }
