@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17661834, g: 0.22107169, b: 0.30337703, a: 1}
+  m_IndirectSpecularColor: {r: 0.17668527, g: 0.22114478, b: 0.30347988, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -770,7 +770,7 @@ PrefabInstance:
     - target: {fileID: 4185398481135581091, guid: b22a0d0d8fad4495a8ccb924de0d206c,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.2999996
+      value: 1.2999995
       objectReference: {fileID: 0}
     - target: {fileID: 4185398481135581091, guid: b22a0d0d8fad4495a8ccb924de0d206c,
         type: 3}
@@ -780,7 +780,7 @@ PrefabInstance:
     - target: {fileID: 4185398481135581091, guid: b22a0d0d8fad4495a8ccb924de0d206c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.22876966
+      value: 0.22877026
       objectReference: {fileID: 0}
     - target: {fileID: 4185398481135581091, guid: b22a0d0d8fad4495a8ccb924de0d206c,
         type: 3}
@@ -790,7 +790,7 @@ PrefabInstance:
     - target: {fileID: 4185398481135581091, guid: b22a0d0d8fad4495a8ccb924de0d206c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.06271654
+      value: 0.06271696
       objectReference: {fileID: 0}
     - target: {fileID: 4185398481135581091, guid: b22a0d0d8fad4495a8ccb924de0d206c,
         type: 3}
@@ -850,10 +850,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d21edac8a0b9a478f800cac71d2aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disappear: 0
+  persistent: 0
   triggeringObject: 0
   targets:
   - {fileID: 1937658360}
-  persistent: 0
   activeSwitch: 1
   visibleSwitch: 0
   functionalitySwitch: 0
@@ -1021,7 +1022,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 1388569540}
   m_Lens:
     FieldOfView: 60.000004
     OrthographicSize: 10
@@ -1048,7 +1049,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 207991534}
   m_LocalRotation: {x: 0.29788315, y: -0, z: -0, w: 0.95460236}
-  m_LocalPosition: {x: 0.68999827, y: 10.790001, z: 0.5699997}
+  m_LocalPosition: {x: -3, y: 11.629765, z: -9.7371645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2322,10 +2323,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d21edac8a0b9a478f800cac71d2aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disappear: 0
+  persistent: 0
   triggeringObject: 0
   targets:
   - {fileID: 634782809}
-  persistent: 0
   activeSwitch: 1
   visibleSwitch: 0
   functionalitySwitch: 0
@@ -3686,7 +3688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Path: {fileID: 540045766}
-  m_PathPosition: 0.111097045
+  m_PathPosition: 0
   m_PositionUnits: 0
   m_PathOffset: {x: 0, y: 0, z: 0}
   m_XDamping: 0
@@ -4417,10 +4419,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d21edac8a0b9a478f800cac71d2aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disappear: 0
+  persistent: 0
   triggeringObject: 0
   targets:
   - {fileID: 651494624}
-  persistent: 0
   activeSwitch: 1
   visibleSwitch: 0
   functionalitySwitch: 0
@@ -6552,7 +6555,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1821510661}
   m_LocalRotation: {x: 0.29788318, y: 0, z: 0, w: 0.95460236}
-  m_LocalPosition: {x: 0.68999827, y: 11.629765, z: -9.7371645}
+  m_LocalPosition: {x: -3, y: 11.629765, z: -9.7371645}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6690,10 +6693,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d21edac8a0b9a478f800cac71d2aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disappear: 0
+  persistent: 1
   triggeringObject: 1
   targets:
   - {fileID: 511037325}
-  persistent: 1
   activeSwitch: 0
   visibleSwitch: 0
   functionalitySwitch: 1

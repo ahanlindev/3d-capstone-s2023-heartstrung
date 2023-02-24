@@ -34,6 +34,9 @@ public class ConfigurableButton : MonoBehaviour
     [Tooltip("If enabled, the object renderer will be switched with this button")]
     [SerializeField] public bool visibleSwitch;
 
+    [Tooltip("If enabled, the object collider will be switched with this button")]
+    [SerializeField] public bool colliderSwitch;
+
     [Tooltip("If enabled, the script attached will be switched with this button")]
     [SerializeField] public bool functionalitySwitch;
 
@@ -53,8 +56,6 @@ public class ConfigurableButton : MonoBehaviour
         _buttonBodyRenderer = GetComponent<Renderer>();
         _originalColor = _buttonBodyRenderer.material.color;
     }
-
-
 
 
     void OnCollisionEnter(Collision collision)
@@ -111,6 +112,7 @@ public class ConfigurableButton : MonoBehaviour
             if (activeSwitch) Activeness(target);
             if (visibleSwitch) Visibility(target);
             if (functionalitySwitch) Functionality(target);
+            if (colliderSwitch) Collision(target);
         }
     }
 
@@ -122,14 +124,17 @@ public class ConfigurableButton : MonoBehaviour
     private void Visibility(GameObject target)
     {
         MeshRenderer[] _meshes = target.GetComponentsInChildren<MeshRenderer>();
-        MeshCollider[] _meshColliders = target.GetComponentsInChildren<MeshCollider>();
-        Collider[] _colliders = target.GetComponentsInChildren<Collider>();
 
         // Can't use that question mark but Idky
         foreach (MeshRenderer mesh in _meshes) { mesh.enabled = !mesh.enabled; }
+    }
+
+    private void Collision(GameObject target)
+    {
+        MeshCollider[] _meshColliders = target.GetComponentsInChildren<MeshCollider>();
+        Collider[] _colliders = target.GetComponentsInChildren<Collider>();
 
         foreach (MeshCollider meshCollider in _meshColliders) { meshCollider.enabled = !meshCollider.enabled; }
-
         foreach (Collider collider in _colliders) { collider.enabled = !collider.enabled; }
     }
 
