@@ -353,7 +353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &97609589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1299,6 +1299,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2595317218204527740, guid: d5c279ffafcfa67449134434ea68d724,
+        type: 3}
+      propertyPath: _moveSpeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2696504059735813714, guid: d5c279ffafcfa67449134434ea68d724,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1819,7 +1824,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-112382
+  m_Name: pb_Mesh-230388
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -2474,7 +2479,7 @@ PrefabInstance:
     - target: {fileID: 7597927454967243523, guid: 0ef876aeccfa4c84c91807e87440a6cb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12
+      value: 35.8
       objectReference: {fileID: 0}
     - target: {fileID: 7597927454967243523, guid: 0ef876aeccfa4c84c91807e87440a6cb,
         type: 3}
@@ -3595,7 +3600,7 @@ PrefabInstance:
     - target: {fileID: 8203154391426751168, guid: bbe766eebab7044a59cef1bbfc3c2a50,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.92
+      value: -4.3
       objectReference: {fileID: 0}
     - target: {fileID: 8203154391426751168, guid: bbe766eebab7044a59cef1bbfc3c2a50,
         type: 3}
