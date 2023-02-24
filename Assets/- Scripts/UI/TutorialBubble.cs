@@ -7,7 +7,10 @@ public class TutorialBubble : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject Kitty;
+
+    [SerializeField]
     public Transform VirtualCamera;
+
     private Vector3 shift;
 
     private SpriteRenderer spriteRenderer;
