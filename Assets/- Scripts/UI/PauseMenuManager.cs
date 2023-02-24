@@ -18,7 +18,7 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Button defaultSelection;
 
     [Tooltip("A list of scenes where the pause menu cannot be enabled.")]
-    [SerializeField] public List<string> pauseBlacklist = new List<string>();
+    [SerializeField] public List<SceneID> pauseBlacklist = new List<SceneID>();
 
     [Tooltip("Whether the game is paused.")]
     [SerializeField] public bool paused {get; private set;}
@@ -64,7 +64,7 @@ public class PauseMenuManager : MonoBehaviour
     private void OnPauseKeyPressed(InputAction.CallbackContext _) {
         // Debug.Log("Pause");
         // Check if the current scene is in the pause blacklist
-        if(!pauseBlacklist.Contains(SceneManager.GetActiveScene().name)) {
+        if(!pauseBlacklist.Contains(SceneManager.GetActiveScene().ToSceneID())) {
             if(!paused) {
                 Pause();
             } else {
