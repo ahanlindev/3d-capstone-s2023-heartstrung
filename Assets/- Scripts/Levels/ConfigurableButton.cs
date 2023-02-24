@@ -6,6 +6,15 @@ using DG.Tweening;
 public class ConfigurableButton : MonoBehaviour
 {
 
+
+    [Tooltip("Disappear totally after being triggered")]
+    [SerializeField] public bool disappear;
+
+    [Tooltip("If enabled, once pressed the button will stay pressed permanently.")]
+    [SerializeField] public bool persistent;
+
+    //[Tooltip("By claiming the attached pf, the objects on the button will be sticked and move along pf's move")]
+    //[SerializeField] public PfMovingList attachedPf;
     public enum TriggeringObject {Player, Heart };
 
     [Tooltip("What will trigger this button?")]
@@ -16,9 +25,6 @@ public class ConfigurableButton : MonoBehaviour
 
     [Tooltip("Targets connected with")]
     public List<GameObject> targets;
-
-    [Tooltip("If enabled, once pressed the button will stay pressed permanently.")]
-    [SerializeField] public bool persistent;
 
     private bool _pressed;
 
@@ -34,9 +40,12 @@ public class ConfigurableButton : MonoBehaviour
     /// <summary>color that the button is when the game begins. Used in tweening.</summary>
     private Color _originalColor;
     private Renderer _buttonBodyRenderer;
+    //private HashSet<Rigidbody> collidedBodies;
+
 
     private void Start()
     {
+        //collidedBodies = new HashSet<Rigidbody>();
         if (_button == null)
         {
             _button = gameObject.GetComponent<Button>();
@@ -45,30 +54,54 @@ public class ConfigurableButton : MonoBehaviour
         _originalColor = _buttonBodyRenderer.material.color;
     }
 
+
+
+
     void OnCollisionEnter(Collision collision)
     {
-        if (!_pressed)
+    
+        //if (collidedBodies == null) Start();
+        //var temp = collision.collider.attachedRigidbody;
+        //if (temp != null) collidedBodies.Add(temp);
+        //Debug.Log("collided11 with " + collision.gameObject.name);
+        if (_button == null)
         {
-            Debug.Log("collided with " + collision.gameObject.name);
-            if (collision.gameObject.tag == triggeringObject.ToString())
-            {
-                _pressed = true;
-                PressTween();
-            }
+            Start();
         }
+        if (!_pressed)
+            {
+                Debug.Log("collided with " + collision.gameObject.name);
+                if (collision.gameObject.tag == triggeringObject.ToString())
+                {
+                    _pressed = true;
+                    PressTween();
+                    if (disappear)
+                    {
+                        GetComponent<MeshRenderer>().enabled = false;
+                        GetComponent<MeshCollider>().enabled = false;
+                    }
+                }
+            }
+        
     }
 
     void OnCollisionExit(Collision collision)
     {
-        if (!persistent)
-        {
-            Debug.Log("No longer colliding with " + collision.gameObject.name);
-            if (collision.gameObject.name == triggeringObject.ToString())
+   
+        
+            //var temp = collision.collider.attachedRigidbody;
+            //if (temp != null) collidedBodies.Remove(temp);
+
+            if (!persistent)
             {
-                _pressed = false;
-                PressTween();
+                Debug.Log("No longer colliding with " + collision.gameObject.name);
+                if (collision.gameObject.name == triggeringObject.ToString())
+                {
+                    _pressed = false;
+                    PressTween();
+                }
             }
-        }
+        
     }
 
     private void DoTrigger()
@@ -139,5 +172,6 @@ public class ConfigurableButton : MonoBehaviour
         transform.DOScale(newScale, PRESS_DURATION)
             .OnComplete(DoTrigger);
     }
+
 }
 
