@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource[] audioSources;
 
     private float flingPower = 0f;
+    private bool soundDictInitialized = false;
 
     public bool musicPlaying = false;
 
@@ -72,6 +73,7 @@ public class AudioManager : MonoBehaviour
         foreach(AudioEvent audioEvent in audioEvents) {
             sounds.Add(audioEvent.EventName, audioEvent);
         }
+        // Debug.Log("SoundDict initialized");
 
         audioSources[0].clip = sounds["ChargeFling"].poolSound();
         audioSources[0].loop = true;
@@ -81,6 +83,8 @@ public class AudioManager : MonoBehaviour
         // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
         //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
         // }
+        soundDictInitialized = true;
+        LoadSceneMusic(SceneManager.GetActiveScene());
     }
 
     // called first
@@ -92,9 +96,16 @@ public class AudioManager : MonoBehaviour
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("OnSceneLoaded: " + scene.name);
-        Debug.Log(mode);
+        // Debug.Log("OnSceneLoaded: " + scene.name);
+        // Debug.Log(mode);
+        if(soundDictInitialized) {
+            LoadSceneMusic(scene);
+        }
+    }
+
+    void LoadSceneMusic(Scene scene) {
         if(perSceneMusic.ContainsKey(scene.ToSceneID())) {
+            // Debug.Log("Loading music " + scene.ToSceneID());
             startMusic(perSceneMusic[scene.ToSceneID()]);
         } else {
             stopMusic();
