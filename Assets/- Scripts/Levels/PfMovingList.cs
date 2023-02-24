@@ -31,7 +31,7 @@ public class PfMovingList : MonoBehaviour
     void Start()
     { 
         lastPosition = transform.position;
-        collidedBodies = new HashSet<Rigidbody>();
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
         tgtLength = target.Length;
 
         transform.DOMove(target[index].position, 1 / speed);
@@ -41,7 +41,6 @@ public class PfMovingList : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
         
         moveTo();
     }
@@ -84,7 +83,7 @@ public class PfMovingList : MonoBehaviour
             
         
             //SetEase(Ease.InOutSine)
-        if (!_moved) {
+        if (!(_moved && index == 0)) {
             Vector3 offset = transform.position - lastPosition;
             lastPosition = transform.position;
             foreach(Rigidbody attached in collidedBodies)
@@ -98,6 +97,7 @@ public class PfMovingList : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
         var temp = collision.collider.attachedRigidbody;
         if (temp != null) collidedBodies.Add(temp);
     }
