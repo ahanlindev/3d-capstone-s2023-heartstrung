@@ -114,7 +114,7 @@ Transform:
   - {fileID: 7938019322173919201}
   - {fileID: 1525162850447421404}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8269092850188768560
 GameObject:
@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 7548359672668053354}
   - component: {fileID: 7664367620510205636}
   - component: {fileID: 7604900408955017740}
+  - component: {fileID: 5071551684835782272}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -237,3 +238,16 @@ MonoBehaviour:
   radius: 5
   damage: 10
   power: 2
+--- !u!114 &5071551684835782272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269092850188768560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63fbd7fc94d32d34194bdf614d5a13e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 1
