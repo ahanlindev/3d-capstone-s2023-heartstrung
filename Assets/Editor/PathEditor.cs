@@ -713,12 +713,16 @@ namespace PathCreationEditor {
 
         BezierPath bezierPath {
             get {
+                if (data.bezierPath == null) {
+                    creator.InitializeEditorData(false);
+                }
                 return data.bezierPath;
             }
         }
 
         PathCreatorData data {
             get {
+                
                 return creator.EditorData;
             }
         }

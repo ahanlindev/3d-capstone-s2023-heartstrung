@@ -52,6 +52,8 @@ namespace PathCreation {
             editorData.bezierOrVertexPathModified -= TriggerPathUpdate;
             editorData.bezierOrVertexPathModified += TriggerPathUpdate;
 
+            Debug.Log($"intialized {initialized}");
+            if (initialized) {return;}
             editorData.Initialize (in2DMode);
             initialized = true;
         }
@@ -60,7 +62,6 @@ namespace PathCreation {
             get {
                 return editorData;
             }
-
         }
 
         public void TriggerPathUpdate () {

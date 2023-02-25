@@ -10,7 +10,7 @@ namespace PathCreation {
         public event System.Action bezierCreated;
 
         [SerializeField]
-        BezierPath _bezierPath;
+        BezierPath _bezierPath = null;
         VertexPath _vertexPath;
 
         [SerializeField]
@@ -44,9 +44,7 @@ namespace PathCreation {
         public int tabIndex;
 
         public void Initialize (bool defaultIs2D) {
-            if (_bezierPath == null) {
-                CreateBezier (Vector3.zero, defaultIs2D);
-            }
+            CreateBezier (Vector3.zero, defaultIs2D);
             vertexPathUpToDate = false;
             _bezierPath.OnModified -= BezierPathEdited;
             _bezierPath.OnModified += BezierPathEdited;
