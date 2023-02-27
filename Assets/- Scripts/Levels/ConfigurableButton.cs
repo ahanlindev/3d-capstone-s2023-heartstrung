@@ -105,7 +105,8 @@ public class ConfigurableButton : MonoBehaviour
         
     }
 
-    private void DoTrigger()
+    // Enable to called from outside
+    public void DoTrigger()
     {
         foreach (GameObject target in targets)
         {
@@ -114,6 +115,12 @@ public class ConfigurableButton : MonoBehaviour
             if (functionalitySwitch) Functionality(target);
             if (colliderSwitch) Collision(target);
         }
+    }
+
+    // Since fingevent require a float
+    public void DoTrigger(float parameter)
+    {
+        DoTrigger();
     }
 
     private void Activeness(GameObject target)
