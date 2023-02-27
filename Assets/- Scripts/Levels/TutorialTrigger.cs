@@ -7,13 +7,19 @@ public class TutorialTrigger : MonoBehaviour
 {
 
     public int HintIndex;
-    TutorialBubble tutorialBubble;
-    
+    [Tooltip("Targeted UI Bubbles, if empty, will search for name [ChatBubble]")]
+    [SerializeField] public TutorialBubble[] tutorialBubbles;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        tutorialBubble = GameObject.Find("ChatBubble").GetComponent<TutorialBubble>();
+        if (tutorialBubbles.Length == 0)
+        {
+            // get the only one by name
+            tutorialBubbles = GameObject.Find("ChatBubble").GetComponents<TutorialBubble>();
+        }
+        
     }
 
     // Update is called once per frame
@@ -22,11 +28,16 @@ public class TutorialTrigger : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
-        {
-            tutorialBubble.changeText(HintIndex);
+        { 
+            foreach (TutorialBubble tutorialBubble in tutorialBubbles)
+            {
+                Debug.Log(tutorialBubble.gameObject.name);
+                tutorialBubble.changeText(HintIndex);
+            }
+            
         }
 
     }
@@ -36,9 +47,12 @@ public class TutorialTrigger : MonoBehaviour
     
         if (other.gameObject.tag == "Player")
         {
-            tutorialBubble.checktheBush(HintIndex);
-            tutorialBubble.cleanText();
-            //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
+            foreach (TutorialBubble tutorialBubble in tutorialBubbles)
+            {
+                tutorialBubble.checktheBush(HintIndex);
+                tutorialBubble.cleanText();
+                //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
+            }
         }
     }
 
