@@ -18,21 +18,22 @@ public class KittyButtonHitbox : MonoBehaviour
             button = gameObject.GetComponent<Button>();
         }
     }
-    void OnCollisionEnter(Collision collision) {
+    void OnTriggerEnter(Collider collision) {
         if(!pressed) {
-            Debug.Log("collided with " + collision.gameObject.name);
-            if(collision.gameObject.tag == "Player") {
+            Debug.Log("kittybutton collided with " + collision.gameObject.name);
+            if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Kitty") {
                 button.enable();
                 pressed = true;
             }
+            Debug.Log("tag is " + collision.gameObject.tag);
            
         }
     }
 
-    void OnCollisionExit(Collision collision) {
+    void OnTriggerExit(Collider collision) {
         if(!persistent) {
-            Debug.Log("No longer colliding with " + collision.gameObject.name);
-            if(collision.gameObject.tag == "Player") {
+            Debug.Log("kittybutton no longer colliding with " + collision.gameObject.name);
+            if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Kitty") {
                 button.disable();
                 pressed = false;
             }

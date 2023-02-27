@@ -10,7 +10,7 @@ public class DodgerButtonHitbox : MonoBehaviour
     [SerializeField] public bool persistent;
     bool pressed;
 
-    void OnCollisionEnter(Collision collision) {
+    void OnTriggerEnter(Collider collision) {
         if(!pressed) {
             Debug.Log("collided with " + collision.gameObject.name);
             if(collision.gameObject.tag == "Heart")
@@ -22,7 +22,7 @@ public class DodgerButtonHitbox : MonoBehaviour
         }
     }
 
-    void OnCollisionExit(Collision collision) {
+    void OnTriggerExit(Collider collision) {
         if(!persistent) {
             Debug.Log("No longer colliding with " + collision.gameObject.name);
             if (collision.gameObject.name == "Heart")
