@@ -83,7 +83,7 @@ public class PfMovingList : MonoBehaviour
             
         
             //SetEase(Ease.InOutSine)
-        if (!(_moved && index == 0)) {
+        if (!_moved) {
             Vector3 offset = transform.position - lastPosition;
             lastPosition = transform.position;
             foreach(Rigidbody attached in collidedBodies)
