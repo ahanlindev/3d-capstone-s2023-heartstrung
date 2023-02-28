@@ -65,7 +65,6 @@ namespace Player
             base.UpdateLogic();
             AudioManager.instance?.continueFlingSoundEffect(_power);
             if (!_rotateTween.active) { 
-                Debug.Log("Bazinga");
                 RotateAwayFromHeart(0.0f); }
             UpdateFlingTrajectory();
 
