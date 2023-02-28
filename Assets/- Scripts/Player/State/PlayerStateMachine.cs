@@ -237,7 +237,7 @@ public class PlayerStateMachine : BaseStateMachine
         int frames = 0;
         while (timer < invincibilityTime) {
             yield return null;
-            if (frames % 4 == 0) {
+            if (frames % 8 == 0) {
                 renderers.ForEach((r) => r.enabled = !r.enabled);
             }
             frames++;
