@@ -6,14 +6,26 @@ using DG.Tweening;
 public class TutorialTrigger : MonoBehaviour
 {
 
-    public int HintIndex;
-    TutorialBubble tutorialBubble;
-    
+    public int hintIndex;
+
+    [Tooltip("The time kitty need to pass before triggering the bubble")]
+    public int countDown;
+
+    [Tooltip("Targeted UI Bubbles, if empty, will search for name [ChatBubble]")]
+    [SerializeField] public TutorialBubble[] tutorialBubbles;
+
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-        tutorialBubble = GameObject.Find("ChatBubble").GetComponent<TutorialBubble>();
+        if (tutorialBubbles.Length == 0)
+        {
+            // get the only one by name
+            tutorialBubbles = GameObject.Find("ChatBubble").GetComponents<TutorialBubble>();
+        }
+        
     }
 
     // Update is called once per frame
@@ -22,11 +34,18 @@ public class TutorialTrigger : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            tutorialBubble.changeText(HintIndex);
+            if (countDown == 0)
+            {
+                foreach (TutorialBubble tutorialBubble in tutorialBubbles)
+                {
+                    //Debug.Log("11");
+                    tutorialBubble.changeText(hintIndex);
+                }
+            }     
         }
 
     }
@@ -36,9 +55,13 @@ public class TutorialTrigger : MonoBehaviour
     
         if (other.gameObject.tag == "Player")
         {
-            tutorialBubble.checktheBush(HintIndex);
-            tutorialBubble.cleanText();
-            //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
+            countDown--;
+            foreach (TutorialBubble tutorialBubble in tutorialBubbles)
+            {
+                tutorialBubble.checktheBush(hintIndex);
+                tutorialBubble.cleanText();
+                //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
+            }
         }
     }
 
