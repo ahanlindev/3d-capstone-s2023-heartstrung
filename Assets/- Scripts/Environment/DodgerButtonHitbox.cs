@@ -17,6 +17,7 @@ public class DodgerButtonHitbox : MonoBehaviour
             {
                 button.enable();
                 pressed = true;
+                Debug.Log("Activated");
             }
             
         }
