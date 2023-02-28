@@ -5431,7 +5431,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a3d3fb9f0556c4109bab971af6bec8c4, type: 3}
   - {fileID: 21300000, guid: 5037eda69d9944f09837bc03db7fd30a, type: 3}
   - {fileID: 21300000, guid: 4621af0f870f841c38bc64e5e9497397, type: 3}
-  attackedBush: {fileID: 1580651665}
+  attackedBush: {fileID: 0}
 --- !u!1001 &532336918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15363,18 +15363,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3dd44d59395e4ac41a06e2e2f4932787, type: 3}
---- !u!114 &1580651665 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7604900408955017740, guid: c2ac373610cac844ab0690b1408d3202,
-    type: 3}
-  m_PrefabInstance: {fileID: 632425602}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9d427be244ba4082bf4ba89eb5f5ceb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1589899344 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d2621f1d36759fb4795ecfd75dc7a26c,
@@ -21520,6 +21508,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8648407340232184435, guid: 4b813110edd55cc47887caf1d5e98f2e,
+        type: 3}
+      propertyPath: hintIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648407341265245019, guid: 4b813110edd55cc47887caf1d5e98f2e,
+        type: 3}
+      propertyPath: hintIndex
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8648407341344733909, guid: 4b813110edd55cc47887caf1d5e98f2e,
         type: 3}
       propertyPath: m_Name

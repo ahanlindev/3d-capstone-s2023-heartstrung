@@ -14,22 +14,26 @@ public class TutorialBubble : MonoBehaviour
     private Vector3 shift;
 
     private SpriteRenderer spriteRenderer;
-    private bool[] called;
+    private bool[] _called;
 
-    private int spriteIndex = -1;
+    private int _spriteIndex = -1;
 
-    private float localTimer;
+    private float _localTimer;
 
     [SerializeField]
     public Sprite[] hintSprites;
 
     public HurtingBush attackedBush;
 
-    private Tween lastcall;
+    //private Tween lastcall;
 
     void Start()
     {
-        called = new bool[4];
+        _called = new bool[4];
+        foreach (bool b in _called)
+        {
+            Debug.Log(b);
+        }
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
 
@@ -43,11 +47,11 @@ public class TutorialBubble : MonoBehaviour
         transform.position = Kitty.transform.position + shift;
         Vector3 forwardDirection = (transform.position - VirtualCamera.transform.position).normalized;
         transform.LookAt(transform.position + forwardDirection, VirtualCamera.transform.up);
-        if (spriteIndex >= 0)
+        if (_spriteIndex >= 0)
         {
-            if (localTimer > 0)
+            if (_localTimer > 0)
             {
-                localTimer -= Time.deltaTime;
+                _localTimer -= Time.deltaTime;
                 flicker();
             }
             else
@@ -59,44 +63,49 @@ public class TutorialBubble : MonoBehaviour
 
     public void changeText(int i)
     {
-
-        if (!called[i])
+        //Debug.Log("enter changeText");
+        //foreach (bool b in _called)
+        //{
+        //    Debug.Log(b);
+        //}
+        if (!_called[i])
         {
+            //Debug.Log("show content");
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(true);
-            spriteIndex = 2 * i;
+            _spriteIndex = 2 * i;
             if (attackedBush == null || i != 2)
-                called[i] = true;
-            localTimer = 6f;
+                _called[i] = true;
+            _localTimer = 6f;
         }
     }
 
     public void cleanText()
     {
-        localTimer = 2.5f;
+        _localTimer = 2.5f;
     }
 
     private void doClean()
     {
-        spriteIndex = -1;
+        _spriteIndex = -1;
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
     }
 
     public void checktheBush(int i)
     {
-        if (attackedBush == null || i == 2)
-            called[i] = true;
+        //if (attackedBush == null || i == 2)
+        //    _called[i] = true;
     }
 
     private void flicker()
     {
-        if (Mathf.Ceil(localTimer / 0.5f) % 2 == 0)
+        if (Mathf.Ceil(_localTimer / 0.5f) % 2 == 0)
         {
-            spriteRenderer.sprite = hintSprites[spriteIndex];
+            spriteRenderer.sprite = hintSprites[_spriteIndex];
         } else
         {
-            spriteRenderer.sprite = hintSprites[spriteIndex + 1];
+            spriteRenderer.sprite = hintSprites[_spriteIndex + 1];
         }
     }
 }
