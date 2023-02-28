@@ -94,20 +94,14 @@ public class ComicManager : MonoBehaviour
         _input.Disable();
     }
     private void OnNextInput(CallbackContext _) {
-        if(!PauseMenuManager.instance.paused) {
-           Next(); 
-        }
+        Next(); 
     }
     private void OnPrevInput(CallbackContext _) {
-        if(!PauseMenuManager.instance.paused) {
-           Previous(); 
-        }
+        Previous(); 
     }
 
     private void OnSkipStartInput(CallbackContext _) {
-        if(PauseMenuManager.instance.paused) {
-            TransitionManager.TransitionToNextScene(_skipHoldTime);
-        }
+        TransitionManager.TransitionToNextScene(_skipHoldTime);
     }
 
     private void OnSkipCancelInput(CallbackContext _) {
@@ -122,7 +116,7 @@ public class ComicManager : MonoBehaviour
     /// </summary>
     public void Next()
     {
-        if(_transitioning) {
+        if(_transitioning || PauseMenuManager.instance.paused) {
             return;
         }
         AudioManager.instance.playSoundEvent("ComicAdvance");
@@ -142,7 +136,7 @@ public class ComicManager : MonoBehaviour
     /// <summary>Return to the previous page of the comic, if it exists/</summary>
     public void Previous()
     {
-        if(_transitioning) {
+        if(_transitioning || PauseMenuManager.instance.paused) {
             return;
         }
         if (_index > 0)
@@ -155,7 +149,7 @@ public class ComicManager : MonoBehaviour
 
     /// <summary>Skip the comic and transitions to the next scene/</summary>
     public void Skip() {
-        if(_transitioning) {
+        if(_transitioning || PauseMenuManager.instance.paused) {
             return;
         }
         AudioManager.instance.playSoundEvent("ComicAdvance");
