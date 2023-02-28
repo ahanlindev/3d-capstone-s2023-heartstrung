@@ -65,15 +65,18 @@ public class TrajectoryRenderer : MonoBehaviour
 
             // spherecast to check for early collision
             Ray ray = new Ray(lastPos, vecToCurrentPos.normalized);
+            RaycastHit hitInfo;
             bool willHit = Physics.SphereCast(
                 ray: ray, 
                 radius: objRadius, 
                 maxDistance: vecToCurrentPos.magnitude, 
+                hitInfo: out hitInfo,
                 layerMask: 1
             );
 
-            // exit the loop if the spherecast hits something
-            if (willHit) { break; }
+
+            // exit the loop if the spherecast hits something solid
+            if (willHit && !hitInfo.collider.isTrigger) { break; }
         }
 
         // Apply changes to renderer
