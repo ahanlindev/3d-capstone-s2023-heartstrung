@@ -15,6 +15,9 @@ namespace Heart
         /// <summary>Event handler for when the player starts charging a fling. </summary>
         protected virtual void OnPlayerChargeFling() { }
 
+        /// <summary>Event handler for when the player cancels charging a fling. </summary>
+        protected virtual void OnPlayerChargeFlingCancel() { }
+
         /// <summary>Event handler for when the player attempts to fling the heart. </summary>
         /// <param name="power">percentage power of the fling</param>
         protected virtual void OnPlayerFling(float power) { }
@@ -58,6 +61,7 @@ namespace Heart
         {
             base.Enter();
             _sm.player.ChargeFlingEvent += OnPlayerChargeFling;
+            _sm.player.ChargeFlingCancelEvent += OnPlayerChargeFlingCancel;
             _sm.player.FlingEvent += OnPlayerFling;
             _sm.player.FlingInterruptedEvent += OnPlayerFlingInterrupted;
             _sm.CollisionEnterEvent += OnCollisionEnter;

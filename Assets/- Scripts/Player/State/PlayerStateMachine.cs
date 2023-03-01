@@ -13,6 +13,9 @@ public class PlayerStateMachine : BaseStateMachine
     /// <summary>Event emitted when the player starts charging a fling.</summary>
     public Action ChargeFlingEvent;
 
+    /// <summary>Event emitted when the player cancels charging a fling.</summary>
+    public Action ChargeFlingCancelEvent;
+    
     /// <summary>
     /// Event emitted when the player executes a fling. 
     /// First parameter is percentage fling power. 
