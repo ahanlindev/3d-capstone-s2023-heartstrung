@@ -23,7 +23,9 @@ namespace Heart
         protected virtual void OnPlayerFlingInterrupted() { }
 
         /// <summary>Event handler for when the heart gets hurt by something. Override to ignore or change base behavior.</summary>
-        protected virtual void OnHurt() { _sm.ChangeState(_sm.hurtState); }
+        protected virtual void OnHurt() { 
+            if (!_sm.isInvincible) { _sm.ChangeState(_sm.hurtState); } 
+        }
 
         /// <summary>Event handler for when the heart dies. Override to ignore or change base behavior. </summary>
         protected virtual void OnDie() { _sm.ChangeState(_sm.deadState); }
