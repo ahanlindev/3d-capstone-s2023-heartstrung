@@ -35,6 +35,10 @@ public class PfMovingList : MonoBehaviour
         moveTo();
     }
 
+    private void Awake() {
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+    }
+    
     private void OnEnable() {
         lastPosition = transform.position;
         if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();

@@ -14,12 +14,12 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
     [SerializeField] public int numAudioSources = 5;
 
-    private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
+    private Dictionary<string, AudioEvent> sounds;
 
     // Specifies the music that should play in each scene.
     // No entry in this dict means no music will play.
 
-    [SerializeField] public Dictionary<SceneID, string> perSceneMusic = new Dictionary<SceneID, string>();
+    [SerializeField] public Dictionary<SceneID, string> perSceneMusic;
 
     private AudioSource[] audioSources;
 
@@ -43,6 +43,7 @@ public class AudioManager : MonoBehaviour
         }
 
         // Add entries to the perSceneMusic dictionary
+        perSceneMusic = new Dictionary<SceneID, string>();
         perSceneMusic[SceneID.TUTORIAL_1] = "OverworldMusic";
         perSceneMusic[SceneID.TUTORIAL_2_1] = "OverworldMusic";
         perSceneMusic[SceneID.TUTORIAL_2_2] = "OverworldMusic";
@@ -70,6 +71,7 @@ public class AudioManager : MonoBehaviour
         AudioEvent[] audioEvents = GetComponentsInChildren<AudioEvent>();
 
         // To make search faster and easier, make a dictionary
+        sounds = new Dictionary<string, AudioEvent>();
         foreach(AudioEvent audioEvent in audioEvents) {
             sounds.Add(audioEvent.EventName, audioEvent);
         }
@@ -106,7 +108,10 @@ public class AudioManager : MonoBehaviour
     void LoadSceneMusic(Scene scene) {
         if(perSceneMusic.ContainsKey(scene.ToSceneID())) {
             // Debug.Log("Loading music " + scene.ToSceneID());
-            startMusic(perSceneMusic[scene.ToSceneID()]);
+            string music = perSceneMusic[scene.ToSceneID()];
+            if (!musicAlreadyPlaying(music)) {
+                startMusic(music);
+            }
         } else {
             stopMusic();
         }
@@ -164,9 +169,14 @@ public class AudioManager : MonoBehaviour
         audioSources[0].Stop();
     }
 
-    ///<sumary>Internal function that converts the fling power from the player into a pitch for the audioManager to use.</summary>
+    ///<summary>Internal function that converts the fling power from the player into a pitch for the audioManager to use.</summary>
     private float convertFlingPowerToPitch(float power) {
         return power * 2 + 1f;
+    }
+
+    private bool musicAlreadyPlaying(string name) {
+        // TODO fragile if we change names of clip or audio. Make an enum?
+        return audioSources[1]?.clip?.name == name;
     }
 
     public void startMusic(string name) {
