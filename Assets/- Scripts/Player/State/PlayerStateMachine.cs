@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +13,9 @@ public class PlayerStateMachine : BaseStateMachine
     /// <summary>Event emitted when the player starts charging a fling.</summary>
     public Action ChargeFlingEvent;
 
+    /// <summary>Event emitted when the player cancels charging a fling.</summary>
+    public Action ChargeFlingCancelEvent;
+    
     /// <summary>
     /// Event emitted when the player executes a fling. 
     /// First parameter is percentage fling power. 
@@ -62,6 +67,9 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Health hitTracker { get; private set; }
 
+    /// <summary>Used by states to determine whether the hurt state can be entered</summary>
+    public bool isInvincible { get; private set; }
+
     // INSPECTOR PROPERTIES
 
     [Tooltip("Heart connected to this player")]
@@ -91,6 +99,10 @@ public class PlayerStateMachine : BaseStateMachine
     [Tooltip("Maximum percentage of fling power that a fling can have")]
     [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
     public float maxPower { get => _maxPower; private set => _maxPower = value; }
+
+    [Tooltip("Time in seconds that player will be unable to be hit after being hit once")]
+    [Range(0f, 1f)][SerializeField] private float _invincibilityTime = 1f;
+    public float invincibilityTime { get => _invincibilityTime; private set => _invincibilityTime = value; }
 
     #endregion
 
@@ -196,6 +208,9 @@ public class PlayerStateMachine : BaseStateMachine
         return clip?.length / anim.speed ?? -1f;
     }
 
+    /// <summary>Begins invincibility frames. Informs states that the hurt state should not be entered.</summary>
+    public void StartInvincibility() => StartCoroutine(InvincibilityCoroutine());
+
     #endregion
 
     #region PRIVATE METHODS
@@ -211,5 +226,31 @@ public class PlayerStateMachine : BaseStateMachine
         return matchingParams.Count() > 0;
     }
     
+    /// <summary>Performs the invincibility frame flicker</summary>
+    private IEnumerator InvincibilityCoroutine() {
+        // get all active renderers
+        List<Renderer> renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
+        renderers.RemoveAll((r) => !r.enabled);
+
+        // start invincibility
+        isInvincible = true;
+
+        // flicker renderers on and off until timer runs out
+        float timer = 0;
+        int frames = 0;
+        while (timer < invincibilityTime) {
+            yield return null;
+            if (frames % 8 == 0) {
+                renderers.ForEach((r) => r.enabled = !r.enabled);
+            }
+            frames++;
+            timer += Time.deltaTime;
+        }
+
+        // cleanup at end of sequence
+        isInvincible = false;
+        renderers.ForEach((r) => r.enabled = true);
+    }
+
     #endregion
 }

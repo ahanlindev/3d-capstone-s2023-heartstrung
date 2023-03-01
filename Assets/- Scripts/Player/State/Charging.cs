@@ -15,6 +15,9 @@ namespace Player
         // DOTween object that fluctuates the value of power
         private Tween _fluxTween;
 
+        // DOTween object that faces away from heart initially
+        private Tween _rotateTween;
+
         public override void Enter()
         {
             base.Enter();
@@ -34,7 +37,7 @@ namespace Player
             StartPowerFlux();
 
             // tween rotate away from heart in anticipation of fling
-            RotateAwayFromHeart();
+            RotateAwayFromHeart(0.2f);
 
             _sm.trajectoryRenderer.ToggleRender(true);
         }
@@ -49,10 +52,11 @@ namespace Player
             _sm.transform.DOComplete();
             StopPowerFlux();
 
-            // continue rendering the trajectory if flinging, otherwise stop showing it
+            // reset state if fling was cancelled
             if (!_goingToFling)
             {
                 _sm.trajectoryRenderer.ToggleRender(false);
+                _sm.ChargeFlingCancelEvent?.Invoke();
             }
         }
 
@@ -60,6 +64,8 @@ namespace Player
         {
             base.UpdateLogic();
             AudioManager.instance?.continueFlingSoundEffect(_power);
+            if (!_rotateTween.active) { 
+                RotateAwayFromHeart(0.0f); }
             UpdateFlingTrajectory();
 
         }
@@ -101,12 +107,12 @@ namespace Player
         // Helper Methods ---------------------------------------------
 
         /// <summary>rotates laterally away from the heart over a short time</summary>
-        private void RotateAwayFromHeart()
+        private void RotateAwayFromHeart(float timeNeeded)
         {
             Vector3 vecFromHeart = _sm.transform.position - _sm.heart.transform.position;
             Vector3 lookAtPoint = _sm.transform.position + vecFromHeart;
 
-            _sm.transform.DOLookAt(lookAtPoint, 0.2f, AxisConstraint.Y)
+            _rotateTween = _sm.transform.DOLookAt(lookAtPoint, timeNeeded, AxisConstraint.Y)
                 .SetEase(Ease.InOutCubic);
         }
 

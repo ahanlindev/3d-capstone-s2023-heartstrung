@@ -8,5 +8,10 @@ namespace Heart
         public Dead(HeartStateMachine stateMachine) : base("Dead", stateMachine) { }
 
         protected override bool StateIsFlingable() => false;
+
+        protected override void OnDie()
+        {
+            // Do nothing. prevents dying while dead
+        }
     }
 }

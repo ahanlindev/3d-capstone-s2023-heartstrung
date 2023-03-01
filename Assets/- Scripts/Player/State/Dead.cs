@@ -39,6 +39,11 @@ namespace Player
             base.Exit();
         }
 
+        protected override void OnDie()
+        {
+            // empty. Prevents dying while dead
+        }
+
         protected override void OnPlayerAttackInput(CallbackContext _)
         {
             base.OnPlayerAttackInput(_);
