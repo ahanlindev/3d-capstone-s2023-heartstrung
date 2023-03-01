@@ -6,6 +6,9 @@ public class Checkpoint : MonoBehaviour
 {
     public GameObject KittyRespawnLocation;
     public GameObject DodgerRespawnLocation;
+    public GameObject Flag;
+    public Material InactiveMaterial;
+    public Material ActiveMaterial;
     private CheckpointManager manager;
     public bool activated = false;
 
@@ -19,11 +22,13 @@ public class Checkpoint : MonoBehaviour
             return;
         }
         manager = managers[0];
+        Flag.GetComponent<MeshRenderer>().material = InactiveMaterial;
     }
 
     public void activate() {
         Debug.Log("Checkpoint Activated!");
         activated = true;
         manager.UpdateCheckpoint(this);
+        Flag.GetComponent<MeshRenderer>().material = ActiveMaterial;
     }
 }

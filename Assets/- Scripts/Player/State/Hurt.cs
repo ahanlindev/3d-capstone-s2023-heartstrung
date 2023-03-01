@@ -17,6 +17,8 @@ namespace Player
             // flash on and off
             _sm.StartInvincibility();
 
+            AudioManager.instance.playSoundEvent("KittyHurt");
+
             // return to idle when done with hurt animation
             _sm.StartCoroutine(StartTransitionTween());
         }

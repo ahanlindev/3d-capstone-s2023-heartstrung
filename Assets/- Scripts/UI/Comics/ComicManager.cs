@@ -15,6 +15,9 @@ public class ComicManager : MonoBehaviour
 
     [Tooltip("Time in seconds that the player must hold the skip button")]
     [SerializeField] private float _skipHoldTime = 1.0f;
+
+    [Tooltip("Are we transitioning to the next scene?")]
+    [SerializeField] private bool _transitioning = false;
     
 
     /// <summary>Index of current panel</summary>
@@ -90,8 +93,12 @@ public class ComicManager : MonoBehaviour
 
         _input.Disable();
     }
-    private void OnNextInput(CallbackContext _) => Next();
-    private void OnPrevInput(CallbackContext _) => Previous();
+    private void OnNextInput(CallbackContext _) {
+        Next(); 
+    }
+    private void OnPrevInput(CallbackContext _) {
+        Previous(); 
+    }
 
     private void OnSkipStartInput(CallbackContext _) {
         TransitionManager.TransitionToNextScene(_skipHoldTime);
@@ -109,9 +116,14 @@ public class ComicManager : MonoBehaviour
     /// </summary>
     public void Next()
     {
+        if(_transitioning || PauseMenuManager.instance.paused) {
+            return;
+        }
+        AudioManager.instance.playSoundEvent("ComicAdvance");
         if (_index >= transform.childCount - 1)
         {
             TransitionManager.TransitionToNextScene();
+            _transitioning = true;
         }
         else
         {
@@ -124,15 +136,26 @@ public class ComicManager : MonoBehaviour
     /// <summary>Return to the previous page of the comic, if it exists/</summary>
     public void Previous()
     {
+        if(_transitioning || PauseMenuManager.instance.paused) {
+            return;
+        }
         if (_index > 0)
         {
+            AudioManager.instance.playSoundEvent("ComicAdvance");
             FadeCurrentPanel(fadeIn: false);
             _index--;
         }
     }
 
     /// <summary>Skip the comic and transitions to the next scene/</summary>
-    public void Skip() => TransitionManager.TransitionToNextScene();
+    public void Skip() {
+        if(_transitioning || PauseMenuManager.instance.paused) {
+            return;
+        }
+        AudioManager.instance.playSoundEvent("ComicAdvance");
+        TransitionManager.TransitionToNextScene();
+        _transitioning = true;
+    }
 
     /// <summary>Gradually fade the comic panel at the current index either in or out</summary>
     /// <param name="fadeIn">If true, the comic panel at the current index is enabled, otherwise it is disabled.</param>

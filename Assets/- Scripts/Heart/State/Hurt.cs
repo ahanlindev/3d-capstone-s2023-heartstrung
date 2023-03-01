@@ -17,6 +17,8 @@ namespace Heart
             // start invincibility frames
             _sm.StartInvincibility();
 
+            AudioManager.instance.playSoundEvent("DodgerHurt");
+
             // return to idle when done with hurt animation
             DOVirtual.DelayedCall(
                 delay: _sm.hurtTime,
