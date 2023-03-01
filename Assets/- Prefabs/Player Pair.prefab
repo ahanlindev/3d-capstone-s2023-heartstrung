@@ -99,13 +99,22 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.11199951
+        value: 0.28523302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.11292516
+        value: 0.12126003
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -140,7 +149,7 @@ LineRenderer:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
-    numCapVertices: 0
+    numCapVertices: 3
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
@@ -207,11 +216,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5244844852357987823}
     m_Modifications:
+    - target: {fileID: 1668555474839489407, guid: 9920f1abb6fe3204592a615b7926ab5e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4849260981243858411, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
       propertyPath: _player
       value: 
       objectReference: {fileID: 2595317218204527740}
+    - target: {fileID: 5510173932112455599, guid: 9920f1abb6fe3204592a615b7926ab5e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6346876196418870270, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
       propertyPath: m_RootOrder
@@ -265,6 +284,21 @@ PrefabInstance:
     - target: {fileID: 6346876196418870270, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7685494310886576491, guid: 9920f1abb6fe3204592a615b7926ab5e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7995117841598443528, guid: 9920f1abb6fe3204592a615b7926ab5e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8538619391122608299, guid: 9920f1abb6fe3204592a615b7926ab5e,
+        type: 3}
+      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8883150378333060554, guid: 9920f1abb6fe3204592a615b7926ab5e,
