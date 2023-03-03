@@ -96,6 +96,7 @@ public class PfMovingList : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
         var temp = collision.collider.attachedRigidbody;
         if (temp != null) collidedBodies.Add(temp);
     }
