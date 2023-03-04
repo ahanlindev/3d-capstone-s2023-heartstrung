@@ -104,6 +104,23 @@ namespace Player
             }
         }
 
+        // TODO: may want to look into separating movement state from action state
+        // TODO: Might be over-engineering here though.
+        protected override void HandlePlayerMoveInput(Vector3 moveVector)
+        {
+            base.HandlePlayerMoveInput(moveVector);
+            if (moveVector == Vector3.zero) { return; }
+
+            // account for player move speed and tick rate
+            moveVector *= _sm.moveSpeed * _sm.chargingMovementMult;
+            moveVector *= Time.fixedDeltaTime;
+
+            // find proper position. Look rotation handled for us by tween
+            var newPos = _sm.transform.position + moveVector;
+
+            _sm.rbody.MovePosition(newPos);
+        }
+
         // Helper Methods ---------------------------------------------
 
         /// <summary>rotates laterally away from the heart over a short time</summary>
