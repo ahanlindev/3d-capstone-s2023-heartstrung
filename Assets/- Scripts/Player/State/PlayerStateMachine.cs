@@ -100,6 +100,10 @@ public class PlayerStateMachine : BaseStateMachine
     [SerializeField] private float _jumpPower = 5f;
     public float jumpPower { get => _jumpPower; private set => _jumpPower = value; }
 
+    [Tooltip("Time after becoming airborne before player starts to fall")]
+    [SerializeField] private float _coyoteTime = .15f;
+    public float coyoteTime { get => _coyoteTime; private set => _coyoteTime = value; }
+
     [Header("Fling")]
 
     [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
