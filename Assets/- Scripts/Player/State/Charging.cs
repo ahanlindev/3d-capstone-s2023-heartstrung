@@ -74,14 +74,14 @@ namespace Player
         {
             // allow attack to cancel a charge
             base.OnPlayerAttackInput(_);
-            _sm.ChangeState(_sm.attackingState);
+            _sm.ChangeState(_sm.idleState);
         }
 
         protected override void OnPlayerJumpInput(CallbackContext _)
         {
             // allow jump to cancel a charge
             base.OnPlayerJumpInput(_);
-            _sm.ChangeState(_sm.jumpingState);
+            _sm.ChangeState(_sm.idleState);
         }
 
         protected override void OnPlayerFinishChargeInput(CallbackContext _)
