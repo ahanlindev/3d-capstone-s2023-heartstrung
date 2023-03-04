@@ -113,6 +113,9 @@ public class TrajectoryRenderer : MonoBehaviour
     /// state of the positions array
     /// </summary>
     private void UpdateDecalTransform() {
+        // invalid state if positions is empty
+        if (_positions.Count == 0) { return; }
+
         // use this idx to get position slightly behind end of trajectory line
         int secondToLastIdx = _positions.Count - 2;
 
