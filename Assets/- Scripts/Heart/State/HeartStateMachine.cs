@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>Runs heart states and contains information required to maintain those states.</summary>
@@ -31,6 +33,9 @@ public class HeartStateMachine : BaseStateMachine
     public bool canBeFlung { get; set; }
 
 
+    /// <summary>Used by states to determine whether the hurt state can be entered</summary>
+    public bool isInvincible { get; private set; } = false;
+
     // Inspector-visible values
     [Tooltip("PlayerStateMachine instance for the player attached to this object")]
     [SerializeField] private PlayerStateMachine _player;
@@ -43,6 +48,10 @@ public class HeartStateMachine : BaseStateMachine
     [Tooltip("Time in seconds that the heart will be in the hurt state when hurt")]
     [SerializeField] private float _hurtTime = 0.5f;
     public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
+
+    [Tooltip("Time in seconds that player will be unable to be hit after being hit once")]
+    [Range(0f, 1f)][SerializeField] private float _invincibilityTime = 1f;
+    public float invincibilityTime { get => _invincibilityTime; private set => _invincibilityTime = value; }
 
     // Private Fields --------------------------------------------
     private Animator anim;
@@ -118,6 +127,9 @@ public class HeartStateMachine : BaseStateMachine
         }
     }
 
+    /// <summary>Begins invincibility frames. Informs states that the hurt state should not be entered.</summary>
+    public void StartInvincibility() => StartCoroutine(InvincibilityCoroutine());
+
     /// <summary>
     /// Helper method to check whether the state machine's 
     /// animator has a parameter with the desired name.
@@ -129,4 +141,31 @@ public class HeartStateMachine : BaseStateMachine
         var matchingParams = anim.parameters.Where((param) => param.name == paramName);
         return matchingParams.Count() > 0;
     }
+
+    /// <summary>Performs the invincibility frame flicker</summary>
+    private IEnumerator InvincibilityCoroutine() {
+        // get all active renderers
+        List<Renderer> renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
+        renderers.RemoveAll((r) => !r.enabled);
+        Debug.Log($"Renderers: {renderers.Count}");
+        // start invincibility
+        isInvincible = true;
+
+        // flicker renderers on and off until timer runs out
+        float timer = 0;
+        int frames = 0;
+        while (timer < invincibilityTime) {
+            yield return null;
+            if (frames % 8 == 0) {
+                renderers.ForEach((r) => r.enabled = !r.enabled);
+            }
+            frames++;
+            timer += Time.deltaTime;
+        }
+
+        // cleanup at end of sequence
+        isInvincible = false;
+        renderers.ForEach((r) => r.enabled = true);
+    }
+
 }

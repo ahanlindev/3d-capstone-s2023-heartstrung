@@ -10,38 +10,23 @@ namespace Player
     {
         public Hurt(PlayerStateMachine stateMachine) : base("Hurt", stateMachine) { }
 
-        private Renderer rend;
-        private int frameCount = 0;
-
         public override void Enter()
         {
             base.Enter();
 
             // flash on and off
-            rend = _sm.GetComponentInChildren<Renderer>();
-            rend.enabled = false;
+            _sm.StartInvincibility();
+
+            AudioManager.instance.playSoundEvent("KittyHurt");
 
             // return to idle when done with hurt animation
             _sm.StartCoroutine(StartTransitionTween());
         }
-
-        public override void Exit()
-        {
-            base.Exit();
-            rend.enabled = true;
-        }
-        
-        public override void UpdateLogic()
-        {
-            base.UpdateLogic();
-            frameCount++;
-
-            if (frameCount % 4 == 0) {
-                rend.enabled = !rend.enabled;
-            }
-        }
-
-        /// <summary>description</summary>
+    
+        /// <summary>
+        /// Transition back to the idle state once the hurt 
+        /// animation has concluded
+        /// </summary>
         private IEnumerator StartTransitionTween() {
             float duration = 0;
 

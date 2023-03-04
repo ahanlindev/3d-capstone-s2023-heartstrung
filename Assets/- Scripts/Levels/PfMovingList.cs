@@ -27,16 +27,6 @@ public class PfMovingList : MonoBehaviour
     
     private bool _moved;
 
-    // Start is called before the first frame update
-    void Start()
-    { 
-        lastPosition = transform.position;
-        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
-        tgtLength = target.Length;
-
-        transform.DOMove(target[index].position, 1 / speed);
-
-    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -45,6 +35,21 @@ public class PfMovingList : MonoBehaviour
         moveTo();
     }
 
+    private void Awake() {
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+    }
+    
+    private void OnEnable() {
+        lastPosition = transform.position;
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+        tgtLength = target.Length;
+
+        transform.DOMove(target[index].position, 1 / speed);
+    }
+
+    private void OnDisable() {
+        collidedBodies = null;    
+    }
 
     void moveTo()
     {
@@ -83,21 +88,18 @@ public class PfMovingList : MonoBehaviour
             
         
             //SetEase(Ease.InOutSine)
-        if (!_moved) {
             Vector3 offset = transform.position - lastPosition;
             lastPosition = transform.position;
             foreach(Rigidbody attached in collidedBodies)
             {
-                attached.transform.position += offset;
+                attached.MovePosition(attached.transform.position + offset);
             }
-        }
 
         
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
         var temp = collision.collider.attachedRigidbody;
         if (temp != null) collidedBodies.Add(temp);
     }

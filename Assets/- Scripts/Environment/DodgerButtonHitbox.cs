@@ -10,19 +10,20 @@ public class DodgerButtonHitbox : MonoBehaviour
     [SerializeField] public bool persistent;
     bool pressed;
 
-    void OnCollisionEnter(Collision collision) {
+    void OnTriggerEnter(Collider collision) {
         if(!pressed) {
             Debug.Log("collided with " + collision.gameObject.name);
             if(collision.gameObject.tag == "Heart")
             {
                 button.enable();
                 pressed = true;
+                Debug.Log("Activated");
             }
             
         }
     }
 
-    void OnCollisionExit(Collision collision) {
+    void OnTriggerExit(Collider collision) {
         if(!persistent) {
             Debug.Log("No longer colliding with " + collision.gameObject.name);
             if (collision.gameObject.name == "Heart")

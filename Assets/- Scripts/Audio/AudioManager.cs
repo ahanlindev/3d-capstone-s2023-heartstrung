@@ -8,22 +8,26 @@ using UnityEngine.SceneManagement;
 // Attach this script to the LevelManager.
 // 
 public class AudioManager : MonoBehaviour
-{
+{   
+    private const int FLING_INDEX = 0;
+    private const int MUSIC_INDEX = 1;
+
     public static AudioManager instance {get; private set;}
 
     [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
-    [SerializeField] public int numAudioSources = 5;
+    [SerializeField] private int _numAudioSources = 5;
 
-    private Dictionary<string, AudioEvent> sounds = new Dictionary<string, AudioEvent>();
+    private Dictionary<string, AudioEvent> _sounds;
 
     // Specifies the music that should play in each scene.
     // No entry in this dict means no music will play.
 
-    [SerializeField] public Dictionary<SceneID, string> perSceneMusic = new Dictionary<SceneID, string>();
+    [SerializeField] private Dictionary<SceneID, string> _perSceneMusic;
 
-    private AudioSource[] audioSources;
+    private AudioSource[] _audioSources;
 
-    private float flingPower = 0f;
+    private float _flingPower = 0f;
+    private bool _soundDictInitialized = false;
 
     public bool musicPlaying = false;
 
@@ -42,24 +46,25 @@ public class AudioManager : MonoBehaviour
         }
 
         // Add entries to the perSceneMusic dictionary
-        perSceneMusic[SceneID.TUTORIAL_1] = "OverworldMusic";
-        perSceneMusic[SceneID.TUTORIAL_2_1] = "OverworldMusic";
-        perSceneMusic[SceneID.TUTORIAL_2_2] = "OverworldMusic";
-        perSceneMusic[SceneID.TUTORIAL_2_3] = "OverworldMusic";
-        perSceneMusic[SceneID.TUTORIAL_2_4] = "OverworldMusic";
-        perSceneMusic[SceneID.STRAWBERRY_1] = "OverworldMusic";
-        perSceneMusic[SceneID.STRAWBERRY_2] = "OverworldMusic";
-        perSceneMusic[SceneID.KINGDOM_1] = "OverworldMusic";
-        perSceneMusic[SceneID.KINGDOM_2] = "OverworldMusic";
+        _perSceneMusic = new Dictionary<SceneID, string>();
+        _perSceneMusic[SceneID.TUTORIAL_1] = "OverworldMusic";
+        _perSceneMusic[SceneID.TUTORIAL_2_1] = "OverworldMusic";
+        _perSceneMusic[SceneID.TUTORIAL_2_2] = "OverworldMusic";
+        _perSceneMusic[SceneID.TUTORIAL_2_3] = "OverworldMusic";
+        _perSceneMusic[SceneID.TUTORIAL_2_4] = "OverworldMusic";
+        _perSceneMusic[SceneID.STRAWBERRY_1] = "OverworldMusic";
+        _perSceneMusic[SceneID.STRAWBERRY_2] = "OverworldMusic";
+        _perSceneMusic[SceneID.KINGDOM_1] = "OverworldMusic";
+        _perSceneMusic[SceneID.KINGDOM_2] = "OverworldMusic";
 
         // Instantiate the AudioSources
-        // audioSources[0] is implicitly the fling audio source
-        // audioSources[1] is implicitly the music audio source
-        audioSources = new AudioSource[numAudioSources + 2];
+        // audioSources[FLING_INDEX] is implicitly the fling audio source
+        // audioSources[MUSIC_INDEX] is implicitly the music audio source
+        _audioSources = new AudioSource[_numAudioSources + 2];
 
-        for(int i = 0; i < numAudioSources + 2; i++) {
-            audioSources[i] = gameObject.AddComponent<AudioSource>();
-            audioSources[i].playOnAwake = false;
+        for(int i = 0; i < _numAudioSources + 2; i++) {
+            _audioSources[i] = gameObject.AddComponent<AudioSource>();
+            _audioSources[i].playOnAwake = false;
         }
         // Debug.Log("Done loading sounds.");
     }
@@ -69,18 +74,22 @@ public class AudioManager : MonoBehaviour
         AudioEvent[] audioEvents = GetComponentsInChildren<AudioEvent>();
 
         // To make search faster and easier, make a dictionary
+        _sounds = new Dictionary<string, AudioEvent>();
         foreach(AudioEvent audioEvent in audioEvents) {
-            sounds.Add(audioEvent.EventName, audioEvent);
+            _sounds.Add(audioEvent.EventName, audioEvent);
         }
+        // Debug.Log("SoundDict initialized");
 
-        audioSources[0].clip = sounds["ChargeFling"].poolSound();
-        audioSources[0].loop = true;
-        audioSources[1].loop = true;
+        _audioSources[FLING_INDEX].clip = _sounds["ChargeFling"].poolSound();
+        _audioSources[FLING_INDEX].loop = true;
+        _audioSources[MUSIC_INDEX].loop = true;
 
         // // DEBUG: Print sounds dict to console
         // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
         //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
         // }
+        _soundDictInitialized = true;
+        LoadSceneMusic(SceneManager.GetActiveScene());
     }
 
     // called first
@@ -92,10 +101,20 @@ public class AudioManager : MonoBehaviour
     // called second
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("OnSceneLoaded: " + scene.name);
-        Debug.Log(mode);
-        if(perSceneMusic.ContainsKey(scene.ToSceneID())) {
-            startMusic(perSceneMusic[scene.ToSceneID()]);
+        // Debug.Log("OnSceneLoaded: " + scene.name);
+        // Debug.Log(mode);
+        if(_soundDictInitialized) {
+            LoadSceneMusic(scene);
+        }
+    }
+
+    void LoadSceneMusic(Scene scene) {
+        if(_perSceneMusic.ContainsKey(scene.ToSceneID())) {
+            // Debug.Log("Loading music " + scene.ToSceneID());
+            string music = _perSceneMusic[scene.ToSceneID()];
+            if (!musicAlreadyPlaying(music)) {
+                startMusic(music);
+            }
         } else {
             stopMusic();
         }
@@ -104,28 +123,27 @@ public class AudioManager : MonoBehaviour
     /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
     /// <param name="sound">The name of the AudioPool to pool from.</param>
     public bool playSoundEvent(string sound) {
-        AudioClip soundToPlay = sounds[sound].poolSound();
+        AudioClip soundToPlay = _sounds[sound].poolSound();
         if(soundToPlay == null) {
             // Debug.LogError(sound + " is not a sound event!");
             return false;
         }
         // find an available AudioSource to play the sound
-        // we start at index one because audioSources[0] is reserved for fling
-        for(int i = 2; i < audioSources.Length; i++) {
-            if(!audioSources[i]) {
-                // Debug.LogError("source is null bruh");
-            }
-            if(!audioSources[i].isPlaying) {
-                audioSources[i].clip = soundToPlay;
-                audioSources[i].volume = soundVolume;
+        for(int i = 0; i < _audioSources.Length; i++) {
+            // skip reserved indices
+            if (i == FLING_INDEX || i == MUSIC_INDEX) { continue; }
+
+            if(!_audioSources[i].isPlaying) {
+                _audioSources[i].clip = soundToPlay;
+                _audioSources[i].volume = soundVolume;
                 // randomize pitch for  v a r i a t i o n (TM)
-                if(sounds[sound].PitchShift) {
-                    audioSources[i].pitch = Random.Range(.75f, 1.25f);
+                if(_sounds[sound].PitchShift) {
+                    _audioSources[i].pitch = Random.Range(.75f, 1.25f);
                 } else {
-                    audioSources[i].pitch = 1f;
+                    _audioSources[i].pitch = 1f;
                     // Debug.Log("not doing pitch shift for " + sound);
                 }
-                audioSources[i].Play();
+                _audioSources[i].Play();
                 return true;
             }
         }
@@ -136,55 +154,60 @@ public class AudioManager : MonoBehaviour
     ///<summary>Starts playing the audio fling sound effect.</summary>
     public void startFlingSoundEffect(float power) {
         // Debug.Log("Fling Started");
-        audioSources[0].pitch = convertFlingPowerToPitch(power);
-        audioSources[0].volume = soundVolume / 10f;
-        audioSources[0].Play();
+        _audioSources[FLING_INDEX].pitch = convertFlingPowerToPitch(power);
+        _audioSources[FLING_INDEX].volume = soundVolume / 10f;
+        _audioSources[FLING_INDEX].Play();
     }
 
     ///<summary>Updates the pitch the audio fling sound effect.</summary>
     public void continueFlingSoundEffect(float power) {
         // Debug.Log("Fling Continuing...");
-        audioSources[0].pitch = convertFlingPowerToPitch(power);
+        _audioSources[FLING_INDEX].pitch = convertFlingPowerToPitch(power);
     }
 
     ///<summary>Disables the audio fling sound effect.</summary>
     public void finishFlingSoundEffect() {
         // Debug.Log("Fling Finished");
-        audioSources[0].Stop();
+        _audioSources[FLING_INDEX].Stop();
     }
 
-    ///<sumary>Internal function that converts the fling power from the player into a pitch for the audioManager to use.</summary>
+    ///<summary>Internal function that converts the fling power from the player into a pitch for the audioManager to use.</summary>
     private float convertFlingPowerToPitch(float power) {
         return power * 2 + 1f;
     }
 
+    private bool musicAlreadyPlaying(string name) {
+        // TODO fragile if we change names of clip or audio. Make an enum?
+        return _audioSources[MUSIC_INDEX]?.clip?.name == name;
+    }
+
     public void startMusic(string name) {
         // Debug.Log("Music Started:" + name);
-        audioSources[1].clip = sounds[name].poolSound();
-        audioSources[1].pitch = 1f;
-        audioSources[1].volume = musicVolume;
-        audioSources[1].Play();
+        _audioSources[MUSIC_INDEX].clip = _sounds[name].poolSound();
+        _audioSources[MUSIC_INDEX].pitch = 1f;
+        _audioSources[MUSIC_INDEX].volume = musicVolume;
+        _audioSources[MUSIC_INDEX].Play();
         musicPlaying = true;
     }
 
     public void updateMusicVolume() {
         Debug.Log("updating music volume");
-        audioSources[1].volume = musicVolume;
+        _audioSources[MUSIC_INDEX].volume = musicVolume;
     }
 
     public void stopMusic() {
         // Debug.Log("Music Stopped");
-        audioSources[1].Stop();
+        _audioSources[MUSIC_INDEX].Stop();
         musicPlaying = false;
     }
 
     public void pauseMusic() {
-        audioSources[1].Pause();
+        _audioSources[MUSIC_INDEX].Pause();
         musicPlaying = false;
     }
 
     public void unPauseMusic() {
-        audioSources[1].UnPause();
+        _audioSources[MUSIC_INDEX].UnPause();
         musicPlaying = true;
     }
 }

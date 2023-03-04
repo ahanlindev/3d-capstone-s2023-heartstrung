@@ -15,6 +15,9 @@ namespace Heart
         /// <summary>Event handler for when the player starts charging a fling. </summary>
         protected virtual void OnPlayerChargeFling() { }
 
+        /// <summary>Event handler for when the player cancels charging a fling. </summary>
+        protected virtual void OnPlayerChargeFlingCancel() { }
+
         /// <summary>Event handler for when the player attempts to fling the heart. </summary>
         /// <param name="power">percentage power of the fling</param>
         protected virtual void OnPlayerFling(float power) { }
@@ -23,7 +26,9 @@ namespace Heart
         protected virtual void OnPlayerFlingInterrupted() { }
 
         /// <summary>Event handler for when the heart gets hurt by something. Override to ignore or change base behavior.</summary>
-        protected virtual void OnHurt() { _sm.ChangeState(_sm.hurtState); }
+        protected virtual void OnHurt() { 
+            if (!_sm.isInvincible) { _sm.ChangeState(_sm.hurtState); } 
+        }
 
         /// <summary>Event handler for when the heart dies. Override to ignore or change base behavior. </summary>
         protected virtual void OnDie() { _sm.ChangeState(_sm.deadState); }
@@ -56,6 +61,7 @@ namespace Heart
         {
             base.Enter();
             _sm.player.ChargeFlingEvent += OnPlayerChargeFling;
+            _sm.player.ChargeFlingCancelEvent += OnPlayerChargeFlingCancel;
             _sm.player.FlingEvent += OnPlayerFling;
             _sm.player.FlingInterruptedEvent += OnPlayerFlingInterrupted;
             _sm.CollisionEnterEvent += OnCollisionEnter;
