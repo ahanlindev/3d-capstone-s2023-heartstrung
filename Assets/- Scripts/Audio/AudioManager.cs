@@ -176,9 +176,12 @@ public class AudioManager : MonoBehaviour
         return power * 2 + 1f;
     }
 
+    /// <summary>Return true if the music file with the given name is currently playing</summary>
     private bool musicAlreadyPlaying(string name) {
         // TODO fragile if we change names of clip or audio. Make an enum?
-        return _audioSources[MUSIC_INDEX]?.clip?.name == name;
+        bool sameName = _audioSources[MUSIC_INDEX]?.clip?.name == name;
+        bool currentlyPlaying = _audioSources[MUSIC_INDEX]?.isPlaying ?? false;
+        return (sameName && currentlyPlaying);
     }
 
     public void startMusic(string name) {
