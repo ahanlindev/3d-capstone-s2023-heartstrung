@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class PfMovingList : MonoBehaviour
+public class ConfigurableMPF : MonoBehaviour
 {
 
     [Tooltip("Add/delete empty objects to the target list to set new waypoints.")]
@@ -35,7 +35,7 @@ public class PfMovingList : MonoBehaviour
     }
 
     private void Awake() {
-        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+        if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
     }
     
     private void OnEnable() {
