@@ -30,10 +30,6 @@ public class TutorialBubble : MonoBehaviour
     void Start()
     {
         _called = new bool[4];
-        foreach (bool b in _called)
-        {
-            Debug.Log(b);
-        }
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(false);
 

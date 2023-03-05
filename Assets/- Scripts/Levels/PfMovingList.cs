@@ -34,6 +34,10 @@ public class PfMovingList : MonoBehaviour
         UpdateAttachedBodies();
     }
 
+    private void Awake() {
+        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+    }
+    
     private void OnEnable() {
         _lastPosition = transform.position;
         if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
