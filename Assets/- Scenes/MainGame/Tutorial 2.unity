@@ -2047,6 +2047,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 146733185}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &288496477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4812640812124586709, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+    type: 3}
+  m_PrefabInstance: {fileID: 1334629027}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &289638769 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4169561545757601310, guid: 04ef809a230215145ac9632d9d319659,
@@ -4702,6 +4708,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: heart_button Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1890292559729325110, guid: b7f770e050acb8b4abcde150870c5f05,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3920808108616195048, guid: b7f770e050acb8b4abcde150870c5f05,
         type: 3}
       propertyPath: targets.Array.size
@@ -4860,7 +4871,17 @@ PrefabInstance:
     - target: {fileID: 5194506640357906504, guid: bbe766eebab7044a59cef1bbfc3c2a50,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5659207318667531574, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5659207318667531574, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7224936251444472608, guid: bbe766eebab7044a59cef1bbfc3c2a50,
         type: 3}
@@ -4882,6 +4903,21 @@ PrefabInstance:
       propertyPath: hangTime
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8176943989592994307, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+        type: 3}
+      propertyPath: targets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176943989592994307, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+        type: 3}
+      propertyPath: targets.Array.data[0]
+      value: 
+      objectReference: {fileID: 1351356065}
+    - target: {fileID: 8176943989592994307, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+        type: 3}
+      propertyPath: targets.Array.data[1]
+      value: 
+      objectReference: {fileID: 288496477}
     - target: {fileID: 8203154391426751168, guid: bbe766eebab7044a59cef1bbfc3c2a50,
         type: 3}
       propertyPath: m_RootOrder
@@ -5035,6 +5071,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77d6d762b9ecd4aebb6b4c7de682373c, type: 3}
+--- !u!4 &1351356065 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8724889226984269563, guid: bbe766eebab7044a59cef1bbfc3c2a50,
+    type: 3}
+  m_PrefabInstance: {fileID: 1334629027}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1359197047
 GameObject:
   m_ObjectHideFlags: 0
@@ -6025,6 +6067,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PersistentDoor (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4756276827083581756, guid: 77d6d762b9ecd4aebb6b4c7de682373c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4756276827083581759, guid: 77d6d762b9ecd4aebb6b4c7de682373c, type: 3}

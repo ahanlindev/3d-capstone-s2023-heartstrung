@@ -5,105 +5,90 @@ using DG.Tweening;
 
 public class PfMovingList : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public float speed = 3.0f; //
 
     [Tooltip("Add/delete empty objects to the target list to set new waypoints.")]
-    [SerializeField] public Transform[] target;  //
-    private float delta = 0.05f; // 
-    private int index = 0;
-    private float localTimer = 0;
-   
-    private Vector3 lastPosition;
-    private int tgtLength = 0;
+    [SerializeField] public Transform[] targets;
 
-    private HashSet<Rigidbody> collidedBodies;
+    [Tooltip("Speed of movingpf, the duration is 1 / speed")]
+    [SerializeField] public float _speed = 0.2f;
 
-    [Tooltip("Time for the platform waiting at one waypoint.")] 
+    [Tooltip("Time for the platform waiting at one waypoint.")]
     [SerializeField] public float hangTime = 3.0f;
 
     [Tooltip("If it stop after reach the final wp of the list")]
     [SerializeField] public bool oneWay;
+
+    private int _index = 0;
+    private float _localTimer = 0;
+   
+    private Vector3 _lastPosition;
+    private HashSet<Rigidbody> _collidedBodies;
     
     private bool _moved;
 
 
     // Update is called once per frame
     void FixedUpdate()
-    {
-        
+    {   
         moveTo();
+        UpdateAttachedBodies();
     }
 
     private void OnEnable() {
-        lastPosition = transform.position;
-        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
-        tgtLength = target.Length;
-
-        transform.DOMove(target[index].position, 1 / speed);
+        _lastPosition = transform.position;
+        if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
+        transform.DOMove(targets[_index].position, 1 / _speed);
     }
 
     private void OnDisable() {
-        collidedBodies = null;    
+        _collidedBodies = null;    
     }
 
     void moveTo()
     {
-       
-
-        if (localTimer > 0)
-        {
-            localTimer -= Time.fixedDeltaTime;
-        }
         
-        else if ((transform.position - target[index].position).magnitude < delta)
+        if (_localTimer > 0)
         {
-            if (!_moved)
+            _localTimer -= Time.fixedDeltaTime;
+        } else if (!_moved && transform.position == targets[_index].position)
+        {
+            _index = (_index + 1) % targets.Length;
+            transform.DOMove(targets[_index].position, 1 / _speed);
+            _localTimer = hangTime + 1 / _speed;
+
+            // the final target wp, change the flag and stop
+            if (_index == targets.Length - 1 && oneWay)
             {
-                index = (index + 1) % tgtLength;
-                //if (speed == 1.5f)
-                //{
-                //    Debug.Log(index);
-                //}
-                transform.DOMove(target[index].position, 1 / speed);
-                localTimer = hangTime + 1 / speed;
-                if (index == tgtLength - 1 && oneWay)
-                {
-                    _moved = true;
-                }
+                _moved = true;
             }
-        }
- 
-            //target[index].position = new Vector3(target[index].position.x,
-            //    target[index].position.y, target[index].position.z);
-            //Vector3 direction = target[index].position - thisPlatform.position;
-            //direction /= direction.magnitude;
-            //Vector3 offset = direction * Time.fixedDeltaTime * speed;
-            //thisPlatform.Translate(offset);
-
             
-        
-            //SetEase(Ease.InOutSine)
-            Vector3 offset = transform.position - lastPosition;
-            lastPosition = transform.position;
-            foreach(Rigidbody attached in collidedBodies)
+        }        
+    }
+
+    private void UpdateAttachedBodies() 
+    {
+        if (_collidedBodies.Count != 0)
+        {
+            Vector3 offset = transform.position - _lastPosition;
+            foreach (Rigidbody attached in _collidedBodies)
             {
                 attached.MovePosition(attached.transform.position + offset);
             }
-
-        
+        }
+        _lastPosition = transform.position;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collidedBodies == null) collidedBodies = new HashSet<Rigidbody>();
+        Debug.Log(collision.gameObject.name);
+        if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
         var temp = collision.collider.attachedRigidbody;
-        if (temp != null) collidedBodies.Add(temp);
+        if (temp != null) _collidedBodies.Add(temp);
     }
 
     private void OnCollisionExit(Collision collision)
     {
         var temp = collision.collider.attachedRigidbody;
-        if (temp != null) collidedBodies.Remove(temp);
+        if (temp != null) _collidedBodies.Remove(temp);
     }
 }
