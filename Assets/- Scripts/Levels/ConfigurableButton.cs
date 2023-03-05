@@ -99,7 +99,7 @@ public class ConfigurableButton : MonoBehaviour
                 if (collision.gameObject.name == triggeringObject.ToString())
                 {
                     _pressed = false;
-                    PressTween();
+                    UnpressTween();
                 }
             }
         
