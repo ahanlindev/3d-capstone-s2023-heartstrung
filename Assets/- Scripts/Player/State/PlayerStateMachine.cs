@@ -72,21 +72,39 @@ public class PlayerStateMachine : BaseStateMachine
 
     // INSPECTOR PROPERTIES
 
-    [Tooltip("Heart connected to this player")]
+    [Header("Dodger")]
+
+    [Tooltip("Heart script connected to this player")]
     [SerializeField] private HeartStateMachine _heart;
     public HeartStateMachine heart { get => _heart; private set => _heart = value; }
+
+    [Tooltip("Player's max distance from Dodger in units")]
+    [SerializeField] private float _maxTetherLength = 3f;
+    public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
+
+    [Header("Mobility")]
 
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float _moveSpeed = 2f;
     public float moveSpeed { get => _moveSpeed; private set => _moveSpeed = value; }
 
+    [Tooltip("Movement speed multiplier when charging a fling")]
+    [Range(0f,1f)][SerializeField] private float _chargingMovementMult = 0.15f;
+    public float chargingMovementMult { get => _chargingMovementMult; private set => _chargingMovementMult = value; }
+
+    [Tooltip("Movement speed multiplier when airborne")]
+    [Range(0f,1f)][SerializeField] private float _airborneMovementMult = 0.75f;
+    public float airborneMovementMult { get => _airborneMovementMult; private set => _airborneMovementMult = value; }
+    
     [Tooltip("Player's jump power")]
     [SerializeField] private float _jumpPower = 5f;
     public float jumpPower { get => _jumpPower; private set => _jumpPower = value; }
 
-    [Tooltip("Player's max distance from Dodger in units")]
-    [SerializeField] private float _maxTetherLength = 3f;
-    public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
+    [Tooltip("Time after becoming airborne before player starts to fall")]
+    [SerializeField] private float _coyoteTime = .15f;
+    public float coyoteTime { get => _coyoteTime; private set => _coyoteTime = value; }
+
+    [Header("Fling")]
 
     [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
     [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.55f;
@@ -99,6 +117,8 @@ public class PlayerStateMachine : BaseStateMachine
     [Tooltip("Maximum percentage of fling power that a fling can have")]
     [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
     public float maxPower { get => _maxPower; private set => _maxPower = value; }
+
+    [Header("Misc.")]
 
     [Tooltip("Time in seconds that player will be unable to be hit after being hit once")]
     [Range(0f, 1f)][SerializeField] private float _invincibilityTime = 1f;
