@@ -2817,7 +2817,8 @@ Transform:
   m_LocalPosition: {x: 8.56, y: -8.61, z: -1.88}
   m_LocalScale: {x: 28, y: 10, z: 13}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1437232034}
   m_Father: {fileID: 1867316652}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2833,9 +2834,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e165cdcf8190619488708017c8b13467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 1084549869}
-  DoorMeshRenderer: {fileID: 207090050}
-  DoorMeshCollider: {fileID: 207090049}
 --- !u!64 &207090049
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -10450,18 +10448,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 617297459}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &522108407 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7673325735520936903, guid: b7f770e050acb8b4abcde150870c5f05,
-    type: 3}
-  m_PrefabInstance: {fileID: 1560589422}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1162618389efa4290e119610293d1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &524256728
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12606,6 +12592,7 @@ Transform:
   - {fileID: 1263836909}
   - {fileID: 906880379}
   - {fileID: 774569349}
+  - {fileID: 881284995}
   m_Father: {fileID: 1867316652}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12693,9 +12680,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e165cdcf8190619488708017c8b13467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 522108407}
-  DoorMeshRenderer: {fileID: 612980586}
-  DoorMeshCollider: {fileID: 612980588}
 --- !u!1 &614523803
 GameObject:
   m_ObjectHideFlags: 0
@@ -19018,6 +19002,51 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 879222623}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &881284993
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 881284995}
+  - component: {fileID: 881284994}
+  m_Layer: 0
+  m_Name: Grass Obstacle Disappearer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &881284994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881284993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e004e68a67ef4a348b9f0466928f226e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 612980583}
+--- !u!4 &881284995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881284993}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 612980584}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &887493962
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21548,7 +21577,7 @@ PrefabInstance:
         type: 3}
       propertyPath: targets.Array.data[0]
       value: 
-      objectReference: {fileID: 207090046}
+      objectReference: {fileID: 1437232032}
     - target: {fileID: 5544075491243642905, guid: b7f770e050acb8b4abcde150870c5f05,
         type: 3}
       propertyPath: m_Name
@@ -24363,18 +24392,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1083721780}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1084549869 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7673325735520936903, guid: b7f770e050acb8b4abcde150870c5f05,
-    type: 3}
-  m_PrefabInstance: {fileID: 972718432}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1162618389efa4290e119610293d1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1085371650
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31553,6 +31570,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428731346}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1437232032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1437232034}
+  - component: {fileID: 1437232033}
+  m_Layer: 0
+  m_Name: Grass Obstacle Disappearer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1437232033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437232032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e004e68a67ef4a348b9f0466928f226e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 207090046}
+--- !u!4 &1437232034
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437232032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 207090047}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1439241958 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3dd44d59395e4ac41a06e2e2f4932787,
@@ -33821,7 +33883,12 @@ PrefabInstance:
         type: 3}
       propertyPath: targets.Array.data[0]
       value: 
-      objectReference: {fileID: 612980583}
+      objectReference: {fileID: 881284993}
+    - target: {fileID: 3920808108616195048, guid: b7f770e050acb8b4abcde150870c5f05,
+        type: 3}
+      propertyPath: targets.Array.data[1]
+      value: 
+      objectReference: {fileID: 1437232032}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -38938,7 +39005,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-6864
+  m_Name: pb_Mesh-16800
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
