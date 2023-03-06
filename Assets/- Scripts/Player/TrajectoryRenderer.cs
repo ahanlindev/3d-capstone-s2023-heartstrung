@@ -14,16 +14,26 @@ public class TrajectoryRenderer : MonoBehaviour
 
 
     private LineRenderer _renderer;
+    private List<Vector3> _positions;
     private GameObject _floorDecal;
 
     private void Awake() {
         _renderer = GetComponent<LineRenderer>();
         _renderer.enabled = false; // only show trajectory when explicitly told to
 
+        _positions = new List<Vector3>();
+
         // get child with decal projector
         _floorDecal = transform.GetComponentInChildren<DecalProjector>().gameObject;
         if (!_floorDecal) {Debug.LogError("Trajectory renderer does not have a decal projector in its children");}
         _floorDecal?.SetActive(false);
+    }
+
+    private void Update() {
+        // if decal is enabled, make sure it is synched with the trajectory.
+        if (_floorDecal.activeSelf) {
+            UpdateDecalTransform();
+        }
     }
 
     /// <summary>Update the trajectory that this component will model</summary>
@@ -34,7 +44,7 @@ public class TrajectoryRenderer : MonoBehaviour
     /// premature collisions. By default, assumes object has no volume.
     /// </param>
     public void UpdateTrajectory(Vector3 pivot, Vector3 localStartPos, Vector3 localDestPos, float objRadius = 0.0f) {
-        var positions = new List<Vector3>();
+        _positions = new List<Vector3>();
 
         // initialize necessary vector info
         float startRad = localStartPos.magnitude;
@@ -51,15 +61,14 @@ public class TrajectoryRenderer : MonoBehaviour
 
         // set up loop variables
         float degPerTick = totalAngle / _resolution;
-        Vector3 decalDirection = Vector3.down;
 
         // calculate starting point
-        positions.Add(pivot + localStartPos);
+        _positions.Add(pivot + localStartPos);
 
         // calculate appropriate points along the line
         for (int i = 1; i < _resolution; i++) {
             float currentRadius = Mathf.Lerp(startRad, destRad, ((float)i / _resolution));
-            Vector3 lastPos = positions[i-1];
+            Vector3 lastPos = _positions[i-1];
             
             Vector3 pivotDirToPos = (lastPos - pivot).normalized;
             pivotDirToPos = Quaternion.AngleAxis(degPerTick, axis) * pivotDirToPos;
@@ -68,7 +77,7 @@ public class TrajectoryRenderer : MonoBehaviour
             
             Vector3 vecToCurrentPos = (currentPos - lastPos);
 
-            positions.Add(currentPos);
+            _positions.Add(currentPos);
 
             // spherecast to check for early collision
             Ray ray = new Ray(lastPos, vecToCurrentPos.normalized);
@@ -83,25 +92,13 @@ public class TrajectoryRenderer : MonoBehaviour
 
             // exit the loop if the spherecast hits something
             if (willHit && !hitInfo.collider.isTrigger) { 
-                decalDirection = vecToCurrentPos;
                 break; 
             }
         }
 
         // Apply changes to renderer
-        _renderer.positionCount = positions.Count;
-        _renderer.SetPositions(positions.ToArray());
-
-        
-        // get position slightly behind end of trajectory line
-        int secondToLastIdx = positions.Count - 2;
-        Vector3 decalPos = positions[secondToLastIdx] - (decalDirection.normalized);
-        
-        // update decal transform
-        _floorDecal?.transform.SetPositionAndRotation(
-            decalPos, 
-            Quaternion.LookRotation(decalDirection)
-        );
+        _renderer.positionCount = _positions.Count;
+        _renderer.SetPositions(_positions.ToArray());
     }
 
     // <summary>Toggle whether the trajectory line will be rendered</summary>
@@ -112,10 +109,30 @@ public class TrajectoryRenderer : MonoBehaviour
 
 
     /// <summary>
-    /// Update the position and rotation of the decal projector object
+    /// Update the position and rotation of the decal projector object, based on current
+    /// state of the positions array
     /// </summary>
-    private void UpdateDecalTransform(Vector3 position, Quaternion rotation) {
-        _floorDecal.transform.SetPositionAndRotation(position, rotation);
+    private void UpdateDecalTransform() {
+        // invalid state if positions is empty
+        if (_positions.Count == 0) { return; }
+
+        // use this idx to get position slightly behind end of trajectory line
+        int secondToLastIdx = _positions.Count - 2;
+
+        // if renderer was interrupted, point in direction of last link of renderer, 
+        // otherwise point straight down
+        Vector3 direction = (_positions.Count == _resolution) 
+            ? Vector3.down 
+            : (_positions.Last() - _positions[secondToLastIdx]).normalized;
+
+        // bump position back a bit to avoid clipping into stuff.
+        Vector3 decalPos = _positions[secondToLastIdx] - (direction.normalized);
+
+        // update decal transform
+        _floorDecal?.transform.SetPositionAndRotation(
+            decalPos, 
+            Quaternion.LookRotation(direction)
+        );
     }
 
     /// <summary>

@@ -494,12 +494,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _heart: {fileID: 0}
-  _moveSpeed: 3.5
-  _jumpPower: 5
   _maxTetherLength: 5
+  _moveSpeed: 5
+  _chargingMovementMult: 0.3
+  _airborneMovementMult: 0.75
+  _jumpPower: 6
+  _coyoteTime: 0.1
   _powerPerSecond: 0.55
   _minPower: 0.27
   _maxPower: 1
+  _invincibilityTime: 1
 --- !u!114 &5826389171277131416
 MonoBehaviour:
   m_ObjectHideFlags: 0

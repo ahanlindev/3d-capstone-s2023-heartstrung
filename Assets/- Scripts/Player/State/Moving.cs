@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Player
@@ -8,13 +9,28 @@ namespace Player
     {
         public Moving(PlayerStateMachine stateMachine) : base("Moving", stateMachine) { }
 
+        /// <summary>Timer used to count down coyote time after becoming airborne</summary>
+        private Tween _coyoteTimer;
+
         public override void Enter()
         {
             base.Enter();
+            _coyoteTimer = DOVirtual.DelayedCall(
+                delay: _sm.coyoteTime,
+                callback: () => _sm.ChangeState(_sm.fallingState),
+                ignoreTimeScale: false
+            );
+
+            // we only want to start the timer when leaving the ground
+            _coyoteTimer.Pause();
         }
 
         public override void Exit()
         {
+            // kill timer if necessary
+            if (_coyoteTimer?.active ?? false) {
+                _coyoteTimer.Kill();
+            }
             base.Exit();
         }
 
@@ -23,7 +39,11 @@ namespace Player
             base.UpdatePhysics();
             if (!IsGrounded())
             {
-                _sm.ChangeState(_sm.fallingState);
+                // left the ground. Start falling after grace period
+                _coyoteTimer?.Play();
+            } else {
+                // reset grace period and pause timer.
+                _coyoteTimer?.Rewind();
             }
         }
 

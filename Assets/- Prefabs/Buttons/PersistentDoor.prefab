@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4756276827083581752}
   - component: {fileID: 4756276827083581753}
   - component: {fileID: 4756276827083581758}
-  - component: {fileID: 4756276827083581759}
   m_Layer: 0
   m_Name: PersistentDoor
   m_TagString: Untagged
@@ -107,18 +106,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &4756276827083581759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4756276827083581756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e165cdcf8190619488708017c8b13467, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
-  DoorMeshRenderer: {fileID: 4756276827083581753}
-  DoorMeshCollider: {fileID: 4756276827083581758}
