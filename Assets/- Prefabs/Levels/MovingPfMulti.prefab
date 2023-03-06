@@ -137,7 +137,7 @@ Transform:
   - {fileID: 8724889226984269563}
   - {fileID: 4812640812124586709}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5364636221747269685
 GameObject:
@@ -237,10 +237,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c88d88a3ff3634398a63e4729408379c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 0.2
   targets:
   - {fileID: 8724889226984269563}
   - {fileID: 4812640812124586709}
+  _speed: 0.2
   hangTime: 3
   oneWay: 0
 --- !u!65 &5659207318667531574
@@ -262,7 +262,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9, y: 0.8801874, z: 0.9}
+  m_Size: {x: 0.95, y: 0.8801874, z: 0.95}
   m_Center: {x: 0, y: 0.059906304, z: 0}
 --- !u!1 &7448868337974238324
 GameObject:
