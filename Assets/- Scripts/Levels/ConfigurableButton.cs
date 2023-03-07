@@ -76,13 +76,13 @@ public class ConfigurableButton : MonoBehaviour
             //var temp = collision.collider.attachedRigidbody;
             //if (temp != null) collidedBodies.Remove(temp);
 
-            if (!persistent)
+            if (!persistent && _pressed)
             {
                 Debug.Log("No longer colliding with " + collision.gameObject.name);
-                if (collision.gameObject.name == triggeringObject.ToString())
+                if (collision.gameObject.tag == triggeringObject.ToString())
                 {
                     _pressed = false;
-                    PressTween();
+                    UnpressTween();
                 }
             }
         
@@ -145,27 +145,29 @@ public class ConfigurableButton : MonoBehaviour
         // fade color 
         Color newColor = _originalColor * .6f;
         _buttonBodyRenderer.material.DOColor(newColor, PRESS_DURATION);
-        
+
         // "press" button
-        Vector3 newScale = transform.localScale;
-        newScale.y *= .5f;
-        
-        transform.DOScale(newScale, PRESS_DURATION)
-            .OnComplete(DoTrigger);
+        //Vector3 newScale = transform.localScale;
+        //newScale.y *= .5f;
+
+        //transform.DOScale(newScale, PRESS_DURATION)
+        //    .OnComplete(DoTrigger);
+        DoTrigger();
     }
 
     private void UnpressTween() {
         const float PRESS_DURATION = 0.25f;
-
+        Debug.Log("upressed");
         // restore color 
-        _buttonBodyRenderer.material.DOColor(_originalColor, PRESS_DURATION);
+       _buttonBodyRenderer.material.DOColor(_originalColor, PRESS_DURATION);
 
         // "unpress" button
-        Vector3 newScale = transform.localScale;
-        newScale.y *= 2f;
+        //Vector3 newScale = transform.localScale;
+        //newScale.y *= 2f;
 
-        transform.DOScale(newScale, PRESS_DURATION)
-            .OnComplete(DoTrigger);
+        //transform.DOScale(newScale, PRESS_DURATION)
+        //    .OnComplete(DoTrigger);
+        DoTrigger();
     }
 
 }
