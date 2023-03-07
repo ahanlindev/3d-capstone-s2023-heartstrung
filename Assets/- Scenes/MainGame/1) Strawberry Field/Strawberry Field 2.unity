@@ -1153,7 +1153,6 @@ GameObject:
   - component: {fileID: 389297749}
   - component: {fileID: 389297748}
   - component: {fileID: 389297750}
-  - component: {fileID: 389297751}
   m_Layer: 0
   m_Name: Hide heart
   m_TagString: Untagged
@@ -1248,18 +1247,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &389297751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 389297745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e165cdcf8190619488708017c8b13467, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &389461249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1468,7 +1455,6 @@ GameObject:
   - component: {fileID: 459920892}
   - component: {fileID: 459920895}
   - component: {fileID: 459920894}
-  - component: {fileID: 459920897}
   - component: {fileID: 459920896}
   m_Layer: 0
   m_Name: obstacle
@@ -1564,18 +1550,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &459920897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459920891}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e165cdcf8190619488708017c8b13467, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &465756745
 Mesh:
   m_ObjectHideFlags: 0
@@ -6059,6 +6033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5941821235428590027, guid: 04ef809a230215145ac9632d9d319659, type: 3}
+    - {fileID: 8160055109205554821, guid: 04ef809a230215145ac9632d9d319659, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
