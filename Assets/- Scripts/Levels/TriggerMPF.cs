@@ -6,12 +6,12 @@ public class TriggerMPF : MonoBehaviour
 {
 
     [SerializeField] public Trigger trigger;
-    PfMovingList MPFScript;
+    ConfigurableMPF MPFScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        MPFScript = transform.GetChild(0).GetComponent<PfMovingList>();
+        MPFScript = transform.GetChild(0).GetComponent<ConfigurableMPF>();
         MPFScript.enabled = false;
     }
 

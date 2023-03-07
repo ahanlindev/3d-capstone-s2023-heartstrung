@@ -18,8 +18,7 @@ namespace Player
                 1f,
                 () =>
                 {
-                    int index = SceneManager.GetActiveScene().buildIndex;
-                    SceneManager.LoadSceneAsync(index);
+                    TransitionManager.ResetScene();
                 }, 
                 false
             );
@@ -38,6 +37,11 @@ namespace Player
         public override void Exit()
         {
             base.Exit();
+        }
+
+        protected override void OnDie()
+        {
+            // empty. Prevents dying while dead
         }
 
         protected override void OnPlayerAttackInput(CallbackContext _)

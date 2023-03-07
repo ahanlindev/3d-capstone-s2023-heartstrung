@@ -4,6 +4,8 @@ using DG.Tweening;
 // <summary>Intended to be used to represent the hitbox for Kitty's claw attack</summary>
 public class Claws : MonoBehaviour
 {
+    private const float DAMAGE = 10; // TODO make this inspector-visible?
+
     [SerializeField] private Collider clawHitbox;
 
     private void Awake() {
@@ -19,16 +21,12 @@ public class Claws : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        //Debug.Log($"Claws collided with {other.gameObject.name}");
-        var enemy = other.gameObject.GetComponent<Health>();
-        if (enemy) {
-            enemy.ChangeHealth(-10.0f);
-        }
-        Debug.Log($"Claws collided with {other.gameObject.name}");        
-        var hurtingbush = other.gameObject.GetComponent<HurtingBush>();
-        if (hurtingbush)
-        {
-            hurtingbush.BushDie();
+        Debug.Log($"Found health component of {other.name}");
+        var health = other.gameObject.GetComponent<Health>();
+
+        // no friendly fire
+        if (health && !health.CompareTag("Heart")) {
+            health.ChangeHealth(-DAMAGE);
         }
     }
 }

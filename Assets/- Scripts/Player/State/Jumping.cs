@@ -16,7 +16,7 @@ namespace Player
         {
             base.Enter();
             // play sound
-            AudioManager.instance.playSoundEvent("KittyJump");
+            AudioManager.instance?.playSoundEvent("KittyJump");
 
 
             // apply appropriate force to jump
@@ -57,7 +57,7 @@ namespace Player
 
 
             // account for player move speed and tick rate
-            moveVector *= _sm.moveSpeed;
+            moveVector *= _sm.moveSpeed * _sm.airborneMovementMult;
             moveVector *= Time.fixedDeltaTime;
 
             // find proper position and look rotation

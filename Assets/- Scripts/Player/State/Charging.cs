@@ -15,6 +15,9 @@ namespace Player
         // DOTween object that fluctuates the value of power
         private Tween _fluxTween;
 
+        // DOTween object that faces away from heart initially
+        private Tween _rotateTween;
+
         public override void Enter()
         {
             base.Enter();
@@ -28,13 +31,13 @@ namespace Player
 
             _goingToFling = false;
             _sm.ChargeFlingEvent?.Invoke();
-            AudioManager.instance.startFlingSoundEffect(_power);
+            AudioManager.instance?.startFlingSoundEffect(_power);
 
             // fluctuate power
             StartPowerFlux();
 
             // tween rotate away from heart in anticipation of fling
-            RotateAwayFromHeart();
+            RotateAwayFromHeart(0.2f);
 
             _sm.trajectoryRenderer.ToggleRender(true);
         }
@@ -43,23 +46,26 @@ namespace Player
         {
             base.Exit();
 
-            AudioManager.instance.finishFlingSoundEffect();
+            AudioManager.instance?.finishFlingSoundEffect();
 
             // completes tweens if incomplete
             _sm.transform.DOComplete();
             StopPowerFlux();
 
-            // continue rendering the trajectory if flinging, otherwise stop showing it
+            // reset state if fling was cancelled
             if (!_goingToFling)
             {
                 _sm.trajectoryRenderer.ToggleRender(false);
+                _sm.ChargeFlingCancelEvent?.Invoke();
             }
         }
 
         public override void UpdateLogic()
         {
             base.UpdateLogic();
-            AudioManager.instance.continueFlingSoundEffect(_power);
+            AudioManager.instance?.continueFlingSoundEffect(_power);
+            if (!_rotateTween.active) { 
+                RotateAwayFromHeart(0.0f); }
             UpdateFlingTrajectory();
 
         }
@@ -68,14 +74,14 @@ namespace Player
         {
             // allow attack to cancel a charge
             base.OnPlayerAttackInput(_);
-            _sm.ChangeState(_sm.attackingState);
+            _sm.ChangeState(_sm.idleState);
         }
 
         protected override void OnPlayerJumpInput(CallbackContext _)
         {
             // allow jump to cancel a charge
             base.OnPlayerJumpInput(_);
-            _sm.ChangeState(_sm.jumpingState);
+            _sm.ChangeState(_sm.idleState);
         }
 
         protected override void OnPlayerFinishChargeInput(CallbackContext _)
@@ -88,7 +94,7 @@ namespace Player
                 // execute fling
                 _goingToFling = true;
                 _sm.FlingEvent?.Invoke(_power);
-                AudioManager.instance.playSoundEvent("DodgerFling");
+                AudioManager.instance?.playSoundEvent("DodgerFling");
                 _sm.ChangeState(_sm.flingingState);
             }
             else
@@ -98,15 +104,32 @@ namespace Player
             }
         }
 
+        // TODO: may want to look into separating movement state from action state
+        // TODO: Might be over-engineering here though.
+        protected override void HandlePlayerMoveInput(Vector3 moveVector)
+        {
+            base.HandlePlayerMoveInput(moveVector);
+            if (moveVector == Vector3.zero) { return; }
+
+            // account for player move speed and tick rate
+            moveVector *= _sm.moveSpeed * _sm.chargingMovementMult;
+            moveVector *= Time.fixedDeltaTime;
+
+            // find proper position. Look rotation handled for us by tween
+            var newPos = _sm.transform.position + moveVector;
+
+            _sm.rbody.MovePosition(newPos);
+        }
+
         // Helper Methods ---------------------------------------------
 
         /// <summary>rotates laterally away from the heart over a short time</summary>
-        private void RotateAwayFromHeart()
+        private void RotateAwayFromHeart(float timeNeeded)
         {
             Vector3 vecFromHeart = _sm.transform.position - _sm.heart.transform.position;
             Vector3 lookAtPoint = _sm.transform.position + vecFromHeart;
 
-            _sm.transform.DOLookAt(lookAtPoint, 0.2f, AxisConstraint.Y)
+            _rotateTween = _sm.transform.DOLookAt(lookAtPoint, timeNeeded, AxisConstraint.Y)
                 .SetEase(Ease.InOutCubic);
         }
 

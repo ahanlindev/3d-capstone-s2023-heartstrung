@@ -1,6 +1,6 @@
-using UnityEngine;
-using static UnityEngine.InputSystem.InputAction;
+using System.Collections;
 using DG.Tweening;
+using UnityEngine;
 
 namespace Player
 {
@@ -12,16 +12,31 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            // perform attack
-            _sm.claws.Claw(_sm.attackTime);
 
             // play sound
-            AudioManager.instance.playSoundEvent("KittyAttack");
+            AudioManager.instance?.playSoundEvent("KittyAttack");
 
+            // Perform and finish attack
+            _sm.StartCoroutine(StartTransitionTween());
+        }
+
+        /// <summary>description</summary>
+        private IEnumerator StartTransitionTween() {
+            float duration = 0;
+
+            // wait a short time so animator enters attack state
+            yield return null;
+            yield return new WaitUntil(() => {
+                duration = _sm.GetAnimatorClipLength();
+                return duration > 0;
+            }); 
+
+            // perform attack
+            _sm.claws.Claw(duration);
 
             // return to idle when done
             DOVirtual.DelayedCall(
-                delay: _sm.attackTime,
+                delay: duration,
                 callback: () => _sm.ChangeState(_sm.idleState),
                 ignoreTimeScale: false
             );

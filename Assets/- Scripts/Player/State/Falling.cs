@@ -36,7 +36,7 @@ namespace Player
             base.HandlePlayerMoveInput(moveVector);
             if (moveVector == Vector3.zero) { return; }
             // account for player move speed and tick rate
-            moveVector *= _sm.moveSpeed;
+            moveVector *= _sm.moveSpeed * _sm.airborneMovementMult;
             moveVector *= Time.fixedDeltaTime;
 
             // find proper position and look rotation

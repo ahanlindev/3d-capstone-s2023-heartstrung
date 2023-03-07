@@ -1,16 +1,21 @@
 using System;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>Runs player states and contains information required to maintain those states.</summary>
 public class PlayerStateMachine : BaseStateMachine
 {
-    // Emitted events -----------------------------------------------------
+    #region EVENTS
 
     /// <summary>Event emitted when the player starts charging a fling.</summary>
     public Action ChargeFlingEvent;
 
+    /// <summary>Event emitted when the player cancels charging a fling.</summary>
+    public Action ChargeFlingCancelEvent;
+    
     /// <summary>
     /// Event emitted when the player executes a fling. 
     /// First parameter is percentage fling power. 
@@ -22,7 +27,10 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Action FlingInterruptedEvent;
 
-    // Possible States ----------------------------------------------------
+    #endregion
+
+    #region POSSIBLE STATES
+
     public Player.Idle idleState { get; private set; }
     public Player.Moving movingState { get; private set; }
     public Player.Attacking attackingState { get; private set; }
@@ -33,13 +41,19 @@ public class PlayerStateMachine : BaseStateMachine
     public Player.Hurt hurtState { get; private set; }
     public Player.Dead deadState { get; private set; }
 
-    // Shortcuts for input actions ----------------------------------------
+    #endregion
+
+    #region PUBLIC PROPERTIES
+   
+    // INPUT SHORTCUTS
+
     public InputAction movementInput { get; private set; }
     public InputAction attackInput { get; private set; }
     public InputAction flingInput { get; private set; }
     public InputAction jumpInput { get; private set; }
 
-    // Other necessary components -----------------------------------------
+    // NON-INSPECTOR PROPERTIES
+
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
     public Claws claws { get; private set; }
@@ -53,32 +67,44 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     public Health hitTracker { get; private set; }
 
-    // Inspector-visible values -------------------------------------------
-    [Tooltip("Heart connected to this player")]
+    /// <summary>Used by states to determine whether the hurt state can be entered</summary>
+    public bool isInvincible { get; private set; }
+
+    // INSPECTOR PROPERTIES
+
+    [Header("Dodger")]
+
+    [Tooltip("Heart script connected to this player")]
     [SerializeField] private HeartStateMachine _heart;
     public HeartStateMachine heart { get => _heart; private set => _heart = value; }
 
-    // TODO this is sloppy. Refactor soon.
-    [Tooltip("Amount of time in seconds that the player will be in the attack state")]
-    [SerializeField] private float _attackTime = 0.5f;
-    public float attackTime { get => _attackTime; private set => _attackTime = value; }
+    [Tooltip("Player's max distance from Dodger in units")]
+    [SerializeField] private float _maxTetherLength = 3f;
+    public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
 
-    // TODO this is sloppy. Refactor soon.
-    [Tooltip("Amount of time in seconds that the player will be in the hurt state")]
-    [SerializeField] private float _hurtTime = 0.5f;
-    public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
+    [Header("Mobility")]
 
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float _moveSpeed = 2f;
     public float moveSpeed { get => _moveSpeed; private set => _moveSpeed = value; }
 
+    [Tooltip("Movement speed multiplier when charging a fling")]
+    [Range(0f,1f)][SerializeField] private float _chargingMovementMult = 0.15f;
+    public float chargingMovementMult { get => _chargingMovementMult; private set => _chargingMovementMult = value; }
+
+    [Tooltip("Movement speed multiplier when airborne")]
+    [Range(0f,1f)][SerializeField] private float _airborneMovementMult = 0.75f;
+    public float airborneMovementMult { get => _airborneMovementMult; private set => _airborneMovementMult = value; }
+    
     [Tooltip("Player's jump power")]
     [SerializeField] private float _jumpPower = 5f;
     public float jumpPower { get => _jumpPower; private set => _jumpPower = value; }
 
-    [Tooltip("Player's max distance from Dodger in units")]
-    [SerializeField] private float _maxTetherLength = 3f;
-    public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
+    [Tooltip("Time after becoming airborne before player starts to fall")]
+    [SerializeField] private float _coyoteTime = .15f;
+    public float coyoteTime { get => _coyoteTime; private set => _coyoteTime = value; }
+
+    [Header("Fling")]
 
     [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
     [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.55f;
@@ -92,9 +118,22 @@ public class PlayerStateMachine : BaseStateMachine
     [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
     public float maxPower { get => _maxPower; private set => _maxPower = value; }
 
-    // Private fields ----------------------------------------------------
+    [Header("Misc.")]
+
+    [Tooltip("Time in seconds that player will be unable to be hit after being hit once")]
+    [Range(0f, 1f)][SerializeField] private float _invincibilityTime = 1f;
+    public float invincibilityTime { get => _invincibilityTime; private set => _invincibilityTime = value; }
+
+    #endregion
+
+    #region PRIVATE FIELDS
+ 
     private PlayerInput _playerInput;
     private Animator anim;
+
+    #endregion
+
+    #region  SETUP_TEARDOWN
 
     private void Awake()
     {
@@ -146,6 +185,10 @@ public class PlayerStateMachine : BaseStateMachine
     // Initial state for player should be idle
     protected override BaseState GetInitialState() => idleState;
 
+    #endregion
+
+    #region PUBLIC METHODS
+
     /// <summary>
     /// If an animator parameter of the desired name exists, sets it to value. 
     /// If the desired parameter does not exists, a warning is logged to console. 
@@ -165,6 +208,34 @@ public class PlayerStateMachine : BaseStateMachine
     }
 
     /// <summary>
+    /// Get the length of the current animation clip, scaled by animator speed.
+    ///</summary>
+    /// <returns>
+    /// The length in seconds of the current animation clip. 
+    /// If no clip was found, returns -1.
+    /// </returns>
+    public float GetAnimatorClipLength() {
+        AnimationClip clip = null; 
+        for(int i = 0; i < anim.layerCount; i++) {
+            var clipArray = anim.GetCurrentAnimatorClipInfo(i);
+            if (clipArray.Count() > 0) {
+                clip = clipArray[0].clip;
+                break; // exit loop early if a clip is found
+            }
+        }
+
+        // scale clip length by runtime. If none exists, return -1
+        return clip?.length / anim.speed ?? -1f;
+    }
+
+    /// <summary>Begins invincibility frames. Informs states that the hurt state should not be entered.</summary>
+    public void StartInvincibility() => StartCoroutine(InvincibilityCoroutine());
+
+    #endregion
+
+    #region PRIVATE METHODS
+
+    /// <summary>
     /// Helper method to check whether the state machine's 
     /// animator has a parameter with the desired name.
     /// </summary>
@@ -174,4 +245,32 @@ public class PlayerStateMachine : BaseStateMachine
         var matchingParams = anim.parameters.Where((param) => param.name == paramName);
         return matchingParams.Count() > 0;
     }
+    
+    /// <summary>Performs the invincibility frame flicker</summary>
+    private IEnumerator InvincibilityCoroutine() {
+        // get all active renderers
+        List<Renderer> renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
+        renderers.RemoveAll((r) => !r.enabled);
+
+        // start invincibility
+        isInvincible = true;
+
+        // flicker renderers on and off until timer runs out
+        float timer = 0;
+        int frames = 0;
+        while (timer < invincibilityTime) {
+            yield return null;
+            if (frames % 8 == 0) {
+                renderers.ForEach((r) => r.enabled = !r.enabled);
+            }
+            frames++;
+            timer += Time.deltaTime;
+        }
+
+        // cleanup at end of sequence
+        isInvincible = false;
+        renderers.ForEach((r) => r.enabled = true);
+    }
+
+    #endregion
 }

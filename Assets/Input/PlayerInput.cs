@@ -154,7 +154,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5d2b891d-5578-4253-8337-2bf29118771b"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -238,6 +238,173 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62d59c06-befc-4b03-b4a5-3f6c26f14054"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Comic"",
+            ""id"": ""bfddc15b-61fc-47f8-9a6d-17def53bf77b"",
+            ""actions"": [
+                {
+                    ""name"": ""Next"",
+                    ""type"": ""Button"",
+                    ""id"": ""a4f962e3-9585-4e8e-bca1-a21a147d6434"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Prev"",
+                    ""type"": ""Button"",
+                    ""id"": ""68e3268c-a50c-4566-8c15-8c22c97a3048"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skip"",
+                    ""type"": ""Button"",
+                    ""id"": ""4acf53f1-6332-457d-8b9a-57094e58b2c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""cc9f2ad6-ebeb-4559-8bb5-8e4059448663"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29797ed4-e787-46d7-969c-81d961752b5c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard Mouse"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e77bd3e-ffb4-4d06-98f1-65a7d087ebea"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard Mouse"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7152ef5e-43c1-49f3-ac4b-89d143baa588"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa67c59e-7858-4d5b-afc4-ba90986658aa"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard Mouse"",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dd2e6946-d480-474a-a929-66879b709ade"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""daaa9ba2-0b41-48a1-8b86-5a835e54e5af"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Prev"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3d525a9b-3262-4d76-99fe-d02aeb07fcd8"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard Mouse"",
+                    ""action"": ""Prev"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2e971fc-abda-44c2-bb33-d5e472e13f56"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard Mouse"",
+                    ""action"": ""Prev"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35ea1796-65f7-44a6-9ad5-f3d0057cdaf9"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Prev"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9398efa5-37c8-4a43-8f73-4338446e7953"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -273,6 +440,11 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Fling = m_Gameplay.FindAction("Fling", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        // Comic
+        m_Comic = asset.FindActionMap("Comic", throwIfNotFound: true);
+        m_Comic_Next = m_Comic.FindAction("Next", throwIfNotFound: true);
+        m_Comic_Prev = m_Comic.FindAction("Prev", throwIfNotFound: true);
+        m_Comic_Skip = m_Comic.FindAction("Skip", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -393,6 +565,55 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
+
+    // Comic
+    private readonly InputActionMap m_Comic;
+    private IComicActions m_ComicActionsCallbackInterface;
+    private readonly InputAction m_Comic_Next;
+    private readonly InputAction m_Comic_Prev;
+    private readonly InputAction m_Comic_Skip;
+    public struct ComicActions
+    {
+        private @PlayerInput m_Wrapper;
+        public ComicActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Next => m_Wrapper.m_Comic_Next;
+        public InputAction @Prev => m_Wrapper.m_Comic_Prev;
+        public InputAction @Skip => m_Wrapper.m_Comic_Skip;
+        public InputActionMap Get() { return m_Wrapper.m_Comic; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ComicActions set) { return set.Get(); }
+        public void SetCallbacks(IComicActions instance)
+        {
+            if (m_Wrapper.m_ComicActionsCallbackInterface != null)
+            {
+                @Next.started -= m_Wrapper.m_ComicActionsCallbackInterface.OnNext;
+                @Next.performed -= m_Wrapper.m_ComicActionsCallbackInterface.OnNext;
+                @Next.canceled -= m_Wrapper.m_ComicActionsCallbackInterface.OnNext;
+                @Prev.started -= m_Wrapper.m_ComicActionsCallbackInterface.OnPrev;
+                @Prev.performed -= m_Wrapper.m_ComicActionsCallbackInterface.OnPrev;
+                @Prev.canceled -= m_Wrapper.m_ComicActionsCallbackInterface.OnPrev;
+                @Skip.started -= m_Wrapper.m_ComicActionsCallbackInterface.OnSkip;
+                @Skip.performed -= m_Wrapper.m_ComicActionsCallbackInterface.OnSkip;
+                @Skip.canceled -= m_Wrapper.m_ComicActionsCallbackInterface.OnSkip;
+            }
+            m_Wrapper.m_ComicActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Next.started += instance.OnNext;
+                @Next.performed += instance.OnNext;
+                @Next.canceled += instance.OnNext;
+                @Prev.started += instance.OnPrev;
+                @Prev.performed += instance.OnPrev;
+                @Prev.canceled += instance.OnPrev;
+                @Skip.started += instance.OnSkip;
+                @Skip.performed += instance.OnSkip;
+                @Skip.canceled += instance.OnSkip;
+            }
+        }
+    }
+    public ComicActions @Comic => new ComicActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -418,5 +639,11 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnFling(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IComicActions
+    {
+        void OnNext(InputAction.CallbackContext context);
+        void OnPrev(InputAction.CallbackContext context);
+        void OnSkip(InputAction.CallbackContext context);
     }
 }
