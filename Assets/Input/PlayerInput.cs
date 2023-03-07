@@ -163,6 +163,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""e8dd4e00-f663-4164-b2c3-0adec3a8d7ee"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""WADS"",
                     ""id"": ""5362b244-77a7-4620-b4c1-a4fc9ca9283e"",
                     ""path"": ""2DVector"",
