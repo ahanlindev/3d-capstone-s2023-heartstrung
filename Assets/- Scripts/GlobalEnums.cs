@@ -45,10 +45,10 @@ public static class SceneIDsToString {
         SceneID.TUTORIAL_2_2 => "Tutorial 2.2",
         SceneID.TUTORIAL_2_3 => "Tutorial 2.3",
         SceneID.TUTORIAL_2_4 => "Tutorial 2.4",
-        SceneID.STRAWBERRY_1 => "Strawberry 1",
-        SceneID.STRAWBERRY_2 => "Strawberry 2",
-        SceneID.KINGDOM_1 => "Kingdom 1",
-        SceneID.KINGDOM_2 => "Kingdom 2",
+        SceneID.STRAWBERRY_1 => "Strawberry Field 1",
+        SceneID.STRAWBERRY_2 => "Strawberry Field 2",
+        SceneID.KINGDOM_1 => "Kingdom1",
+        SceneID.KINGDOM_2 => "Kingdom2",
         _ => UnhandledEnum(),
     };
 
@@ -62,6 +62,7 @@ public static class SceneIDsToString {
         foreach (SceneID id in Enum.GetValues(typeof(SceneID))) {
             if (id.GetName() == scene.name) { return id; }
         }
+        UnityEngine.Debug.Log($"Invalid or misspelled scene name {scene.name}!");
         return SceneID.INVALID;
     }
 }
