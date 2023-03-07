@@ -20,9 +20,6 @@ public class ConfigurableButton : MonoBehaviour
     [Tooltip("What will trigger this button?")]
     public TriggeringObject triggeringObject;
 
-    //[Tooltip("It is itself by default.If assigned other, the button logic will be triggered with other conditions")]
-    private Button _button;
-
     [Tooltip("Targets connected with")]
     public List<GameObject> targets;
 
@@ -48,11 +45,6 @@ public class ConfigurableButton : MonoBehaviour
 
     private void Start()
     {
-        //collidedBodies = new HashSet<Rigidbody>();
-        if (_button == null)
-        {
-            _button = gameObject.GetComponent<Button>();
-        }
         _buttonBodyRenderer = GetComponent<Renderer>();
         _originalColor = _buttonBodyRenderer.material.color;
     }
@@ -60,15 +52,6 @@ public class ConfigurableButton : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-    
-        //if (collidedBodies == null) Start();
-        //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) collidedBodies.Add(temp);
-        //Debug.Log("collided11 with " + collision.gameObject.name);
-        if (_button == null)
-        {
-            Start();
-        }
         if (!_pressed)
             {
                 Debug.Log("collided with " + collision.gameObject.name);
