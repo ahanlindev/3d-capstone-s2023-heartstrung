@@ -20,9 +20,6 @@ public class ConfigurableButton : MonoBehaviour
     [Tooltip("What will trigger this button?")]
     public TriggeringObject triggeringObject;
 
-    //[Tooltip("It is itself by default.If assigned other, the button logic will be triggered with other conditions")]
-    private Button _button;
-
     [Tooltip("Targets connected with")]
     public List<GameObject> targets;
 
@@ -48,11 +45,6 @@ public class ConfigurableButton : MonoBehaviour
 
     private void Start()
     {
-        //collidedBodies = new HashSet<Rigidbody>();
-        if (_button == null)
-        {
-            _button = gameObject.GetComponent<Button>();
-        }
         _buttonBodyRenderer = GetComponent<Renderer>();
         _originalColor = _buttonBodyRenderer.material.color;
     }
@@ -60,15 +52,6 @@ public class ConfigurableButton : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-    
-        //if (collidedBodies == null) Start();
-        //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) collidedBodies.Add(temp);
-        //Debug.Log("collided11 with " + collision.gameObject.name);
-        if (_button == null)
-        {
-            Start();
-        }
         if (!_pressed)
             {
                 Debug.Log("collided with " + collision.gameObject.name);
@@ -93,13 +76,13 @@ public class ConfigurableButton : MonoBehaviour
             //var temp = collision.collider.attachedRigidbody;
             //if (temp != null) collidedBodies.Remove(temp);
 
-            if (!persistent)
+            if (!persistent && _pressed)
             {
                 Debug.Log("No longer colliding with " + collision.gameObject.name);
-                if (collision.gameObject.name == triggeringObject.ToString())
+                if (collision.gameObject.tag == triggeringObject.ToString())
                 {
                     _pressed = false;
-                    PressTween();
+                    UnpressTween();
                 }
             }
         
@@ -162,27 +145,29 @@ public class ConfigurableButton : MonoBehaviour
         // fade color 
         Color newColor = _originalColor * .6f;
         _buttonBodyRenderer.material.DOColor(newColor, PRESS_DURATION);
-        
+
         // "press" button
-        Vector3 newScale = transform.localScale;
-        newScale.y *= .5f;
-        
-        transform.DOScale(newScale, PRESS_DURATION)
-            .OnComplete(DoTrigger);
+        //Vector3 newScale = transform.localScale;
+        //newScale.y *= .5f;
+
+        //transform.DOScale(newScale, PRESS_DURATION)
+        //    .OnComplete(DoTrigger);
+        DoTrigger();
     }
 
     private void UnpressTween() {
         const float PRESS_DURATION = 0.25f;
-
+        Debug.Log("upressed");
         // restore color 
-        _buttonBodyRenderer.material.DOColor(_originalColor, PRESS_DURATION);
+       _buttonBodyRenderer.material.DOColor(_originalColor, PRESS_DURATION);
 
         // "unpress" button
-        Vector3 newScale = transform.localScale;
-        newScale.y *= 2f;
+        //Vector3 newScale = transform.localScale;
+        //newScale.y *= 2f;
 
-        transform.DOScale(newScale, PRESS_DURATION)
-            .OnComplete(DoTrigger);
+        //transform.DOScale(newScale, PRESS_DURATION)
+        //    .OnComplete(DoTrigger);
+        DoTrigger();
     }
 
 }
