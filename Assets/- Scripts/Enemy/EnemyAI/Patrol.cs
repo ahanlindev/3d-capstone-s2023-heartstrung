@@ -7,8 +7,6 @@ using BehaviorTree;
 
 public class Patrol : Node
 {
-    private Transform _transform;
-
     private Transform[] _waypoints;
 
     private int _currentWaypoint = 0;
@@ -16,15 +14,19 @@ public class Patrol : Node
     private float _waitTime = 1f;
     private float _waitCounter = 0f;
     private bool _waiting = false;
-
-    public Patrol(Transform transform, Transform[] waypoints) 
+    private NavMeshAgent _navAgent;
+    private float delta = 0.01f;
+    
+    public Patrol(NavMeshAgent navAgent, Transform[] waypoints) 
     {
-        _transform = transform;
+        _navAgent = navAgent;
         _waypoints = waypoints;
     }
 
+
     public override NodeState Evaluate()
     {
+        // pause at waypoint destination for a little bit
         if (_waiting) {
             _waitCounter += Time.deltaTime;
             if (_waitCounter >= _waitTime) {
@@ -32,15 +34,19 @@ public class Patrol : Node
             }
         } else {
             Transform wp = _waypoints[_currentWaypoint];
-            if (Vector3.Distance(_transform.position, wp.position) < 0.01f) {
-                _transform.position = wp.position;
+            var agentPos = new Vector3(_navAgent.transform.position.x, 0, _navAgent.transform.position.z);
+            var wpPos = wp.position;
+            agentPos.y = 0;
+            wpPos.y = 0;
+            if (Vector3.Distance(agentPos, wpPos) <= delta) {
+                //if the waypoint is reached, wait for a little and choose next waypoint
                 _waitCounter = 0f;
                 _waiting = true;
-
                 _currentWaypoint = (_currentWaypoint + 1) % _waypoints.Length;
             } else {
-                _transform.position = Vector3.MoveTowards(_transform.position, wp.position, EnemyAI.speed * Time.deltaTime);
-                _transform.LookAt(wp.position);
+                //if the waypoint is not reached, then continue going to the chosen waypoint
+                _navAgent.destination = wp.position;
+                _navAgent.transform.LookAt(new Vector3(wp.position.x, _navAgent.transform.position.y, wp.position.z));
             }
         }
         state = NodeState.RUNNING;
