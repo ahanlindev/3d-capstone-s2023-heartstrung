@@ -654,7 +654,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Moving
-  m_Speed: 0.75
+  m_Speed: 1.25
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -5499833532993184113}
@@ -682,7 +682,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: JumpStart
-  m_Speed: 1.5
+  m_Speed: 1.25
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3671160955512358844}
@@ -745,12 +745,12 @@ AnimatorStateMachine:
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -1557693113298050574}
-    second:
-    - {fileID: -9192862072823913630}
   - first: {fileID: -7913332668875571894}
     second:
     - {fileID: 9064949446481592054}
+  - first: {fileID: -1557693113298050574}
+    second:
+    - {fileID: -9192862072823913630}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -140, y: 500, z: 0}
   m_EntryPosition: {x: 220, y: 210, z: 0}
