@@ -11,6 +11,8 @@ public class Checkpoint : MonoBehaviour
     public Material ActiveMaterial;
     private CheckpointManager manager;
     public bool activated = false;
+    public ParticleSystem sys1;
+    public ParticleSystem sys2;
 
     void Start() {
         // Find the CheckPointManager in the scene
@@ -23,6 +25,8 @@ public class Checkpoint : MonoBehaviour
         }
         manager = managers[0];
         Flag.GetComponent<MeshRenderer>().material = InactiveMaterial;
+        sys1.Pause();
+        sys2.Pause();
     }
 
     public void activate() {
@@ -30,5 +34,8 @@ public class Checkpoint : MonoBehaviour
         activated = true;
         manager.UpdateCheckpoint(this);
         Flag.GetComponent<MeshRenderer>().material = ActiveMaterial;
+        sys1.Play();
+        sys2.Play();
+        AudioManager.instance.playSoundEvent("Checkpoint");
     }
 }
