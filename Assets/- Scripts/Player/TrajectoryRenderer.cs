@@ -24,9 +24,13 @@ public class TrajectoryRenderer : MonoBehaviour
         _positions = new List<Vector3>();
 
         // get child with decal projector
-        _floorDecal = transform.GetComponentInChildren<DecalProjector>().gameObject;
-        if (!_floorDecal) {Debug.LogError("Trajectory renderer does not have a decal projector in its children");}
-        _floorDecal?.SetActive(false);
+        _floorDecal = transform.GetComponentInChildren<DecalProjector>()?.gameObject;
+        if (!_floorDecal) {
+            Debug.LogWarning("Trajectory renderer does not have a decal projector in its children");
+            this.enabled = false; // prevent update from being called
+            return;
+        }
+        _floorDecal.SetActive(false);
     }
 
     private void Update() {
