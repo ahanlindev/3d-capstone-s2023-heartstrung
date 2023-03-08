@@ -28,6 +28,16 @@ namespace Player
         {
             base.Exit();
             _sm.trajectoryRenderer.ToggleRender(false);
+            
+            // rubber-band heart and player (hopefully) without launching them
+            Vector3 heartToPlayer = _sm.transform.position - _sm.heart.transform.position;
+            float distToHeart = heartToPlayer.magnitude;
+            heartToPlayer = heartToPlayer.normalized * Mathf.Clamp(distToHeart, 0, _sm.maxTetherLength);
+            _sm.rbody.MovePosition(_sm.heart.transform.position + heartToPlayer);
+
+            _sm.rbody.velocity = Vector3.zero;
+            _sm.heart.rbody.velocity = Vector3.zero;
+
             if (!_heartHasLanded)
             {
                 _sm.FlingInterruptedEvent?.Invoke();
