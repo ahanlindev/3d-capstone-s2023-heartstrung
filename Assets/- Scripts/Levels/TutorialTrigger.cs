@@ -43,7 +43,7 @@ public class TutorialTrigger : MonoBehaviour
                 foreach (TutorialBubble tutorialBubble in tutorialBubbles)
                 {
                     //Debug.Log("11");
-                    tutorialBubble.changeText(hintIndex);
+                    tutorialBubble?.changeText(hintIndex);
                 }
             }     
         }
