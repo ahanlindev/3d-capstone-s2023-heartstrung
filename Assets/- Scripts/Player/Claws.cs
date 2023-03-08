@@ -21,7 +21,6 @@ public class Claws : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log($"Found health component of {other.name}");
         var health = other.gameObject.GetComponent<Health>();
 
         // no friendly fire

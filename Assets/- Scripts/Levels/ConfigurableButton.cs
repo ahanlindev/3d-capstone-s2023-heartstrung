@@ -54,7 +54,6 @@ public class ConfigurableButton : MonoBehaviour
     {
         if (!_pressed)
             {
-                Debug.Log("collided with " + collision.gameObject.name);
                 if (collision.gameObject.tag == triggeringObject.ToString())
                 {
                     _pressed = true;
@@ -78,7 +77,6 @@ public class ConfigurableButton : MonoBehaviour
 
             if (!persistent && _pressed)
             {
-                Debug.Log("No longer colliding with " + collision.gameObject.name);
                 if (collision.gameObject.tag == triggeringObject.ToString())
                 {
                     _pressed = false;
@@ -134,7 +132,6 @@ public class ConfigurableButton : MonoBehaviour
      
         foreach (MonoBehaviour script in scripts)
         {
-            Debug.Log("Change state " + script.name);
             script.enabled = !script.enabled;
         }
     }
@@ -157,7 +154,6 @@ public class ConfigurableButton : MonoBehaviour
 
     private void UnpressTween() {
         const float PRESS_DURATION = 0.25f;
-        Debug.Log("upressed");
         // restore color 
        _buttonBodyRenderer.material.DOColor(_originalColor, PRESS_DURATION);
 

@@ -70,7 +70,6 @@ public class TransitionManager : MonoBehaviour {
         int idx = SceneManager.GetActiveScene().buildIndex + 1;
         idx = idx % SceneManager.sceneCountInBuildSettings;
         string sceneName = SceneUtility.GetScenePathByBuildIndex(idx);
-        Debug.Log($"Scene name {sceneName}");
         
         _instance?.DoTransitionToScene(sceneName, fadeTimeOverride);
     } 

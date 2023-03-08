@@ -41,7 +41,6 @@ public class CheckpointManager : MonoBehaviour
     /// Reset Kitty and Dodger to the previous checkpoint.
     /// </summary>
     public void ResetToCheckpoint() {
-        Debug.Log("Resetting to last checkpoint...");
 
         if(!_tutorialPlayer) {
             _kitty.gameObject.transform.position = _kittyRespawnLocation;

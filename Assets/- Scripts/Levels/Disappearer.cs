@@ -23,7 +23,7 @@ public class Disappearer : MonoBehaviour {
 
     private void DisappearTween(GameObject target) {
         Transform targetTf = target.transform;
-        Debug.Log("here");
+
         DOTween.Sequence()
         // rumble on x and z axes
         .Append(targetTf.DOShakePosition(duration: 2.0f, strength: new Vector3(.2f,0,.2f), vibrato: 20))

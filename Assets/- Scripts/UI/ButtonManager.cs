@@ -51,14 +51,12 @@ public class ButtonManager : MonoBehaviour
     }
 
     public void MainMenuButtonClicked() {
-        Debug.Log("Main Menu GO!");
         AudioManager.instance.playSoundEvent("ButtonPress");
         PauseMenuManager.instance.Unpause();
         TransitionManager.TransitionToScene(SceneID.MAINMENU);
     }
 
     public void QuitButtonClicked() {
-        Debug.Log("Quitting Game...");
         AudioManager.instance.playSoundEvent("ButtonPress");
         Application.Quit();
     }
