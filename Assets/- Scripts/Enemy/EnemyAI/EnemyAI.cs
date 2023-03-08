@@ -12,7 +12,7 @@ public class EnemyAI : BTree
 
     public Health _health;
 
-    public static float fovRange = 4f;
+    public static float fovRange = 6f;
 
     public static float speed = 3.5f;
 
