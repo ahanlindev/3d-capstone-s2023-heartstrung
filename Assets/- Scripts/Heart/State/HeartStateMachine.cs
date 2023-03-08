@@ -8,7 +8,7 @@ public class HeartStateMachine : BaseStateMachine
 {
     // Emitted events ----------------------------------
 
-    /// <summary>Notifies listeners when landing after being flung</summary> // TODO might be useful to have this go off when landing at all?
+    /// <summary>Notifies listeners when landing after being flung</summary>
     public System.Action LandedEvent;
 
     /// <summary>Used to inform current state about an entered collision</summary>
