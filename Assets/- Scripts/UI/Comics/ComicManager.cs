@@ -162,7 +162,6 @@ public class ComicManager : MonoBehaviour
     private void FadeCurrentPanel(bool fadeIn)
     {
         // set up variables
-        Debug.Log($"index {_index}");
         RawImage image = transform.GetChild(_index)?.GetComponent<RawImage>();
         float startAlpha = (fadeIn) ? 0.0f : 1.0f;
         float endAlpha = (fadeIn) ? 1.0f : 0.0f;
@@ -174,7 +173,6 @@ public class ComicManager : MonoBehaviour
         image.color = startColor;
 
         // start tween sequence
-        Debug.Log($"fadeInTime {fadeTime}");
         Tween fade = image.DOFade(endAlpha, fadeTime)
             .SetAs(_fadeParams)
         ;

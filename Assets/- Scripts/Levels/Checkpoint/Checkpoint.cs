@@ -30,7 +30,6 @@ public class Checkpoint : MonoBehaviour
     }
 
     public void activate() {
-        Debug.Log("Checkpoint Activated!");
         activated = true;
         manager.UpdateCheckpoint(this);
         Flag.GetComponent<MeshRenderer>().material = ActiveMaterial;

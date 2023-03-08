@@ -14,7 +14,6 @@ public class OptionsSoundSlider : MonoBehaviour
 
     void Slide() {
         if (!AudioManager.instance) { return; }
-        Debug.Log("Volume Changed to " + VolumeSlider.value);
         AudioManager.instance.soundVolume = VolumeSlider.value;
         AudioManager.instance.playSoundEvent("KittyJump");
     }

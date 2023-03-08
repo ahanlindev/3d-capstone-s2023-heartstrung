@@ -147,7 +147,7 @@ public class HeartStateMachine : BaseStateMachine
         // get all active renderers
         List<Renderer> renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
         renderers.RemoveAll((r) => !r.enabled);
-        Debug.Log($"Renderers: {renderers.Count}");
+
         // start invincibility
         isInvincible = true;
 

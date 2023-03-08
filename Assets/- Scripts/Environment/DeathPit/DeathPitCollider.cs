@@ -10,7 +10,6 @@ public class DeathPitCollider : MonoBehaviour
 
     // works as a barrier that is hit
     void OnCollisionEnter(Collision col) {
-        Debug.Log("DeathPitCollider collided with " + col.gameObject.name);
         if(col.gameObject.tag == "Kitty" || col.gameObject.tag == "Player"  || col.gameObject.tag == "Heart") {
             Pit.Death();
         }
@@ -18,7 +17,6 @@ public class DeathPitCollider : MonoBehaviour
 
     // works as a volume that's safe to exist within
     void OnTriggerExit(Collider col) {
-        Debug.Log("DeathPitCollider triggered by " + col.gameObject.name);
         if(col.gameObject.tag == "Kitty" || col.gameObject.tag == "Player"  || col.gameObject.tag == "Heart") {
             Pit.Death();
         }

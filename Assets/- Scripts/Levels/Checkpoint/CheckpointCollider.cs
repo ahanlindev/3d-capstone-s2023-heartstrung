@@ -10,7 +10,6 @@ public class CheckpointCollider : MonoBehaviour
         if(checkpoint.activated) {
             return;
         }
-        Debug.Log("CheckpointCollider collided with " + other.gameObject.name);
         if(other.gameObject.tag == "Kitty" || other.gameObject.tag == "Player"  || other.gameObject.tag == "Heart") {
             checkpoint.activate();
         }
