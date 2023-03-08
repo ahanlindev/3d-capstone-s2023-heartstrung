@@ -84,15 +84,18 @@ public class ConfigurableMPF : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
+        //Debug.Log(collision.gameObject.name);
         if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
-        var temp = collision.collider.attachedRigidbody;
-        if (temp != null) _collidedBodies.Add(temp);
+        //var temp = collision.collider.attachedRigidbody;
+        //if (temp != null) _collidedBodies.Add(temp);
+        collision.gameObject.transform.SetParent(transform);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        var temp = collision.collider.attachedRigidbody;
-        if (temp != null) _collidedBodies.Remove(temp);
+        //var temp = collision.collider.attachedRigidbody;
+        //if (temp != null) _collidedBodies.Remove(temp);
+        collision.gameObject.transform.SetParent(null);
+        collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
 }
