@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -6,6 +7,9 @@ using DG.Tweening;
 public class TransitionManager : MonoBehaviour {
     
     #region EVENTS
+
+    /// <summary>Event emitted when leaving a scene and screen has fully faded out</summary>
+    public static event System.Action FadeoutFinishEvent;
 
     /// <summary>Event emitted when entering a scene and screen has fully faded in</summary>
     public static event System.Action FadeinFinishEvent;
@@ -104,7 +108,8 @@ public class TransitionManager : MonoBehaviour {
     /// <param name="fadeTimeOverride">
     /// If nonzero, overrides normal fadeout time of the scene transition
     /// </param>
-    private void DoTransitionToScene(string sceneName, float fadeTimeOverride = 0) {
+    private void DoTransitionToScene(string sceneName, float fadeTimeOverride) => StartCoroutine(DoTransitionToSceneCoroutine(sceneName, fadeTimeOverride));
+    private IEnumerator DoTransitionToSceneCoroutine(string sceneName, float fadeTimeOverride = 0) {
         // handle param
         float fadeTime =(fadeTimeOverride == 0) ? _fadeTime : fadeTimeOverride;
 
@@ -117,18 +122,18 @@ public class TransitionManager : MonoBehaviour {
         // set overlay to correct color and make it transparent
         _screenFadeOverlay.color = _fadeoutColor - new Color(0,0,0,1);
 
+        // fade screen out
+        _fadeoutTween = _screenFadeOverlay.DOFade(endValue: 1, duration: fadeTime)
+            .OnComplete(() => FadeoutFinishEvent?.Invoke());
+        yield return _fadeoutTween.WaitForCompletion();
 
-        _fadeoutTween = DOTween.Sequence()
-            // fade out
-            .Append(_screenFadeOverlay.DOFade(endValue: 1, duration: fadeTime)
-                .OnComplete(() => SceneManager.LoadSceneAsync(sceneName)))
-            
-            // wait a little bit
-            .AppendInterval(0.5f)
-
-            // fade back in
-            .Append(_screenFadeOverlay.DOFade(0, fadeTime))
-                .OnComplete(() =>FadeinFinishEvent?.Invoke());
+        // load next scene
+        var load = SceneManager.LoadSceneAsync(sceneName);
+        yield return new WaitUntil(() => load.isDone);
+        
+        _fadeoutTween = _screenFadeOverlay.DOFade(0, fadeTime)
+            .OnComplete(() =>FadeinFinishEvent?.Invoke());
+        yield return null;
     }
 
     #endregion
