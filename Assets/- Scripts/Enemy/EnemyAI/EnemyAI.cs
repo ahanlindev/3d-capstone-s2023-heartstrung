@@ -10,11 +10,9 @@ public class EnemyAI : BTree
 
     public UnityEngine.Transform[] waypoints;
 
-    public Health _health;
+    // public Health _health;
 
     public static float fovRange = 6.5f;
-
-    public static float speed = 3.5f;
 
     public static float attackRange = 1f;
 
@@ -24,27 +22,27 @@ public class EnemyAI : BTree
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _health = GetComponent<Health>();
+        // _health = GetComponent<Health>();
         _enemyClaw = GetComponentInChildren<EnemyClaw>();
     }
 
-    private void OnEnable()
-    {
-        _health.ChangeHealthEvent += OnChangeHealth;
-    }
+    // private void OnEnable()
+    // {
+    //     _health.ChangeHealthEvent += OnChangeHealth;
+    // }
 
-    private void OnDisable()
-    {
-        _health.ChangeHealthEvent -= OnChangeHealth;
-    }
+    // private void OnDisable()
+    // {
+    //     _health.ChangeHealthEvent -= OnChangeHealth;
+    // }
 
-    private void OnChangeHealth(float newTotal, float delta)
-    {
-        if (newTotal  <= 0) {
-            //play dead animation
-            _agent.isStopped = true;
-        }
-    }
+    // private void OnChangeHealth(float newTotal, float delta)
+    // {
+    //     if (newTotal  <= 0) {
+    //         //play dead animation
+    //         _agent.isStopped = true;
+    //     }
+    // }
 
     protected override Node SetupTree() 
     {
@@ -58,12 +56,12 @@ public class EnemyAI : BTree
         */
         Node root = new Selector(new List<Node>
             {
-             new Sequence(new List<Node>
-                {
-                    new KO(_agent, _health),
-                    new TakeHit(_health),
-            }),
-             new Sequence(new List<Node>
+            //  new Sequence(new List<Node>
+            //     {
+            //         new KO(_agent, _health),
+            //         new TakeHit(_health),
+            // }),
+            new Sequence(new List<Node>
                 {
                 new CheckPlayerInRange(_agent), 
                 new Attack(_agent, _enemyClaw),
