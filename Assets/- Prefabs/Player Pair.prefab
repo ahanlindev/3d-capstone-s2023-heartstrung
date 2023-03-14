@@ -274,8 +274,8 @@ MonoBehaviour:
   m_UVBias: {x: 0, y: 0}
   m_DecalLayerMask: 1
   m_ScaleMode: 0
-  m_Offset: {x: 0, y: 0, z: 5}
-  m_Size: {x: 1, y: 1, z: 10}
+  m_Offset: {x: 0, y: 0, z: 15}
+  m_Size: {x: 1, y: 1, z: 30}
   m_FadeFactor: 1
 --- !u!1001 &1165010813718196291
 PrefabInstance:
@@ -285,11 +285,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5244844852357987823}
     m_Modifications:
-    - target: {fileID: 1668555474839489407, guid: 9920f1abb6fe3204592a615b7926ab5e,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4849260981243858411, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
       propertyPath: _player
@@ -308,7 +303,7 @@ PrefabInstance:
     - target: {fileID: 6346876196418870270, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.15
+      value: -0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6346876196418870270, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
@@ -348,21 +343,6 @@ PrefabInstance:
     - target: {fileID: 6346876196418870270, guid: 9920f1abb6fe3204592a615b7926ab5e,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7685494310886576491, guid: 9920f1abb6fe3204592a615b7926ab5e,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7995117841598443528, guid: 9920f1abb6fe3204592a615b7926ab5e,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8538619391122608299, guid: 9920f1abb6fe3204592a615b7926ab5e,
-        type: 3}
-      propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8883150378333060554, guid: 9920f1abb6fe3204592a615b7926ab5e,
