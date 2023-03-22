@@ -7,7 +7,7 @@ using BehaviorTree;
 public class Attack : Node
 {
     private Transform _lastTarget;
-    private float _attackTime = 1.5f;
+    private float _attackTime = 2.5f;
     private float _attackCounter = 0f;
 
     private UnityEngine.AI.NavMeshAgent _agent;
@@ -30,7 +30,6 @@ public class Attack : Node
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _attackTime) {
             //play attack animation
-            Debug.Log("attacking");
             _enemyClaw.Claw(1.5f);
             _attackCounter = 0f;
         }
