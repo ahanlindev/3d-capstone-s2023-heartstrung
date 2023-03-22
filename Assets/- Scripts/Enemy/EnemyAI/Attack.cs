@@ -30,6 +30,7 @@ public class Attack : Node
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _attackTime) {
             //play attack animation
+            Debug.Log("attacking");
             _enemyClaw.Claw(1.5f);
             _attackCounter = 0f;
         }

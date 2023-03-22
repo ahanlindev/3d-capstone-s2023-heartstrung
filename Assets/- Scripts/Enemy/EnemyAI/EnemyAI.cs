@@ -12,9 +12,9 @@ public class EnemyAI : BTree
 
     // public Health _health;
 
-    public static float fovRange = 6.5f;
+    public static float fovRange = 6.0f;
 
-    public static float attackRange = 1f;
+    public static float attackRange = 2.0f;
 
 
     public EnemyClaw _enemyClaw;
@@ -67,7 +67,8 @@ public class EnemyAI : BTree
                 new Attack(_agent, _enemyClaw),
             }), 
              new Sequence(new List<Node>
-                {new CheckFOVRange(_agent),
+                {
+                new CheckFOVRange(_agent),
                 new GoToPlayer(_agent),
             }), 
              new Patrol(_agent, waypoints),
