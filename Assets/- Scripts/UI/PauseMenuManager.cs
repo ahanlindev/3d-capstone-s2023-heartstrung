@@ -97,6 +97,7 @@ public class PauseMenuManager : MonoBehaviour
         UnpauseEvent?.Invoke();
         // to be safe, also close the options menu
         OptionsMenuManager.instance.CloseOptions();
+        ControlsMenuManager.instance.CloseControls();
         HidePauseMenu();
     }
 

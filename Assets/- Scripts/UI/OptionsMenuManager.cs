@@ -59,11 +59,12 @@ public class OptionsMenuManager : MonoBehaviour
         // Closes the options menu
         optionsOpen = false;
         OptionsUI.SetActive(false);
+        AudioManager.instance.playSoundEvent("ButtonPress");
         if(!PauseMenuManager.instance.pauseBlacklist.Contains(SceneManager.GetActiveScene().ToSceneID())) {
             PauseMenuManager.instance.ShowPauseMenu();
         }
         // re-enable the title screen if we're on the title screen
-        if(SceneManager.GetActiveScene().name == SceneID.MAINMENU.GetName()) {
+        if(SceneManager.GetActiveScene().name == "Main Menu") {
             TitleScreenManager.instance.EnableMenu();
         }
     }
