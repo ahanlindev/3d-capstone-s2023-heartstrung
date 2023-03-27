@@ -9,6 +9,9 @@ namespace Player
     {
         public Charging(PlayerStateMachine stateMachine) : base("Charging", stateMachine) { }
 
+        // name of scoot magnitude parameter in animator
+        private const string SCOOT_PARAM = "ScootMagnitude";
+
         private float _power;
         private bool _goingToFling = false;
 
@@ -67,7 +70,6 @@ namespace Player
             if (!_rotateTween.active) { 
                 RotateAwayFromHeart(0.0f); }
             UpdateFlingTrajectory();
-
         }
 
         protected override void OnPlayerAttackInput(CallbackContext _)
@@ -109,7 +111,12 @@ namespace Player
         protected override void HandlePlayerMoveInput(Vector3 moveVector)
         {
             base.HandlePlayerMoveInput(moveVector);
-            if (moveVector == Vector3.zero) { return; }
+
+            // early return if no movement
+            if (moveVector == Vector3.zero) { 
+                _sm.SetAnimatorFloat(SCOOT_PARAM, 0f);
+                return; 
+            }
 
             // account for player move speed and tick rate
             moveVector *= _sm.moveSpeed * _sm.chargingMovementMult;
@@ -118,7 +125,12 @@ namespace Player
             // find proper position. Look rotation handled for us by tween
             var newPos = _sm.transform.position + moveVector;
 
+            // apply movement to rigidbody
             _sm.rbody.MovePosition(newPos);
+
+            // update animator parameter for scoot animation
+            float scootMagnitude = Vector3.Dot(moveVector, _sm.transform.right);
+            _sm.SetAnimatorFloat(SCOOT_PARAM, scootMagnitude);
         }
 
         // Helper Methods ---------------------------------------------
