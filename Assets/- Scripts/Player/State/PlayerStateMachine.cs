@@ -208,6 +208,24 @@ public class PlayerStateMachine : BaseStateMachine
     }
 
     /// <summary>
+    /// If an animator parameter of the desired name exists, sets it to value. 
+    /// If the desired parameter does not exists, a warning is logged to console. 
+    /// </summary>
+    /// <param name="name">Name of the animation parameter to update</param>
+    /// <param name="value">Desired value for the animation parameter</param>
+    public void SetAnimatorFloat(string name, float value)
+    {
+        if (AnimatorHasParam(name))
+        {
+            anim.SetFloat(name, value);
+        }
+        else
+        {
+            Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
+        }
+    }
+
+    /// <summary>
     /// Get the length of the current animation clip, scaled by animator speed.
     ///</summary>
     /// <returns>
