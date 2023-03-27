@@ -8,7 +8,7 @@ public class EnemyClaw : MonoBehaviour
 {
     [SerializeField] private Collider clawHitbox;
 
-    private float _damage = 10.0f;
+    private float _damage = 20.0f;
 
     private void Awake() {
         if (!clawHitbox) { Debug.LogError("Claws cannot find a collider component"); }

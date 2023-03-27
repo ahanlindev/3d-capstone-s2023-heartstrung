@@ -5,12 +5,12 @@ using UnityEngine;
 /// <summary>Teleports Kitty and Dodger when collided with.</summary>
 public class DeathPit : MonoBehaviour
 {
-    public float damageTaken = 10f;
+    // public float damageTaken = 10f;
 
     public void Death() {
         PlayerStateMachine player = FindObjectOfType<PlayerStateMachine>();
         HeartStateMachine heart = player.heart;
-        heart?.health.ChangeHealth(-damageTaken);
+        // heart?.health.ChangeHealth(-damageTaken);
 
         // move Kitty and Dodger to safety if they're alive
         if (heart?.health.CurrentHealth > 0) {
