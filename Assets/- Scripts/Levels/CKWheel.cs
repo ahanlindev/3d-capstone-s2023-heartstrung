@@ -13,6 +13,6 @@ public class CKWheel : MonoBehaviour
         float rotationThisFrame = rotationSpeed * Time.deltaTime;
 
         // Apply the rotation to the object's y-axis
-        transform.Rotate(Vector3.up, rotationThisFrame);
+        transform.Rotate(-Vector3.forward, rotationThisFrame);
     }
 }
