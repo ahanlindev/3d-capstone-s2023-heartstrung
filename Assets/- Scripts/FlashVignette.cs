@@ -1,20 +1,18 @@
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 
 public class DamageVignette : MonoBehaviour
 {
     public float flashDuration = 0.5f;
-    public float maxIntensity = 0.5f;
+    public float maxAlpha = 0.5f;
 
-    private PostProcessVolume postProcessVolume;
-    private Vignette vignette;
+    private Image vignetteImage;
     private float flashTimer = 0f;
     private bool isFlashing = false;
 
     private void Start()
     {
-        postProcessVolume = GetComponent<PostProcessVolume>();
-        postProcessVolume.profile.TryGetSettings(out vignette);
+        vignetteImage = GetComponent<Image>();
     }
 
     private void Update()
@@ -26,12 +24,12 @@ public class DamageVignette : MonoBehaviour
             {
                 isFlashing = false;
                 flashTimer = 0f;
-                vignette.intensity.value = 0f;
+                vignetteImage.color = new Color(1f, 1f, 1f, 0f);
             }
             else
             {
-                float flashIntensity = maxIntensity * (1 - flashTimer / flashDuration);
-                vignette.intensity.value = flashIntensity;
+                float flashAlpha = maxAlpha * (1 - flashTimer / flashDuration);
+                vignetteImage.color = new Color(1f, 1f, 1f, flashAlpha);
             }
         }
     }
