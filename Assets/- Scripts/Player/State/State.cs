@@ -130,7 +130,6 @@ namespace Player
         protected bool IsGrounded()
         {
             float distToGround = _sm.coll.bounds.extents.y;
-            Vector3 collOffset = _sm.coll.bounds.center - _sm.transform.position;
 
             Vector3 center = _sm.coll.bounds.center;
             center.y -= (distToGround - 0.4f);
