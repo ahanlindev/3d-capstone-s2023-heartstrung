@@ -50,6 +50,16 @@ public class ButtonManager : MonoBehaviour
         PauseMenuManager.instance.Unpause();
     }
 
+    public void LevelSelectButtonClicked() {
+        AudioManager.instance.playSoundEvent("ButtonPress");
+        TransitionManager.TransitionToScene(SceneID.LEVELSELECT);
+    }
+
+    public void LevelButtonClicked(SceneID levelID) {
+        AudioManager.instance.playSoundEvent("ButtonPress");
+        TransitionManager.TransitionToScene(levelID);
+    }
+
     public void MainMenuButtonClicked() {
         AudioManager.instance.playSoundEvent("ButtonPress");
         PauseMenuManager.instance.Unpause();
