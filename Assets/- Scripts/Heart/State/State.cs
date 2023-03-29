@@ -33,6 +33,10 @@ namespace Heart
         /// <summary>Event handler for when the heart dies. Override to ignore or change base behavior. </summary>
         protected virtual void OnDie() { _sm.ChangeState(_sm.deadState); }
 
+        // TODO this seems like it could be brought down to the dead state. For alpha build, it'll work
+        /// <summary>Event handler for when the heart revives from the dead state. Override to ignore or change base behavior. </summary>
+        protected virtual void OnRevive() { _sm.ChangeState(_sm.idleState); }
+        
         /// <summary>Event handler to allow this component to react to collisions</summary>
         protected virtual void OnCollisionEnter(Collision other) { }
 
@@ -54,6 +58,11 @@ namespace Heart
             {
                 // If alive, get hurt if damage was taken
                 OnHurt();
+            } 
+            else if (delta > 0 && (newVal - delta <= 0))
+            {
+                // if dead, and health is added, revive
+                OnRevive();
             }
         }
 
