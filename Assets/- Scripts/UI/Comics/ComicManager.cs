@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
 /// <summary>Controls displaying and hiding comic pages in sequence</summary>
 public class ComicManager : MonoBehaviour
@@ -18,7 +19,22 @@ public class ComicManager : MonoBehaviour
 
     [Tooltip("Are we transitioning to the next scene?")]
     [SerializeField] private bool _transitioning = false;
+
+    [Tooltip("Object reference to Prev Button")]
+    [SerializeField] private GameObject prevButton;
+    [Tooltip("Object reference to Next Button")]
+    [SerializeField] private GameObject nextButton;
+    [Tooltip("Object reference to Skip Button")]
+    [SerializeField] private GameObject skipButton;
     
+    [Tooltip("If true, the Prev Button will be disabled when on the first panel")]
+    [SerializeField] private bool hidePrevAtStart = true;
+    [FormerlySerializedAs("hideNextAtEnd")]
+    [Tooltip("If true, the Next Button will be disabled when on the last panel")]
+    [SerializeField] private bool _hideNextAtEnd = false;
+    [FormerlySerializedAs("disableSkipInput")]
+    [Tooltip("If true, the player will not be able to skip")]
+    [SerializeField] private bool disableSkip = false;
 
     /// <summary>Index of current panel</summary>
     private int _index = 0;
@@ -53,6 +69,9 @@ public class ComicManager : MonoBehaviour
 
         // activate the starting index
         FadeCurrentPanel(fadeIn: true);
+        
+        // Initialize button state
+        UpdateButtons();
     }
 
     private void OnDestroy()
@@ -116,11 +135,17 @@ public class ComicManager : MonoBehaviour
     /// </summary>
     public void Next()
     {
+        // input ignored in these states
         if(_transitioning || PauseMenuManager.instance.paused) {
             return;
         }
+        
+        bool atLastIdx = _index >= transform.childCount - 1;
+        if (_hideNextAtEnd && atLastIdx) { return; }
+        
+        // validated. Actually advance page
         AudioManager.instance.playSoundEvent("ComicAdvance");
-        if (_index >= transform.childCount - 1)
+        if (atLastIdx)
         {
             TransitionManager.TransitionToNextScene();
             _transitioning = true;
@@ -130,6 +155,9 @@ public class ComicManager : MonoBehaviour
             _index++;
             FadeCurrentPanel(fadeIn: true);
         }
+       
+        // Update button state
+        UpdateButtons();
     }
 
 
@@ -139,12 +167,16 @@ public class ComicManager : MonoBehaviour
         if(_transitioning || PauseMenuManager.instance.paused) {
             return;
         }
+        
         if (_index > 0)
         {
             AudioManager.instance.playSoundEvent("ComicAdvance");
             FadeCurrentPanel(fadeIn: false);
             _index--;
         }
+        
+        // Update button state
+        UpdateButtons();
     }
 
     /// <summary>Skip the comic and transitions to the next scene/</summary>
@@ -161,12 +193,13 @@ public class ComicManager : MonoBehaviour
     /// <param name="fadeIn">If true, the comic panel at the current index is enabled, otherwise it is disabled.</param>
     private void FadeCurrentPanel(bool fadeIn)
     {
-        // set up variables
+        // set up variables for fade
         RawImage image = transform.GetChild(_index)?.GetComponent<RawImage>();
         float startAlpha = (fadeIn) ? 0.0f : 1.0f;
         float endAlpha = (fadeIn) ? 1.0f : 0.0f;
         float fadeTime = (fadeIn) ? _panelFadeInTime : _panelFadeOutTime;
 
+        
         // fade in or fade out image as appropriate
         Color startColor = image.color;
         startColor.a = startAlpha;
@@ -187,5 +220,33 @@ public class ComicManager : MonoBehaviour
             // deactivate game object at end of fade out
             fade.OnComplete(() => { image.gameObject.SetActive(false); });
         }
+    }
+
+    /// <summary>
+    /// Hides and shows the next and prev buttons as appropriate based on state
+    /// </summary>
+    private void UpdateButtons()
+    {
+        bool atLastIdx = _index == transform.childCount - 1;
+        
+        // initialize conditions
+        bool showPrev = !(hidePrevAtStart && _index == 0);
+        bool showNext = !(_hideNextAtEnd && atLastIdx);
+        bool showSkip = !(disableSkip) && !atLastIdx;
+        
+        // handle button visuals
+        if (prevButton) { prevButton.SetActive(showPrev); }
+        if (nextButton) { nextButton.SetActive(showNext); }
+        if (skipButton) { skipButton.SetActive(showSkip); }
+        
+        // handle input bindings
+        if (showPrev) {  _input.Comic.Prev.Enable(); }
+        else { _input.Comic.Prev.Disable(); }
+        
+        if (showNext) {  _input.Comic.Next.Enable(); }
+        else { _input.Comic.Next.Disable(); }
+
+        if (showSkip) { _input.Comic.Skip.Enable(); }
+        else { _input.Comic.Skip.Disable(); }
     }
 }

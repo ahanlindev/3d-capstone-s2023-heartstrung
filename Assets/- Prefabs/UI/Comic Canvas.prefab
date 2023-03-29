@@ -538,10 +538,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 369e50baf69756f4c946f77e93667161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fadeOutOverlay: {fileID: 7463897585459569356}
   _panelFadeInTime: 0.5
   _panelFadeOutTime: 0.25
   _skipHoldTime: 1
+  _transitioning: 0
+  prevButton: {fileID: 6512499102923347645}
+  nextButton: {fileID: 6512499101923864701}
+  skipButton: {fileID: 6512499103129789398}
+  hidePrevAtStart: 1
+  hideNextAtEnd: 0
+  disableSkip: 0
 --- !u!1 &6512499102403544485
 GameObject:
   m_ObjectHideFlags: 0
