@@ -54,8 +54,8 @@ public class AudioManager : MonoBehaviour
         _perSceneMusic[SceneID.TUTORIAL_2_4] = "OverworldMusic";
         _perSceneMusic[SceneID.STRAWBERRY_1] = "OverworldMusic";
         _perSceneMusic[SceneID.STRAWBERRY_2] = "OverworldMusic";
-        _perSceneMusic[SceneID.KINGDOM_1] = "OverworldMusic";
-        _perSceneMusic[SceneID.KINGDOM_2] = "OverworldMusic";
+        _perSceneMusic[SceneID.KINGDOM_1] = "OverworldMusicDistorted";
+        _perSceneMusic[SceneID.KINGDOM_2] = "OverworldMusicDistorted";
 
         // Instantiate the AudioSources
         // audioSources[FLING_INDEX] is implicitly the fling audio source

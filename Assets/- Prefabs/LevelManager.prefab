@@ -3237,6 +3237,53 @@ MonoBehaviour:
   SoundPool:
   - {fileID: 8300000, guid: c0ee5c987bc8db4409a7a010c35c6d0c, type: 3}
   PitchShift: 1
+--- !u!1 &3348592312080926050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7815129110893431021}
+  - component: {fileID: 5385158531504404999}
+  m_Layer: 0
+  m_Name: OverworldMusicDistorted
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7815129110893431021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3348592312080926050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5385158531504404999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3348592312080926050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: 124c476b4bfef804eaf6375ee2752849, type: 3}
+  PitchShift: 0
 --- !u!1 &3354423882017138779
 GameObject:
   m_ObjectHideFlags: 0
@@ -4891,6 +4938,7 @@ Transform:
   - {fileID: 5743899970361027435}
   - {fileID: 6622051352215537752}
   - {fileID: 8680660619120754457}
+  - {fileID: 7815129110893431021}
   m_Father: {fileID: 7072556800105984191}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
