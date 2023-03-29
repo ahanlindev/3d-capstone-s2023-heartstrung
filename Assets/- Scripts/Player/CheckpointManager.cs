@@ -48,6 +48,9 @@ public class CheckpointManager : MonoBehaviour
             // Debug.Log("Resetting velocity");
             _kitty.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
             _dodger.gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
+            
+            var healthComponent = _dodger.GetComponent<HeartStateMachine>()?.health;
+            healthComponent?.ChangeHealth(healthComponent.MaxHealth);
         } else {
             // This is the tutorial player, so do it a bit differently
             this.gameObject.transform.position = _kittyRespawnLocation;
