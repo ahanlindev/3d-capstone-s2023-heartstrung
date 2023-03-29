@@ -50,7 +50,7 @@ public static class SceneIDsToString {
         SceneID.STRAWBERRY_1 => "Strawberry Field 1",
         SceneID.STRAWBERRY_2 => "Strawberry Field 2",
         SceneID.KINGDOM_1 => "Kingdom1",
-        SceneID.KINGDOM_2 => "Kingdom2",
+        SceneID.KINGDOM_2 => "Kingdom 2",
         _ => UnhandledEnum(),
     };
 
