@@ -129,7 +129,7 @@ public class PlayerStateMachine : BaseStateMachine
     #region PRIVATE FIELDS
  
     private PlayerInput _playerInput;
-    private Animator anim;
+    private Animator _anim;
 
     #endregion
 
@@ -163,7 +163,7 @@ public class PlayerStateMachine : BaseStateMachine
         hitTracker = GetComponent<Health>();
         claws = GetComponentInChildren<Claws>();
         trajectoryRenderer = GetComponentInChildren<TrajectoryRenderer>();
-        anim = GetComponentInChildren<Animator>();
+        _anim = GetComponentInChildren<Animator>();
 
         // initialize tether (TODO this should either be a method or done elsewhere)
         var tether = GetComponent<ConfigurableJoint>();
@@ -175,7 +175,7 @@ public class PlayerStateMachine : BaseStateMachine
         }
 
         // validate non-guaranteed values
-        if (!anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
+        if (!_anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
         if (!claws) { Debug.LogError("PlayerStateMachine cannot find Claws component in children"); }
         if (!trajectoryRenderer) { Debug.LogError("PlayerStateMachine cannot find TrajectoryRenderer component in children!"); }
         if (!hitTracker) { Debug.LogError("PlayerStateMachine cannot find a Health component!"); }
@@ -193,17 +193,17 @@ public class PlayerStateMachine : BaseStateMachine
     /// If an animator parameter of the desired name exists, sets it to value. 
     /// If the desired parameter does not exists, a warning is logged to console. 
     /// </summary>
-    /// <param name="name">Name of the animation parameter to update</param>
+    /// <param name="paramName">Name of the animation parameter to update</param>
     /// <param name="value">Desired value for the animation parameter</param>
-    public void SetAnimatorBool(string name, bool value)
+    public void SetAnimatorBool(string paramName, bool value)
     {
-        if (AnimatorHasParam(name))
+        if (AnimatorHasParam(paramName))
         {
-            anim.SetBool(name, value);
+            _anim.SetBool(paramName, value);
         }
         else
         {
-            Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
+            Debug.LogWarning($"State <color=blue>{paramName}</color> does not exist in Player's animator controller");
         }
     }
 
@@ -211,17 +211,17 @@ public class PlayerStateMachine : BaseStateMachine
     /// If an animator parameter of the desired name exists, sets it to value. 
     /// If the desired parameter does not exists, a warning is logged to console. 
     /// </summary>
-    /// <param name="name">Name of the animation parameter to update</param>
+    /// <param name="paramName">Name of the animation parameter to update</param>
     /// <param name="value">Desired value for the animation parameter</param>
-    public void SetAnimatorFloat(string name, float value)
+    public void SetAnimatorFloat(string paramName, float value)
     {
-        if (AnimatorHasParam(name))
+        if (AnimatorHasParam(paramName))
         {
-            anim.SetFloat(name, value);
+            _anim.SetFloat(paramName, value);
         }
         else
         {
-            Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Player's animator controller");
+            Debug.LogWarning($"State <color=blue>{paramName}</color> does not exist in Player's animator controller");
         }
     }
 
@@ -234,18 +234,18 @@ public class PlayerStateMachine : BaseStateMachine
     /// </returns>
     public float GetAnimatorClipLength() {
         AnimationClip clip = null; 
-        for(int i = 0; i < anim.layerCount; i++) {
-            var clipArray = anim.GetCurrentAnimatorClipInfo(i);
-            if (clipArray.Count() > 0) {
+        for(int i = 0; i < _anim.layerCount; i++) {
+            var clipArray = _anim.GetCurrentAnimatorClipInfo(i);
+            if (clipArray.Any()) {
                 clip = clipArray[0].clip;
                 break; // exit loop early if a clip is found
             }
         }
 
         // scale clip length by runtime. If none exists, return -1
-        return clip?.length / anim.speed ?? -1f;
+        return (clip) ? clip.length / _anim.speed : -1f;
     }
-
+    
     /// <summary>Begins invincibility frames. Informs states that the hurt state should not be entered.</summary>
     public void StartInvincibility() => StartCoroutine(InvincibilityCoroutine());
 
@@ -260,14 +260,13 @@ public class PlayerStateMachine : BaseStateMachine
     /// <returns>True if a matching parameter is found, false otherwise.</returns>
     private bool AnimatorHasParam(string paramName)
     {
-        var matchingParams = anim.parameters.Where((param) => param.name == paramName);
-        return matchingParams.Count() > 0;
+        return _anim.parameters.Any(param => param.name == paramName);
     }
     
     /// <summary>Performs the invincibility frame flicker</summary>
     private IEnumerator InvincibilityCoroutine() {
         // get all active renderers
-        List<Renderer> renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
+        var renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
         renderers.RemoveAll((r) => !r.enabled);
 
         // start invincibility
