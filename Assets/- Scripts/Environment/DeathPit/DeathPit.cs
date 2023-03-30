@@ -7,7 +7,7 @@ using UnityEngine;
 public class DeathPit : MonoBehaviour
 {
     // public float damageTaken = 10f;
-    
+
     public void Death() {
         PlayerStateMachine player = FindObjectOfType<PlayerStateMachine>();
         HeartStateMachine heart = player.heart;
@@ -16,7 +16,7 @@ public class DeathPit : MonoBehaviour
         // move Kitty and Dodger to safety if they're alive
         if (heart?.health.CurrentHealth > 0) {
             CheckpointManager cm = FindObjectOfType<CheckpointManager>();
-        cm.ResetToCheckpoint();
+            cm.ResetToCheckpoint();
         }
     }
 }
