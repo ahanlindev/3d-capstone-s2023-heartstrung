@@ -13,20 +13,20 @@ public class Health : MonoBehaviour
     
     [Tooltip("Max health for this entity")]
     [SerializeField] private float _maxHealth = 100f;
-    public float MaxHealth {get => _maxHealth; private set => _maxHealth = value; }
+    public float MaxHealth {get => _maxHealth; }
 
     /// <summary>current health value</summary>
     public float CurrentHealth { get; private set; }
 
 
-    void Awake()
+    private void Awake()
     {
         CurrentHealth = _maxHealth;        
     }
-
+    
     /// <summary>
     /// Updates the current amount of health by the specified 
-    /// value, and sends a corresponding event. 
+    /// value (clamped to max health), and sends a corresponding event. 
     /// </summary>
     public void ChangeHealth(float delta) {
         CurrentHealth += delta;

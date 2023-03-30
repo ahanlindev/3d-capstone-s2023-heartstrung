@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>Teleports Kitty and Dodger when collided with.</summary>
+[System.Obsolete("Functionality moved to DeathPitCollider class")] 
 public class DeathPit : MonoBehaviour
 {
     // public float damageTaken = 10f;
