@@ -32,29 +32,32 @@ public class HeartStateMachine : BaseStateMachine
     /// <summary>True if the heart is in a flingable state, false otherwise. Updated by states.</summary>
     public bool canBeFlung { get; set; }
 
-
     /// <summary>Used by states to determine whether the hurt state can be entered</summary>
-    public bool isInvincible { get; private set; } = false;
+    public bool isInvincible { get; private set; }
 
     // Inspector-visible values
     [Tooltip("PlayerStateMachine instance for the player attached to this object")]
     [SerializeField] private PlayerStateMachine _player;
-    public PlayerStateMachine player { get => _player; private set => _player = value; }
+    public PlayerStateMachine player => _player;
 
     [Tooltip("Speed along the arc that the heart will fly through the air in degrees per second")]
     [SerializeField] private float _flingSpeed = 180.0f;
-    public float flingSpeed { get => _flingSpeed; private set => _flingSpeed = value; }
+    public float flingSpeed => _flingSpeed;
 
     [Tooltip("Time in seconds that the heart will be in the hurt state when hurt")]
     [SerializeField] private float _hurtTime = 0.5f;
-    public float hurtTime { get => _hurtTime; private set => _hurtTime = value; }
+    public float hurtTime => _hurtTime;
 
     [Tooltip("Time in seconds that player will be unable to be hit after being hit once")]
     [Range(0f, 1f)][SerializeField] private float _invincibilityTime = 1f;
-    public float invincibilityTime { get => _invincibilityTime; private set => _invincibilityTime = value; }
+    public float invincibilityTime => _invincibilityTime;
+
+    [Tooltip("Time in seconds that the heart can be in the falling state before the player is reset")]
+    [SerializeField] private float _fallResetTime = 3.0f;
+    public float fallResetTime => _fallResetTime;
 
     // Private Fields --------------------------------------------
-    private Animator anim;
+    private Animator _anim;
 
     private void Awake()
     {
@@ -70,13 +73,13 @@ public class HeartStateMachine : BaseStateMachine
         coll = GetComponent<Collider>();
         health = GetComponent<Health>();
 
-        anim = GetComponentInChildren<Animator>();
+        _anim = GetComponentInChildren<Animator>();
 
         if (!player)
         {
             Debug.LogError($"HeartStateMachine on <color=yellow>{gameObject.name}</color> has no connected PlayerStateMachine!");
         }
-        if (!anim)
+        if (!_anim)
         {
             Debug.LogError($"HeartStateMachine on <color=yellow>{gameObject.name}</color> cannot find animator component in self or children");
         }
@@ -113,17 +116,17 @@ public class HeartStateMachine : BaseStateMachine
     /// If an animator parameter of the desired name exists, sets it to value. 
     /// If the desired parameter does not exists, a warning is logged to console. 
     /// </summary>
-    /// <param name="name">Name of the animation parameter to update</param>
+    /// <param name="paramName">Name of the animation parameter to update</param>
     /// <param name="value">Desired value for the animation parameter</param>
-    public void SetAnimatorBool(string name, bool value)
+    public void SetAnimatorBool(string paramName, bool value)
     {
-        if (AnimatorHasParam(name))
+        if (AnimatorHasParam(paramName))
         {
-            anim.SetBool(name, value);
+            _anim.SetBool(paramName, value);
         }
         else
         {
-            Debug.LogWarning($"State <color=blue>{name}</color> does not exist in Heart's animator controller");
+            Debug.LogWarning($"State <color=blue>{paramName}</color> does not exist in Heart's animator controller");
         }
     }
 
@@ -138,14 +141,13 @@ public class HeartStateMachine : BaseStateMachine
     /// <returns>True if a matching parameter is found, false otherwise.</returns>
     private bool AnimatorHasParam(string paramName)
     {
-        var matchingParams = anim.parameters.Where((param) => param.name == paramName);
-        return matchingParams.Count() > 0;
+        return _anim.parameters.Any(param => param.name == paramName);
     }
 
     /// <summary>Performs the invincibility frame flicker</summary>
     private IEnumerator InvincibilityCoroutine() {
         // get all active renderers
-        List<Renderer> renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
+        var renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
         renderers.RemoveAll((r) => !r.enabled);
 
         // start invincibility
