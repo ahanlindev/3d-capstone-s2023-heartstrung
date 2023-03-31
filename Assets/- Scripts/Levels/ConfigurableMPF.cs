@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Animations;
 using UnityEngine;
 using DG.Tweening;
 
@@ -26,12 +27,13 @@ public class ConfigurableMPF : MonoBehaviour
     
     private bool _moved;
 
+    private ParentConstraint pc;
 
     // Update is called once per frame
     void FixedUpdate()
     {   
         moveTo();
-        UpdateAttachedBodies();
+        //UpdateAttachedBodies();
     }
 
     private void Awake() {
@@ -84,18 +86,27 @@ public class ConfigurableMPF : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log(collision.gameObject.name);
+        Debug.Log(collision.gameObject.name + " enter");
         if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
         //var temp = collision.collider.attachedRigidbody;
         //if (temp != null) _collidedBodies.Add(temp);
-        collision.gameObject.transform.SetParent(transform);
+        pc = collision.gameObject.GetComponent<ParentConstraint>();
+        var source = new ConstraintSource();
+        source.sourceTransform = transform;
+        pc.AddSource(source);
+        pc.enabled = true;
+        // collision.gameObject.transform.SetParent(transform);
     }
 
     private void OnCollisionExit(Collision collision)
     {
+                Debug.Log(collision.gameObject.name + " exit");
+
         //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) _collidedBodies.Remove(temp);
-        collision.gameObject.transform.SetParent(null);
-        collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        //if (temp != null) _collidedBodies.Remove(temp);   
+        pc.RemoveSource(1);
+        pc.enabled = false;
+        // collision.gameObject.transform.SetParent(null);
+        // collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
 }
