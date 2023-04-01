@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!198 &1613099980660062639
 ParticleSystem:
@@ -751,7 +751,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 5
+      value: 0.0001
       mode: 0
       spread: 0
       speed:
@@ -1308,8 +1308,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.1981132, g: 0.13294321, b: 0.004485576, a: 0}
-        key1: {r: 1, g: 0.83770627, b: 0.61698115, a: 1}
+        key0: {r: 0.2924528, g: 0.24429926, b: 0.1508247, a: 0}
+        key1: {r: 1, g: 0.923694, b: 0.81761, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1495,7 +1495,7 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 3
-      scalar: -0.5
+      scalar: -1
       minScalar: 0.5
       maxCurve:
         serializedVersion: 2
@@ -1601,7 +1601,7 @@ ParticleSystem:
     z:
       serializedVersion: 2
       minMaxState: 3
-      scalar: -0.5
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
