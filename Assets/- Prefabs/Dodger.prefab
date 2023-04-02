@@ -153,7 +153,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7323596991281770794}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.9, z: -0}
+  m_LocalPosition: {x: 0, y: -0.77, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -201,6 +201,7 @@ MonoBehaviour:
   _blockingLayers:
     serializedVersion: 2
     m_Bits: 1
+  _bufferDepth: 0.3
 --- !u!1 &8883150378333060554
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +304,6 @@ MonoBehaviour:
   _flingSpeed: 300
   _hurtTime: 0.5
   _invincibilityTime: 1
-  _fallResetTime: 3
 --- !u!114 &5781121236881792120
 MonoBehaviour:
   m_ObjectHideFlags: 0

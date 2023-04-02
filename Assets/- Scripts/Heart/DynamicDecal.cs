@@ -18,10 +18,12 @@ public class DynamicDecal : MonoBehaviour
              "up on surfaces underneath. This value is capped at the projection depth set at the start.")]
     [SerializeField] private bool _dynamicDepth = true;
 
-    [FormerlySerializedAs("ignoredLayers")]
     [Tooltip("List of layers that the decal should use to limit depth. Note: Only used when dynamicDepth is enabled")]
     [SerializeField] private LayerMask _blockingLayers;
 
+    [Tooltip("Fixed amount of extra depth added in addition to the dynamic depth. Note: Only used when dynamicDepth is enabled")]
+    [SerializeField] private float _bufferDepth = 0.01f;
+    
     private LayerMask _actualIgnoredLayers;
     private DecalProjector _projector;
     private Quaternion _rot;
@@ -35,7 +37,6 @@ public class DynamicDecal : MonoBehaviour
         _rot = transform.rotation;    
         _offsetFromParent = transform.localPosition;
         _maxDepth = _projector.size.z;
-        Debug.Log($"projector size is {_projector.size}. Pivot is {_projector.pivot}. Max depth is {_maxDepth}");
     }
 
     // Update is called once per frame
@@ -72,9 +73,8 @@ public class DynamicDecal : MonoBehaviour
         );
         
         // calculate actual distance
-        const float depthEpsilon = 0.01f;// Small value added to ensure surface is actually projected upon
         float projectionDepth = (hit) ? hitInfo.distance : _maxDepth;
-        projectionDepth += depthEpsilon; 
+        projectionDepth += _bufferDepth; 
         
         // update and apply new property values
         Vector3 newSize = _projector.size;
