@@ -33,7 +33,7 @@ public class ConfigurableMPF : MonoBehaviour
     void FixedUpdate()
     {   
         moveTo();
-        //UpdateAttachedBodies();
+        UpdateAttachedBodies();
     }
 
     private void Awake() {
@@ -88,25 +88,20 @@ public class ConfigurableMPF : MonoBehaviour
     {
         Debug.Log(collision.gameObject.name + " enter");
         if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
-        //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) _collidedBodies.Add(temp);
-        pc = collision.gameObject.GetComponent<ParentConstraint>();
-        var source = new ConstraintSource();
-        source.sourceTransform = transform;
-        pc.AddSource(source);
-        pc.enabled = true;
-        // collision.gameObject.transform.SetParent(transform);
+        var temp = collision.collider.attachedRigidbody;
+        if (temp != null) _collidedBodies.Add(temp);
+        
+        Transform playerTransform = collision.gameObject.transform;
+        playerTransform.SetParent(transform.parent);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-                Debug.Log(collision.gameObject.name + " exit");
+        Debug.Log(collision.gameObject.name + " exit");
 
-        //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) _collidedBodies.Remove(temp);   
-        pc.RemoveSource(1);
-        pc.enabled = false;
-        // collision.gameObject.transform.SetParent(null);
-        // collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        var temp = collision.collider.attachedRigidbody;
+        if (temp != null) _collidedBodies.Remove(temp);   
+        collision.gameObject.transform.SetParent(null);
+        collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
 }
