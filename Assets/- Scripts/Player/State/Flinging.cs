@@ -30,6 +30,7 @@ namespace Player
             _sm.trajectoryRenderer.ToggleRender(false);
             
             // rubber-band heart and player (hopefully) without launching them
+            if (!_sm.heart) { return; }
             Vector3 heartToPlayer = _sm.transform.position - _sm.heart.transform.position;
             float distToHeart = heartToPlayer.magnitude;
             heartToPlayer = heartToPlayer.normalized * Mathf.Clamp(distToHeart, 0, _sm.maxTetherLength);
