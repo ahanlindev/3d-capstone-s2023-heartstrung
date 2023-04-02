@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Animations;
 using UnityEngine;
 using DG.Tweening;
 
@@ -26,6 +27,7 @@ public class ConfigurableMPF : MonoBehaviour
     
     private bool _moved;
 
+    private ParentConstraint pc;
 
     // Update is called once per frame
     void FixedUpdate()
@@ -84,17 +86,21 @@ public class ConfigurableMPF : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log(collision.gameObject.name);
+        Debug.Log(collision.gameObject.name + " enter");
         if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
-        //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) _collidedBodies.Add(temp);
-        collision.gameObject.transform.SetParent(transform);
+        var temp = collision.collider.attachedRigidbody;
+        if (temp != null) _collidedBodies.Add(temp);
+        
+        Transform playerTransform = collision.gameObject.transform;
+        playerTransform.SetParent(transform.parent);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        //var temp = collision.collider.attachedRigidbody;
-        //if (temp != null) _collidedBodies.Remove(temp);
+        Debug.Log(collision.gameObject.name + " exit");
+
+        var temp = collision.collider.attachedRigidbody;
+        if (temp != null) _collidedBodies.Remove(temp);   
         collision.gameObject.transform.SetParent(null);
         collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
     }
