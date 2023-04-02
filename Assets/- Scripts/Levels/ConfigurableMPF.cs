@@ -86,7 +86,7 @@ public class ConfigurableMPF : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name + " enter");
+        // Debug.Log(collision.gameObject.name + " enter");
         if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
         var temp = collision.collider.attachedRigidbody;
         if (temp != null) _collidedBodies.Add(temp);
@@ -97,7 +97,7 @@ public class ConfigurableMPF : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        Debug.Log(collision.gameObject.name + " exit");
+        // Debug.Log(collision.gameObject.name + " exit");
 
         var temp = collision.collider.attachedRigidbody;
         if (temp != null) _collidedBodies.Remove(temp);   
