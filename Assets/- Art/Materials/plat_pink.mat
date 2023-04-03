@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: plat_pink
-  m_Shader: {fileID: -6465566751694194690, guid: 852601e206302384db21b45339f3c61e,
+  m_Shader: {fileID: -6465566751694194690, guid: 56be2614ae5c4334ab478df2281050ed,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,6 +24,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - MainTex:
+        m_Texture: {fileID: 2800000, guid: 55c75274b1934fe4585b6dee03cdc02f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Mask_R_Emission:
+        m_Texture: {fileID: 2800000, guid: 55c75274b1934fe4585b6dee03cdc02f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 55c75274b1934fe4585b6dee03cdc02f, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -90,6 +98,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Brightness_Rim: 2
+    - Rim_Power: 0.09
+    - Toon_Ramp_Offset: 0.5
+    - Toon_Ramp_Smoothness: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -128,8 +140,9 @@ Material:
     - _tiling_x: 1
     - _tiling_y: 1
     m_Colors:
+    - Toon_Ramp_Tint: {r: 0.49056596, g: 0.49056596, b: 0.49056596, a: 1}
     - _BaseColor: {r: 0.9339623, g: 0.879188, b: 0.8164827, a: 1}
-    - _Color: {r: 0.509434, g: 0.46569955, b: 0.41571736, a: 1}
+    - _Color: {r: 0.5849056, g: 0.5380028, b: 0.5443904, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

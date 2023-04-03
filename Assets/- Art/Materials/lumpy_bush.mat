@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: lumpy_bush
-  m_Shader: {fileID: -6465566751694194690, guid: 852601e206302384db21b45339f3c61e,
+  m_Shader: {fileID: -6465566751694194690, guid: 56be2614ae5c4334ab478df2281050ed,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,6 +24,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - MainTex:
+        m_Texture: {fileID: 2800000, guid: 44759e544809ef8408b261cb79cd7071, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Mask_R_Emission:
+        m_Texture: {fileID: 2800000, guid: 44759e544809ef8408b261cb79cd7071, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: d11a7d9fe6c587b469a656f3147d77a6, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -90,6 +98,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Brightness_Rim: 2
+    - Rim_Power: 0.15
+    - Toon_Ramp_Offset: 0.5
+    - Toon_Ramp_Smoothness: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -128,6 +140,7 @@ Material:
     - _tiling_x: 1
     - _tiling_y: 1
     m_Colors:
+    - Toon_Ramp_Tint: {r: 0.49056596, g: 0.49056596, b: 0.49056596, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.62352943, g: 0.6039216, b: 0.48235294, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

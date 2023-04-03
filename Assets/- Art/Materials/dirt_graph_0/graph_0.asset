@@ -32,10 +32,10 @@ MonoBehaviour:
       Index: 0
       Type: 8
       Channel: baseColor
-    OutputTexture: {fileID: 2800000, guid: 82e1534b27ee34f439b6e048003d85b7, type: 3}
+    OutputTexture: {fileID: 0}
     sRGB: 1
     IsVirtual: 0
-    IsStandardOutput: 1
+    IsStandardOutput: 0
     IsAlphaAssignable: 1
     AlphaChannel: 
     InvertAssignedAlpha: 0
@@ -48,10 +48,10 @@ MonoBehaviour:
       Index: 1
       Type: 8
       Channel: normal
-    OutputTexture: {fileID: 2800000, guid: ecb76b2a176b8d84db55d9b709733bc3, type: 3}
+    OutputTexture: {fileID: 0}
     sRGB: 0
     IsVirtual: 0
-    IsStandardOutput: 1
+    IsStandardOutput: 0
     IsAlphaAssignable: 0
     AlphaChannel: 
     InvertAssignedAlpha: 0
@@ -80,13 +80,13 @@ MonoBehaviour:
       Index: 3
       Type: 8
       Channel: metallic
-    OutputTexture: {fileID: 2800000, guid: 9a6b254891d6f07418e27260edda9cc2, type: 3}
+    OutputTexture: {fileID: 0}
     sRGB: 0
     IsVirtual: 0
-    IsStandardOutput: 1
+    IsStandardOutput: 0
     IsAlphaAssignable: 1
-    AlphaChannel: 
-    InvertAssignedAlpha: 0
+    AlphaChannel: roughness
+    InvertAssignedAlpha: 1
     Flags: 0
   - Index: 4
     VirtualOutputIndex: 10
@@ -96,10 +96,10 @@ MonoBehaviour:
       Index: 4
       Type: 8
       Channel: height
-    OutputTexture: {fileID: 2800000, guid: 4d183207ec781db428e92699b6e062c9, type: 3}
+    OutputTexture: {fileID: 0}
     sRGB: 1
     IsVirtual: 0
-    IsStandardOutput: 1
+    IsStandardOutput: 0
     IsAlphaAssignable: 1
     AlphaChannel: 
     InvertAssignedAlpha: 0
@@ -112,10 +112,10 @@ MonoBehaviour:
       Index: 5
       Type: 8
       Channel: ambientOcclusion
-    OutputTexture: {fileID: 2800000, guid: 3ff3ba4b2df4fc445a8e1c1fd77201dc, type: 3}
+    OutputTexture: {fileID: 0}
     sRGB: 0
     IsVirtual: 0
-    IsStandardOutput: 1
+    IsStandardOutput: 0
     IsAlphaAssignable: 1
     AlphaChannel: 
     InvertAssignedAlpha: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   DefaultPreset: " <sbspreset pkgurl=\"pkg://dirt\" label=\"\" >\n  <presetinput
     identifier=\"$outputsize\" uid=\"727132532\" type=\"8\" value=\"10,10\" />\n
     </sbspreset>\n"
-  MaterialShader: Universal Render Pipeline/Lit
+  MaterialShader: Shader Graphs/ToonShader
   RenderTextures: 0
   OutputRemaped: 0
   references:
