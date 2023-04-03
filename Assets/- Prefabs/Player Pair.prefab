@@ -208,7 +208,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _kitty: {fileID: 2595317218204527740}
   _dodger: {fileID: 6009765639757675944}
-  _tutorialPlayer: 0
 --- !u!114 &5769091791090599976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,6 +230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6108984510704798761}
   - component: {fileID: 2894547586297202625}
+  - component: {fileID: 457536853005256167}
   m_Layer: 6
   m_Name: Trajectory Decal
   m_TagString: Untagged
@@ -277,6 +277,24 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 0, z: 15}
   m_Size: {x: 1, y: 1, z: 30}
   m_FadeFactor: 1
+--- !u!114 &457536853005256167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8816940025161048372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05d4c9fb5dd86342bff5da02a335077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dynamicRotation: 0
+  _dynamicDepth: 1
+  _blockingLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  _bufferDepth: 0.3
 --- !u!1001 &1165010813718196291
 PrefabInstance:
   m_ObjectHideFlags: 0
