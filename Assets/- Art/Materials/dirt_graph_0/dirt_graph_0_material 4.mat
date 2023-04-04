@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: dirt_graph_0_material 4
-  m_Shader: {fileID: -6465566751694194690, guid: 852601e206302384db21b45339f3c61e,
+  m_Shader: {fileID: -6465566751694194690, guid: 56be2614ae5c4334ab478df2281050ed,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,6 +24,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - MainTex:
+        m_Texture: {fileID: 2800000, guid: af3cc6a6dd1e82a4ab4f3195465c4a29, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Mask_R_Emission:
+        m_Texture: {fileID: 2800000, guid: af3cc6a6dd1e82a4ab4f3195465c4a29, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 82e1534b27ee34f439b6e048003d85b7, type: 3}
         m_Scale: {x: 3, y: 6}
@@ -90,6 +98,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Brightness_Rim: 2
+    - Rim_Power: 0
+    - Toon_Ramp_Offset: 0.5
+    - Toon_Ramp_Smoothness: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -128,10 +140,12 @@ Material:
     - _tiling_x: 3
     - _tiling_y: 6
     m_Colors:
+    - Toon_Ramp_Tint: {r: 0.49056596, g: 0.49056596, b: 0.49056596, a: 1}
     - _BaseColor: {r: 0.8901961, g: 0.7647059, b: 0.65882355, a: 1}
     - _Color: {r: 0.8901961, g: 0.7647059, b: 0.65882355, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _TILING: {r: 3, g: 6, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3053835024494585932
 MonoBehaviour:
