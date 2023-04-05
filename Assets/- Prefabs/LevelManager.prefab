@@ -544,8 +544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: c96b2c98007991749ad32ec18f16619b, type: 3}
-  - {fileID: 8300000, guid: 5b63a63056d0a5a4e99c60f20763c6fc, type: 3}
+  - {fileID: 8300000, guid: e61ec387ae566e541bd7599e8daac6a7, type: 3}
   PitchShift: 0
 --- !u!1 &449737099873480207
 GameObject:
@@ -683,6 +682,54 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &556168429660639021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 576909684922256123}
+  - component: {fileID: 9009719808452542469}
+  m_Layer: 0
+  m_Name: EnemyHiss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &576909684922256123
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556168429660639021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9009719808452542469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556168429660639021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: 976bcd4988b436149b0e75a87e1aa23b, type: 3}
+  - {fileID: 8300000, guid: a30b8d49f7ab81b45a52fb26138cf29a, type: 3}
+  PitchShift: 0
 --- !u!1 &567354719361512388
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,7 +909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: d796d9bed23b2dd43b303d0de5614275, type: 3}
+  - {fileID: 8300000, guid: 397800201e0c521488d8e139abbc7def, type: 3}
   PitchShift: 0
 --- !u!1 &1231400055746123823
 GameObject:
@@ -909,7 +956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: d95ef053846028140ac19c3fe676c33e, type: 3}
+  - {fileID: 8300000, guid: c780137c1e586ac49b05a5c126a030ec, type: 3}
   PitchShift: 0
 --- !u!1 &1479192903509564047
 GameObject:
@@ -1136,6 +1183,53 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1701351573282201197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 658333362204908400}
+  - component: {fileID: 196568557124835011}
+  m_Layer: 0
+  m_Name: KittyFalls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &658333362204908400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701351573282201197}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &196568557124835011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701351573282201197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: f6f93b08b22112f43bf3b4f08787e611, type: 3}
+  PitchShift: 0
 --- !u!1 &1746409464457243983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1802,9 +1896,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 8c6dd2575e712d845a48ff98fe3fa41b, type: 3}
-  - {fileID: 8300000, guid: f6c9db54ceaccb74a994edc52ca7c710, type: 3}
-  - {fileID: 8300000, guid: c1f7563578c89c149986dcfe9ff4857e, type: 3}
+  - {fileID: 8300000, guid: f25fc95f4e22f6f4bb4eeff7aec8ced6, type: 3}
+  - {fileID: 8300000, guid: 77145fb3ede68cc46a21e0ea9d553809, type: 3}
   PitchShift: 1
 --- !u!1 &2552865114459851393
 GameObject:
@@ -2226,7 +2319,7 @@ GameObject:
   - component: {fileID: 3608438163313891991}
   - component: {fileID: 5389200875387591333}
   m_Layer: 0
-  m_Name: ButtonHover
+  m_Name: UIButtonHover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2260,7 +2353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: bd1033a3a9d38ca4c8a1f07dc4be5068, type: 3}
+  - {fileID: 8300000, guid: 3346584dd7da35842995a64378c3d5bd, type: 3}
   PitchShift: 1
 --- !u!1 &2715385318677187165
 GameObject:
@@ -2383,7 +2476,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: ff509fedf25ba64409ccc3600263acfd, type: 3}
+  - {fileID: 8300000, guid: 53f77af95bf8c7f4fa06c66e2ea6bc76, type: 3}
+  - {fileID: 8300000, guid: 2ba23d2431def3c4aa371fa6b60d4222, type: 3}
   PitchShift: 1
 --- !u!1 &2813255195389493977
 GameObject:
@@ -2430,7 +2524,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 933d5392186fbc44b8efd252b22a0344, type: 3}
+  - {fileID: 8300000, guid: 0db6df2aa59e8f7428f7c87676d88b48, type: 3}
+  - {fileID: 8300000, guid: 0726dcc6f972ee94595132a7a4ae3668, type: 3}
   PitchShift: 1
 --- !u!1 &2823825153300866135
 GameObject:
@@ -2980,6 +3075,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &3191483428979121688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1644656631850618296}
+  - component: {fileID: 5885401448589252892}
+  m_Layer: 0
+  m_Name: EnemyAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1644656631850618296
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191483428979121688}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5885401448589252892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3191483428979121688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: f6f93b08b22112f43bf3b4f08787e611, type: 3}
+  PitchShift: 0
 --- !u!1 &3252010082563039594
 GameObject:
   m_ObjectHideFlags: 0
@@ -3235,7 +3377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: c0ee5c987bc8db4409a7a010c35c6d0c, type: 3}
+  - {fileID: 8300000, guid: 3f9defc94c5fb1544b4667bfbd2bcc3d, type: 3}
   PitchShift: 1
 --- !u!1 &3348592312080926050
 GameObject:
@@ -3282,7 +3424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 124c476b4bfef804eaf6375ee2752849, type: 3}
+  - {fileID: 8300000, guid: 282ef33dd0e41994b9ccba9eefe51fa4, type: 3}
   PitchShift: 0
 --- !u!1 &3354423882017138779
 GameObject:
@@ -3329,7 +3471,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: f482d7e9ddf590b49b0783e7d0dd6f02, type: 3}
+  - {fileID: 8300000, guid: 7a23464209e1e34499f73ff8b80cec1b, type: 3}
+  - {fileID: 8300000, guid: c6d6689d014c14446baf3803365fafd5, type: 3}
+  - {fileID: 8300000, guid: fb7e4b86edcc044468b26303dc3bf50f, type: 3}
   PitchShift: 1
 --- !u!1 &3560270683485749615
 GameObject:
@@ -3376,7 +3520,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 8034cafd1a8059342a2a662f4b090592, type: 3}
+  - {fileID: 8300000, guid: 213e7099bc78c8348b6b48efddc0f3ef, type: 3}
+  PitchShift: 1
+--- !u!1 &3987044246832972743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3785397600227094078}
+  - component: {fileID: 3350416884044369108}
+  m_Layer: 0
+  m_Name: UIButtonPress
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3785397600227094078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3987044246832972743}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3350416884044369108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3987044246832972743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: 933139f6bcf91be4f990a1831d2ebad8, type: 3}
   PitchShift: 1
 --- !u!1 &4042660990437820853
 GameObject:
@@ -3454,6 +3645,53 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &4358802499853532118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4683967211071572354}
+  - component: {fileID: 5461971901859808293}
+  m_Layer: 0
+  m_Name: KittyDies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4683967211071572354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4358802499853532118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5461971901859808293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4358802499853532118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: f6f93b08b22112f43bf3b4f08787e611, type: 3}
+  PitchShift: 1
 --- !u!1 &4516077639839793277
 GameObject:
   m_ObjectHideFlags: 0
@@ -3590,6 +3828,53 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &4759057542504949085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6728867882310783739}
+  - component: {fileID: 554707127294584535}
+  m_Layer: 0
+  m_Name: GroundRumble
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6728867882310783739
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4759057542504949085}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7072556802029630818}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &554707127294584535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4759057542504949085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893be68c79ffc9469179221dfc388eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundPool:
+  - {fileID: 8300000, guid: e4186042a841ca94788e91e0dd19ba94, type: 3}
+  PitchShift: 0
 --- !u!1 &4900773324004480072
 GameObject:
   m_ObjectHideFlags: 0
@@ -3673,7 +3958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 5f0d0f271887a3e418524a71822dcdce, type: 3}
+  - {fileID: 8300000, guid: 200d147b5576c9642abab4d3f25b1a75, type: 3}
   PitchShift: 1
 --- !u!1 &5123506818651518517
 GameObject:
@@ -4165,7 +4450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: aeeeccdeecb5dab45b69d9ae88d73f7f, type: 3}
+  - {fileID: 8300000, guid: ddf1f6038499d05498a90da108d79dcb, type: 3}
   PitchShift: 1
 --- !u!1 &6175870385050185746
 GameObject:
@@ -4288,7 +4573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 0ce341a4ec6268046aff61226281a2a2, type: 3}
+  - {fileID: 8300000, guid: cb8cfd84a27cff4409a68d5cc4350fd4, type: 3}
   PitchShift: 0
 --- !u!1 &6395379169976288452
 GameObject:
@@ -4933,11 +5218,17 @@ Transform:
   - {fileID: 5566857835360110633}
   - {fileID: 1431865812930298415}
   - {fileID: 7007551086033310337}
+  - {fileID: 4683967211071572354}
   - {fileID: 3608438163313891991}
+  - {fileID: 3785397600227094078}
   - {fileID: 6435305854958128137}
-  - {fileID: 5743899970361027435}
   - {fileID: 6622051352215537752}
   - {fileID: 8680660619120754457}
+  - {fileID: 658333362204908400}
+  - {fileID: 576909684922256123}
+  - {fileID: 1644656631850618296}
+  - {fileID: 6728867882310783739}
+  - {fileID: 5743899970361027435}
   - {fileID: 7815129110893431021}
   m_Father: {fileID: 7072556800105984191}
   m_RootOrder: -1
@@ -4954,7 +5245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8197dc3816be1f946acdf10d603a01b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _numAudioSources: 5
+  _numAudioSources: 15
   musicPlaying: 0
   soundVolume: 0.7
   musicVolume: 0.7
@@ -5630,7 +5921,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundPool:
-  - {fileID: 8300000, guid: 722c69914509bc142928f45aa370ad6c, type: 3}
+  - {fileID: 8300000, guid: 378ce379ead4d714d9672322e26f1f80, type: 3}
   PitchShift: 0
 --- !u!1 &8360665545426411140
 GameObject:

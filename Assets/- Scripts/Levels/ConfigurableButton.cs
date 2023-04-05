@@ -57,6 +57,7 @@ public class ConfigurableButton : MonoBehaviour
                 if (collision.gameObject.tag == triggeringObject.ToString())
                 {
                     _pressed = true;
+                    AudioManager.instance.playSoundEvent("ButtonPress");
                     PressTween();
                     if (disappear)
                     {
