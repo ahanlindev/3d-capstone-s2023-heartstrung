@@ -59,7 +59,7 @@ public class OptionsMenuManager : MonoBehaviour
         // Closes the options menu
         optionsOpen = false;
         OptionsUI.SetActive(false);
-        AudioManager.instance.playSoundEvent("ButtonPress");
+        AudioManager.instance.playSoundEvent("UIButtonPress");
         if(!PauseMenuManager.instance.pauseBlacklist.Contains(SceneManager.GetActiveScene().ToSceneID())) {
             PauseMenuManager.instance.ShowPauseMenu();
         }
