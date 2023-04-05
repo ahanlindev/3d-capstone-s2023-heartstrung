@@ -64,7 +64,7 @@ public class PauseMenuManager : MonoBehaviour
     private void OnPauseKeyPressed(InputAction.CallbackContext _) {
         // Debug.Log("Pause");
         // Check if the current scene is in the pause blacklist
-        if(!pauseBlacklist.Contains(SceneManager.GetActiveScene().ToSceneID())) {
+        if(CanPause()) {
             if(!paused) {
                 Pause();
             } else {
@@ -107,6 +107,8 @@ public class PauseMenuManager : MonoBehaviour
         if (!defaultSelection) { Debug.LogError("Pause menu has no default button selected!"); }
         defaultSelection.Select();
     }
+
+    public bool CanPause() => !pauseBlacklist.Contains(SceneManager.GetActiveScene().ToSceneID());
 
     public void HidePauseMenu() {
         pauseUI.SetActive(false);
