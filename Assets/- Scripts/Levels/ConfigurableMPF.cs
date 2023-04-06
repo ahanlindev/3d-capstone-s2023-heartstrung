@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using DG.Tweening;
@@ -60,7 +58,6 @@ public class ConfigurableMPF : MonoBehaviour
     
     #region MonoBehaviour Methods
     
-    // Update is called once per frame
     private void FixedUpdate()
     {   
         MoveTo();
@@ -127,21 +124,29 @@ public class ConfigurableMPF : MonoBehaviour
     /// </summary>
     private void MoveTo()
     {
+        // Oneway platforms don't do anything after reaching their destination.
+        if (_oneWayFinished) { return; }
+
+        // If timer is active, platform is in-motion or resting. Update timer and return.
         if (_localTimer > 0)
         {
             _localTimer -= Time.fixedDeltaTime;
-        } else if (!_oneWayFinished && transform.position == _targets[_index].position)
-        {
-            _index = (_index + 1) % _targets.Length;
-            transform.DOMove(_targets[_index].position, moveDuration);
-            _localTimer = _hangTime + moveDuration;
+            return;
+        }
+        
+        // Prevent starting next stage if not at destination
+        if (transform.position != _targets[_index].position) { return; }
+        
+        // Increment target, reset timer, and start moving
+        _index = (_index + 1) % _targets.Length;
+        _localTimer = _hangTime + moveDuration;
+        transform.DOMove(_targets[_index].position, moveDuration);
 
-            // the final target wp, change the flag and stop
-            if (_index == _targets.Length - 1 && _oneWay)
-            {
-                _oneWayFinished = true;
-            }
-        }        
+        // If this is a oneway going to the final waypoint, set the flag
+        if (_index == _targets.Length - 1 && _oneWay)
+        {
+            _oneWayFinished = true;
+        }
     }
     
     /// <summary>
