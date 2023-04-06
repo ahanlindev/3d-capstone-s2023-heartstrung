@@ -10,19 +10,22 @@ public class ConfigurableMPF : MonoBehaviour
     
     [FormerlySerializedAs("targets")]
     [Tooltip("Add/delete empty objects to this target list to set new waypoints.")]
-    [SerializeField] public Transform[] _targets;
+    [SerializeField] private Transform[] _targets;
 
     [Tooltip("Speed of the moving platform, the duration from one waypoint to another is 1 / speed")]
-    [SerializeField] public float _speed = 0.2f;
+    [SerializeField] private float _speed = 0.2f;
 
     [FormerlySerializedAs("hangTime")]
     [Tooltip("Time that the platform waits at a waypoint.")]
-    [SerializeField] public float _hangTime = 3.0f;
+    [SerializeField] private float _hangTime = 3.0f;
 
     [FormerlySerializedAs("oneWay")]
     [Tooltip("If true, the platform stops after reaching the final waypoint of the list")]
-    [SerializeField] public bool _oneWay;
+    [SerializeField] private bool _oneWay;
 
+    [Tooltip("If true, skips the initial rumble animation when enabled")] 
+    [SerializeField] private bool _skipRumble;
+    
     #endregion
     
     #region Private Fields & Properties
@@ -73,7 +76,7 @@ public class ConfigurableMPF : MonoBehaviour
     private void OnEnable() {
         _lastPosition = transform.position;
         _collidedBodies ??= new HashSet<Rigidbody>();
-        transform.DOMove(_targets[_index].position, moveDuration);
+        StartMovement();
     }
 
     private void OnDisable() {
@@ -101,6 +104,20 @@ public class ConfigurableMPF : MonoBehaviour
     #endregion
     
     #region Private methods
+
+    private void StartMovement()
+    {
+        if (_skipRumble)
+        {
+            transform.DOMove(_targets[_index].position, moveDuration);
+            return;
+        }
+
+        // Shake the platform to draw attention
+        transform.DOShakePosition(duration: 2.0f, strength: new Vector3(.2f, 0, .2f), vibrato: 20)
+            //Once shake finishes, begin movement
+            .OnComplete(() => transform.DOMove(_targets[_index].position, moveDuration));
+    }
     
     /// <summary>
     /// Timing and logic for movement and rest. Called in FixedUpdate.
