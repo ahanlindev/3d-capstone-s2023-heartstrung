@@ -15,6 +15,7 @@ public enum SceneID {
     COMIC4,
     COMIC5,
     COMIC6,
+    FULLCOMIC,
     TUTORIAL_1,
     TUTORIAL_2, // TODO remove
     TUTORIAL_2_1,
@@ -41,6 +42,7 @@ public static class SceneIDsToString {
         SceneID.COMIC4 => "Comic4",
         SceneID.COMIC5 => "Comic5",
         SceneID.COMIC6 => "Comic6",
+        SceneID.FULLCOMIC => "WholeStory",
         SceneID.TUTORIAL_1 => "Tutorial 1",
         SceneID.TUTORIAL_2 => "Tutorial 2",  // TODO remove
         SceneID.TUTORIAL_2_1 => "Tutorial 2.1",
