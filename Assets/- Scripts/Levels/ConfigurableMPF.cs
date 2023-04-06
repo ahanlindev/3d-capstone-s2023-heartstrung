@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -48,12 +49,17 @@ public class ConfigurableMPF : MonoBehaviour
     /// <summary>
     /// Position of the platform at the end of the previous frame
     /// </summary>
-    private Vector3 _lastPosition;
+    [Obsolete] private Vector3 _lastPosition;
     
     /// <summary>
     /// Rigidbodies affected by the moving platform
     /// </summary>
-    private HashSet<Rigidbody> _collidedBodies;
+    [Obsolete] private HashSet<Rigidbody> _collidedBodies;
+
+    /// <summary>
+    /// Object at top level of scene with 1x1x1 scale, used to contain things that should move along with the platform
+    /// </summary>
+    private Transform _socket;
     
     /// <summary>
     /// If true, platform will no longer move after reaching its current target waypoint
@@ -68,43 +74,50 @@ public class ConfigurableMPF : MonoBehaviour
     private void FixedUpdate()
     {   
         MoveTo();
-        UpdateAttachedBodies();
+        UpdateSocket();
     }
 
-    private void Awake() { _collidedBodies ??= new HashSet<Rigidbody>(); }
-    
     private void OnEnable() {
-        _lastPosition = transform.position;
-        _collidedBodies ??= new HashSet<Rigidbody>();
+        CreateSocket();
         StartMovement();
     }
 
     private void OnDisable() {
-        _collidedBodies = null;    
+        Destroy(_socket);
     }
     
     private void OnCollisionEnter(Collision collision)
     {
-        _collidedBodies ??= new HashSet<Rigidbody>();
-        var temp = collision.collider.attachedRigidbody;
-        if (temp != null) _collidedBodies.Add(temp);
-        
-        Transform playerTransform = collision.gameObject.transform;
-        playerTransform.SetParent(transform.parent);
+        // If collided with a rigidbody, make it a child of the socket object
+        Rigidbody rbody = collision.collider.attachedRigidbody;
+        Transform playerTransform = rbody.gameObject.transform;
+        playerTransform.SetParent(_socket);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        var temp = collision.collider.attachedRigidbody;
-        if (temp != null) _collidedBodies.Remove(temp);   
-        collision.gameObject.transform.SetParent(null);
-        collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        // If leaving object has a rigidbody and is attached to the socket, remove it
+        Rigidbody rbody = collision.collider.attachedRigidbody;
+        if (rbody && rbody.transform.IsChildOf(_socket))
+        {
+            collision.gameObject.transform.SetParent(null);
+        }
     }
     
     #endregion
     
     #region Private methods
-
+    
+    /// <summary>
+    /// Initialize socket. Create an empty game object at the root level of the scene.
+    /// </summary>
+    private void CreateSocket()
+    {
+        string socketName = $"{transform.parent.name}_MPFSocket";
+        var socketObj = new GameObject(name: socketName);
+        _socket = socketObj.transform;
+    }
+    
     private void StartMovement()
     {
         if (_skipRumble)
@@ -142,19 +155,13 @@ public class ConfigurableMPF : MonoBehaviour
     }
     
     /// <summary>
-    /// Move all attached rigidbodies and update last position
+    /// Make sure the socket object stays synced with this one
     /// </summary>
-    private void UpdateAttachedBodies() 
+    private void UpdateSocket()
     {
-        if (_collidedBodies.Count != 0)
-        {
-            Vector3 offset = transform.position - _lastPosition;
-            foreach (Rigidbody attached in _collidedBodies)
-            {
-                attached.MovePosition(attached.transform.position + offset);
-            }
-        }
-        _lastPosition = transform.position;
+        if (!_socket) { return; }
+
+        _socket.transform.position = transform.position;
     }
     
     #endregion
