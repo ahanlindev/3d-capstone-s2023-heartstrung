@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -7,8 +8,12 @@ public class TransitionManager : MonoBehaviour {
     
     #region EVENTS
 
+    
+    /// <summary>Event emitted when leaving a scene and screen has fully faded out</summary>
+    public static event Action FadeoutFinishEvent;
+    
     /// <summary>Event emitted when entering a scene and screen has fully faded in</summary>
-    public static event System.Action FadeinFinishEvent;
+    public static event Action FadeinFinishEvent;
     
     #endregion
 
@@ -24,6 +29,7 @@ public class TransitionManager : MonoBehaviour {
     
     [Tooltip("Color that the screen will fade to when transitioning between scenes")]
     [SerializeField] private Color _fadeoutColor = Color.black;
+
 
     #endregion
 
@@ -50,9 +56,11 @@ public class TransitionManager : MonoBehaviour {
     /// <param name="fadeTimeOverride">
     /// If nonzero, overrides normal fadeout time of the scene transition
     /// </param>
-    public static void ResetScene(int fadeTimeOverride = 0) {
+    public static void ResetScene(int fadeTimeOverride = 0)
+    {
+        if (!_instance) { return; }
         int idx = SceneManager.GetActiveScene().buildIndex;
-        _instance?.DoTransitionToScene(
+        _instance.DoTransitionToScene(
             SceneManager.GetSceneByBuildIndex(idx).name, 
             fadeTimeOverride
         );
@@ -66,12 +74,15 @@ public class TransitionManager : MonoBehaviour {
     /// <param name="fadeTimeOverride">
     /// If nonzero, overrides normal fadeout time of the scene transition
     /// </param>
-    public static void TransitionToNextScene(float fadeTimeOverride = 0) {
+    public static void TransitionToNextScene(float fadeTimeOverride = 0)
+    {
+        if (!_instance) { return; }
+        
         int idx = SceneManager.GetActiveScene().buildIndex + 1;
         idx = idx % SceneManager.sceneCountInBuildSettings;
         string sceneName = SceneUtility.GetScenePathByBuildIndex(idx);
         
-        _instance?.DoTransitionToScene(sceneName, fadeTimeOverride);
+        _instance.DoTransitionToScene(sceneName, fadeTimeOverride);
     } 
     
     /// <summary>Transition to the scene specified by the enum value</summary>
@@ -79,8 +90,10 @@ public class TransitionManager : MonoBehaviour {
     /// <param name="fadeTimeOverride">
     /// If nonzero, overrides normal fadeout time of the scene transition
     /// </param>
-    public static void TransitionToScene(SceneID sceneID, float fadeTimeOverride = 0) {
-        _instance?.DoTransitionToScene(sceneID.GetName(), fadeTimeOverride);
+    public static void TransitionToScene(SceneID sceneID, float fadeTimeOverride = 0)
+    {
+        if (!_instance) { return; }
+        _instance.DoTransitionToScene(sceneID.GetName(), fadeTimeOverride);
     }
 
     /// <summary>Cancel any current scene transition and reverses screen fadeout.</summary>
@@ -120,7 +133,11 @@ public class TransitionManager : MonoBehaviour {
         _fadeoutTween = DOTween.Sequence()
             // fade out
             .Append(_screenFadeOverlay.DOFade(endValue: 1, duration: fadeTime)
-                .OnComplete(() => SceneManager.LoadSceneAsync(sceneName)))
+                .OnComplete(() =>
+                {
+                    SceneManager.LoadSceneAsync(sceneName);
+                    FadeoutFinishEvent?.Invoke();
+                }))
             
             // wait a little bit
             .AppendInterval(0.5f)
