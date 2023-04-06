@@ -45,16 +45,6 @@ public class ConfigurableMPF : MonoBehaviour
     /// Timer that measures rest time and movement time between 2 waypoints
     /// </summary>
     private float _localTimer;
-   
-    /// <summary>
-    /// Position of the platform at the end of the previous frame
-    /// </summary>
-    [Obsolete] private Vector3 _lastPosition;
-    
-    /// <summary>
-    /// Rigidbodies affected by the moving platform
-    /// </summary>
-    [Obsolete] private HashSet<Rigidbody> _collidedBodies;
 
     /// <summary>
     /// Object at top level of scene with 1x1x1 scale, used to contain things that should move along with the platform
