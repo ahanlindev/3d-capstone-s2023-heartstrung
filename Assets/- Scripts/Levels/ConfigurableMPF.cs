@@ -25,17 +25,22 @@ public class ConfigurableMPF : MonoBehaviour
 
     #endregion
     
-    #region Private Fields
+    #region Private Fields & Properties
     
+    /// <summary>
+    /// Time taken to move from one waypoint to another
+    /// </summary>
+    private float moveDuration => 1f / _speed;
+
     /// <summary>
     /// Index of current waypoint
     /// </summary>
-    private int _index = 0;
+    private int _index;
     
     /// <summary>
     /// Timer that measures rest time and movement time between 2 waypoints
     /// </summary>
-    private float _localTimer = 0;
+    private float _localTimer;
    
     /// <summary>
     /// Position of the platform at the end of the previous frame
@@ -68,7 +73,7 @@ public class ConfigurableMPF : MonoBehaviour
     private void OnEnable() {
         _lastPosition = transform.position;
         _collidedBodies ??= new HashSet<Rigidbody>();
-        transform.DOMove(_targets[_index].position, 1 / _speed);
+        transform.DOMove(_targets[_index].position, moveDuration);
     }
 
     private void OnDisable() {
@@ -108,8 +113,8 @@ public class ConfigurableMPF : MonoBehaviour
         } else if (!_oneWayFinished && transform.position == _targets[_index].position)
         {
             _index = (_index + 1) % _targets.Length;
-            transform.DOMove(_targets[_index].position, 1 / _speed);
-            _localTimer = _hangTime + 1 / _speed;
+            transform.DOMove(_targets[_index].position, moveDuration);
+            _localTimer = _hangTime + moveDuration;
 
             // the final target wp, change the flag and stop
             if (_index == _targets.Length - 1 && _oneWay)
