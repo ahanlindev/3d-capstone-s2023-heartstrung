@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 /// <summary>Runs player states and contains information required to maintain those states.</summary>
 public class PlayerStateMachine : BaseStateMachine
 {
-    #region EVENTS
+    #region Public Events
 
     /// <summary>Event emitted when the player starts charging a fling.</summary>
     public Action ChargeFlingEvent;
@@ -29,7 +29,7 @@ public class PlayerStateMachine : BaseStateMachine
 
     #endregion
 
-    #region POSSIBLE STATES
+    #region Possible States
 
     public Player.Idle idleState { get; private set; }
     public Player.Moving movingState { get; private set; }
@@ -43,7 +43,7 @@ public class PlayerStateMachine : BaseStateMachine
 
     #endregion
 
-    #region PUBLIC PROPERTIES
+    #region Public Properties
    
     // INPUT SHORTCUTS
 
@@ -52,7 +52,7 @@ public class PlayerStateMachine : BaseStateMachine
     public InputAction flingInput { get; private set; }
     public InputAction jumpInput { get; private set; }
 
-    // NON-INSPECTOR PROPERTIES
+    // NON-SERIALIZED PROPERTIES
 
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
@@ -70,70 +70,72 @@ public class PlayerStateMachine : BaseStateMachine
     /// <summary>Used by states to determine whether the hurt state can be entered</summary>
     public bool isInvincible { get; private set; }
 
-    // INSPECTOR PROPERTIES
+    #endregion
+    
+    #region Serialized Public Properties
 
     [Header("Dodger")]
 
     [Tooltip("Heart script connected to this player")]
     [SerializeField] private HeartStateMachine _heart;
-    public HeartStateMachine heart { get => _heart; private set => _heart = value; }
+    public HeartStateMachine heart => _heart;
 
     [Tooltip("Player's max distance from Dodger in units")]
     [SerializeField] private float _maxTetherLength = 3f;
-    public float maxTetherLength { get => _maxTetherLength; private set => _maxTetherLength = value; }
+    public float maxTetherLength => _maxTetherLength;
 
     [Header("Mobility")]
 
     [Tooltip("Player's max speed in units/second")]
     [SerializeField] private float _moveSpeed = 2f;
-    public float moveSpeed { get => _moveSpeed; private set => _moveSpeed = value; }
+    public float moveSpeed => _moveSpeed;
 
     [Tooltip("Movement speed multiplier when charging a fling")]
     [Range(0f,1f)][SerializeField] private float _chargingMovementMult = 0.15f;
-    public float chargingMovementMult { get => _chargingMovementMult; private set => _chargingMovementMult = value; }
+    public float chargingMovementMult => _chargingMovementMult;
 
     [Tooltip("Movement speed multiplier when airborne")]
     [Range(0f,1f)][SerializeField] private float _airborneMovementMult = 0.75f;
-    public float airborneMovementMult { get => _airborneMovementMult; private set => _airborneMovementMult = value; }
-    
+    public float airborneMovementMult => _airborneMovementMult;
+
     [Tooltip("Player's jump power")]
     [SerializeField] private float _jumpPower = 5f;
-    public float jumpPower { get => _jumpPower; private set => _jumpPower = value; }
+    public float jumpPower => _jumpPower;
 
     [Tooltip("Time after becoming airborne before player starts to fall")]
     [SerializeField] private float _coyoteTime = .15f;
-    public float coyoteTime { get => _coyoteTime; private set => _coyoteTime = value; }
+    public float coyoteTime => _coyoteTime;
 
     [Header("Fling")]
 
     [Tooltip("Percentage of fling power that will fill or lessen per second charging a fling")]
     [Range(0f, 1f)][SerializeField] private float _powerPerSecond = 0.55f;
-    public float powerPerSecond { get => _powerPerSecond; private set => _powerPerSecond = value; }
+    public float powerPerSecond => _powerPerSecond;
 
     [Tooltip("Minimum percentage of fling power that a fling can have")]
     [Range(0f, 1f)][SerializeField] private float _minPower = 0.35f;
-    public float minPower { get => _minPower; private set => _minPower = value; }
+    public float minPower => _minPower;
 
     [Tooltip("Maximum percentage of fling power that a fling can have")]
     [Range(0f, 1f)][SerializeField] private float _maxPower = 1f;
-    public float maxPower { get => _maxPower; private set => _maxPower = value; }
+    public float maxPower => _maxPower;
 
     [Header("Misc.")]
 
     [Tooltip("Time in seconds that player will be unable to be hit after being hit once")]
     [Range(0f, 1f)][SerializeField] private float _invincibilityTime = 1f;
-    public float invincibilityTime { get => _invincibilityTime; private set => _invincibilityTime = value; }
+    public float invincibilityTime => _invincibilityTime;
 
     #endregion
 
-    #region PRIVATE FIELDS
+    #region Private Fields
  
     private PlayerInput _playerInput;
     private Animator _anim;
 
     #endregion
 
-    #region  SETUP_TEARDOWN
+    #region  MonoBehaviour Methods
 
     private void Awake()
     {
@@ -182,12 +184,9 @@ public class PlayerStateMachine : BaseStateMachine
         if (!heart) { Debug.LogWarning("Player does not have a heart set!"); }
     }
 
-    // Initial state for player should be idle
-    protected override BaseState GetInitialState() => idleState;
-
     #endregion
 
-    #region PUBLIC METHODS
+    #region Public Methods
 
     /// <summary>
     /// If an animator parameter of the desired name exists, sets it to value. 
@@ -252,7 +251,13 @@ public class PlayerStateMachine : BaseStateMachine
     #endregion
 
     #region PRIVATE METHODS
-
+    
+    /// <summary>
+    /// Initialization method used to set state on startup
+    /// </summary>
+    /// <returns>The state that this state machine should start in</returns>
+    protected override BaseState GetInitialState() => idleState;
+    
     /// <summary>
     /// Helper method to check whether the state machine's 
     /// animator has a parameter with the desired name.
