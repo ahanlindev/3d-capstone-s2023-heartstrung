@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
 
 // <summary>Intended to be used to represent the hitbox for Kitty's claw attack</summary>
-public class Claws : MonoBehaviour
+[Obsolete] public class Claws : MonoBehaviour
 {
-    private const float DAMAGE = 10; // TODO make this inspector-visible?
+    private const float DAMAGE = 10;
 
     [SerializeField] private Collider clawHitbox;
 

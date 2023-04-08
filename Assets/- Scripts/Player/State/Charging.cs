@@ -10,10 +10,10 @@ namespace Player
         public Charging(PlayerStateMachine stateMachine) : base("Charging", stateMachine) { }
 
         // name of scoot magnitude parameter in animator
-        private const string SCOOT_PARAM = "ScootMagnitude";
+        private const string ScootParam = "ScootMagnitude";
 
         private float _power;
-        private bool _goingToFling = false;
+        private bool _goingToFling;
 
         // DOTween object that fluctuates the value of power
         private Tween _fluxTween;
@@ -55,30 +55,24 @@ namespace Player
             _sm.transform.DOComplete();
             StopPowerFlux();
 
+            // If flinging as planned, we're done
+            if (_goingToFling) { return; }
+
             // reset state if fling was cancelled
-            if (!_goingToFling)
-            {
-                _sm.trajectoryRenderer.ToggleRender(false);
-                _sm.ChargeFlingCancelEvent?.Invoke();
-            }
+            _sm.trajectoryRenderer.ToggleRender(false);
+            _sm.ChargeFlingCancelEvent?.Invoke();
         }
 
         public override void UpdateLogic()
         {
             base.UpdateLogic();
             AudioManager.instance?.continueFlingSoundEffect(_power);
-            if (!_rotateTween.active) { 
-                RotateAwayFromHeart(0.0f); }
+            
+            if (!_rotateTween.active) { RotateAwayFromHeart(0.0f); }
+
             UpdateFlingTrajectory();
         }
-
-        protected override void OnPlayerAttackInput(CallbackContext _)
-        {
-            // allow attack to cancel a charge
-            base.OnPlayerAttackInput(_);
-            _sm.ChangeState(_sm.idleState);
-        }
-
+        
         protected override void OnPlayerJumpInput(CallbackContext _)
         {
             // allow jump to cancel a charge
@@ -114,7 +108,7 @@ namespace Player
 
             // early return if no movement
             if (moveVector == Vector3.zero) { 
-                _sm.SetAnimatorFloat(SCOOT_PARAM, 0f);
+                _sm.SetAnimatorFloat(ScootParam, 0f);
                 return; 
             }
 
@@ -130,7 +124,7 @@ namespace Player
 
             // update animator parameter for scoot animation
             float scootMagnitude = Vector3.Dot(moveVector, _sm.transform.right);
-            _sm.SetAnimatorFloat(SCOOT_PARAM, scootMagnitude);
+            _sm.SetAnimatorFloat(ScootParam, scootMagnitude);
         }
 
         // Helper Methods ---------------------------------------------

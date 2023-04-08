@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// Small script designed to update a decal projector to match desired parameters.

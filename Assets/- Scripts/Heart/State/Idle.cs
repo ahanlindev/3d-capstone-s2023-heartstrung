@@ -9,7 +9,7 @@ namespace Heart
         public Idle(HeartStateMachine stateMachine) : base("Idle", stateMachine) { }
 
         // true if player is charging a fling. TODO could be its own state
-        private bool _playerCharging = false;
+        private bool _playerCharging;
 
         // tween that rotates away from the player
         private Tween _rotateTween;
@@ -23,10 +23,9 @@ namespace Heart
             }
 
             // constantly face away from player after initial tween
-            if (_playerCharging) {
-                if (_rotateTween == null || !_rotateTween.active) {
-                    RotateAwayFromPlayer(0.0f);
-                }
+            if (!_playerCharging) { return; }
+            if (_rotateTween is not { active: true }) {
+                RotateAwayFromPlayer(0.0f);
             }
         }
 

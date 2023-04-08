@@ -18,7 +18,7 @@ namespace Player
                 2f,
                 () =>
                 {
-                    CheckpointManager cm = Object.FindObjectOfType<CheckpointManager>();
+                    var cm = Object.FindObjectOfType<CheckpointManager>();
                     cm?.ResetToCheckpoint();
                     _sm.ChangeState(_sm.idleState);
                 },

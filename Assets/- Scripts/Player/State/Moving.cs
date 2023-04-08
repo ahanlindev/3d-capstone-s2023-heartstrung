@@ -47,12 +47,6 @@ namespace Player
             }
         }
 
-        protected override void OnPlayerAttackInput(CallbackContext _)
-        {
-            base.OnPlayerAttackInput(_);
-            _sm.ChangeState(_sm.attackingState);
-        }
-
         protected override void OnPlayerJumpInput(CallbackContext _)
         {
             base.OnPlayerJumpInput(_);

@@ -22,7 +22,7 @@ public class KO : Node
 
     public override NodeState Evaluate()
     {
-        bool _isDead = _health.CurrentHealth <= 0;
+        bool _isDead = _health.currentHealth <= 0;
         //check if enemy is dead
         if (_isDead) {
             //if enemy is currently dead then stay dead for 10 seconds and then revive after
