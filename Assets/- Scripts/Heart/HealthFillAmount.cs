@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthFillAmount : MonoBehaviour
 {
     // Drag health component from Dodger here in inspector
     [SerializeField] private Health _health;
-    private Renderer rend;
-    
+    private Renderer _renderer;
+    private static readonly int HealthFill = Shader.PropertyToID("_health_fill");
+
     private void Awake() {
-        rend = GetComponent<Renderer>();
+        _renderer = GetComponent<Renderer>();
         if (!_health) { Debug.Log("HealthFillAmount does not have a health component set!"); }
     }
 
@@ -29,6 +28,6 @@ public class HealthFillAmount : MonoBehaviour
         // whatever shader stuff needs to happen
 
         float percentage = newLevel / _health.MaxHealth;
-        rend.material.SetFloat("_health_fill", percentage);
+        _renderer.material.SetFloat(HealthFill, percentage);
     }
 }

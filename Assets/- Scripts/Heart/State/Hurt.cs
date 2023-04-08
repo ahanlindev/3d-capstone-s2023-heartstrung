@@ -1,7 +1,4 @@
-using UnityEngine;
 using DG.Tweening;
-using System.Collections;
-using System.Linq;
 
 namespace Heart
 {
