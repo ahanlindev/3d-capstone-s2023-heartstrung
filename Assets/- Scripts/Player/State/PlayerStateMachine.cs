@@ -167,14 +167,7 @@ public class PlayerStateMachine : BaseStateMachine
         trajectoryRenderer = GetComponentInChildren<TrajectoryRenderer>();
         _anim = GetComponentInChildren<Animator>();
 
-        // initialize tether (TODO this should either be a method or done elsewhere)
-        var tether = GetComponent<ConfigurableJoint>();
-        if (tether)
-        {
-            var tetherLimit = tether.linearLimit;
-            tetherLimit.limit = maxTetherLength + 0.2f; // add delta for safety when working with limit
-            tether.linearLimit = tetherLimit;
-        }
+        InitTether();
 
         // validate non-guaranteed values
         if (!_anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
@@ -257,6 +250,19 @@ public class PlayerStateMachine : BaseStateMachine
     /// </summary>
     /// <returns>The state that this state machine should start in</returns>
     protected override BaseState GetInitialState() => idleState;
+
+    /// <summary>
+    /// Initialize the tether joint if it exists
+    /// </summary>
+    private void InitTether()
+    {
+        var tether = GetComponent<ConfigurableJoint>();
+        if (!tether) { return; }
+
+        SoftJointLimit tetherLimit = tether.linearLimit;
+        tetherLimit.limit = maxTetherLength + 0.2f; // add delta for safety when working with limit
+        tether.linearLimit = tetherLimit;
+    }
     
     /// <summary>
     /// Helper method to check whether the state machine's 

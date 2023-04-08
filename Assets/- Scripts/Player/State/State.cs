@@ -12,6 +12,8 @@ namespace Player
 
         public State(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }
 
+        #region Virtual Methods
+        
         /// <summary>Event handler for when the player performs an attack input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
         protected virtual void OnPlayerAttackInput(CallbackContext _) { }
@@ -43,26 +45,10 @@ namespace Player
         /// <param name="moveVector">Desired movement direction</param>
         protected virtual void HandlePlayerMoveInput(Vector3 moveVector) { }
 
-        /// <summary>
-        /// Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate. 
-        /// Note that the player can only die when the heart does.
-        /// </summary>
-        /// <param name="newVal">new health total</param>
-        /// <param name="delta">change from previous health value</param>
-        private void OnChangeHealth(float newVal, float delta)
-        {
-            if (newVal <= 0)
-            {
-                // If health drops to zero, die
-                OnDie();
-            }
-            else if (delta < 0)
-            {
-                // If alive, get hurt if damage was taken
-                OnHurt();
-            }
-        }
-
+        #endregion 
+        
+        #region Overridden Methods
+        
         public override void Enter()
         {
             base.Enter();
@@ -124,24 +110,29 @@ namespace Player
             // reset animator state
             _sm.SetAnimatorBool(name, false);
         }
+        
+        #endregion
+
+        #region Protected Methods
 
         /// <summary>Check if the player is touching the ground</summary>
         /// <returns>True if player is grounded, false otherwise.</returns>
         protected bool IsGrounded()
         {
-            float distToGround = _sm.coll.bounds.extents.y;
-
-            Vector3 center = _sm.coll.bounds.center;
+            // Get starting point for ground check
+            Bounds bounds = _sm.coll.bounds;
+            float distToGround = bounds.extents.y;
+            Vector3 center = bounds.center;
             center.y -= (distToGround - 0.4f);
 
-            RaycastHit hitInfo;
+            // Cast to see if ground is being touched
             bool touchingGround = Physics.BoxCast(
                 center: center,
                 halfExtents: new Vector3(0.25f, 0.1f, 0.25f),
                 direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
                 maxDistance: 0.4f,
-                hitInfo: out hitInfo
+                hitInfo: out RaycastHit hitInfo
             );
 
             // prevent trigger volumes from falsely grounding the player.
@@ -151,6 +142,30 @@ namespace Player
             return touchingGround;
         }
 
+        #endregion
+
+        #region Private Methods
+        
+        /// <summary>
+        /// Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate. 
+        /// Note that the player can only die when the heart does.
+        /// </summary>
+        /// <param name="newVal">new health total</param>
+        /// <param name="delta">change from previous health value</param>
+        private void OnChangeHealth(float newVal, float delta)
+        {
+            if (newVal <= 0)
+            {
+                // If health drops to zero, die
+                OnDie();
+            }
+            else if (delta < 0)
+            {
+                // If alive, get hurt if damage was taken
+                OnHurt();
+            }
+        }
+        
         private void SubscribeToInputEvents() {
             _sm.attackInput.performed += OnPlayerAttackInput;
             _sm.jumpInput.performed += OnPlayerJumpInput;
@@ -164,5 +179,7 @@ namespace Player
             _sm.flingInput.performed -= OnPlayerStartChargeInput;
             _sm.flingInput.canceled -= OnPlayerFinishChargeInput;
         }
+        
+        #endregion
     }
 }

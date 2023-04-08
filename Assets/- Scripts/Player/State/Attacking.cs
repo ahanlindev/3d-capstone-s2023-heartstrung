@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 namespace Player
 {
     /// <summary>State where the player is performing an attack</summary>
-    public class Attacking : State
+    [Obsolete] public class Attacking : State
     {
         public Attacking(PlayerStateMachine stateMachine) : base("Attacking", stateMachine) { }
 
