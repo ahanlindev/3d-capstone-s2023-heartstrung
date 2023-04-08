@@ -13,7 +13,7 @@ public class HealthFillAmount : MonoBehaviour
     }
 
     private void Start() {
-        ChangeHealthLevel(_health.CurrentHealth, 0);
+        ChangeHealthLevel(_health.currentHealth, 0);
     }
 
     private void OnEnable() {
@@ -27,7 +27,7 @@ public class HealthFillAmount : MonoBehaviour
     private void ChangeHealthLevel(float newLevel, float change) {
         // whatever shader stuff needs to happen
 
-        float percentage = newLevel / _health.MaxHealth;
+        float percentage = newLevel / _health.maxHealth;
         _renderer.material.SetFloat(HealthFill, percentage);
     }
 }

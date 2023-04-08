@@ -15,7 +15,7 @@ namespace Heart
             // If falling for too long, kill and reset. Helps avoid common fling-related softlocks.
             _fallTimer = DOVirtual.DelayedCall(
                 delay: _sm.fallResetTime,
-                callback: () => { _sm.health.ChangeHealth(-_sm.health.MaxHealth); },
+                callback: () => { _sm.health.ChangeHealth(-_sm.health.maxHealth); },
                 ignoreTimeScale: false
             );
         }

@@ -45,7 +45,7 @@ public class CheckpointManager : MonoBehaviour
         if (!_dodger) { return; }
         _dodger.transform.position = _dodgerRespawnLocation;
         _dodger.rbody.velocity = new Vector3(0f, 0f, 0f);
-        _dodger.health.ChangeHealth(_dodger.health.MaxHealth);
+        _dodger.health.ChangeHealth(_dodger.health.maxHealth);
         _dodger.ChangeState(_dodger.idleState);
     }
 }
