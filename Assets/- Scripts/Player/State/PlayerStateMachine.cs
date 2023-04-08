@@ -33,7 +33,6 @@ public class PlayerStateMachine : BaseStateMachine
 
     public Player.Idle idleState { get; private set; }
     public Player.Moving movingState { get; private set; }
-    public Player.Attacking attackingState { get; private set; }
     public Player.Jumping jumpingState { get; private set; }
     public Player.Falling fallingState { get; private set; }
     public Player.Charging chargingState { get; private set; }
@@ -48,7 +47,6 @@ public class PlayerStateMachine : BaseStateMachine
     // INPUT SHORTCUTS
 
     public InputAction movementInput { get; private set; }
-    public InputAction attackInput { get; private set; }
     public InputAction flingInput { get; private set; }
     public InputAction jumpInput { get; private set; }
 
@@ -56,7 +54,6 @@ public class PlayerStateMachine : BaseStateMachine
 
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
-    public Claws claws { get; private set; }
 
     /// <summary>Trajectory renderer for charge and fling</summary>
     public TrajectoryRenderer trajectoryRenderer { get; private set; }
@@ -142,7 +139,6 @@ public class PlayerStateMachine : BaseStateMachine
         // construct each state
         idleState = new Player.Idle(this);
         movingState = new Player.Moving(this);
-        attackingState = new Player.Attacking(this);
         jumpingState = new Player.Jumping(this);
         fallingState = new Player.Falling(this);
         chargingState = new Player.Charging(this);
@@ -155,7 +151,6 @@ public class PlayerStateMachine : BaseStateMachine
         _playerInput.Enable();
 
         movementInput = _playerInput.Gameplay.Move;
-        attackInput = _playerInput.Gameplay.Attack;
         flingInput = _playerInput.Gameplay.Fling;
         jumpInput = _playerInput.Gameplay.Jump;
 
@@ -163,7 +158,6 @@ public class PlayerStateMachine : BaseStateMachine
         rbody = GetComponent<Rigidbody>();
         coll = GetComponent<Collider>();
         hitTracker = GetComponent<Health>();
-        claws = GetComponentInChildren<Claws>();
         trajectoryRenderer = GetComponentInChildren<TrajectoryRenderer>();
         _anim = GetComponentInChildren<Animator>();
 
@@ -171,7 +165,6 @@ public class PlayerStateMachine : BaseStateMachine
 
         // validate non-guaranteed values
         if (!_anim) { Debug.LogError("PlayerStateMachine cannot find Animator component in children"); }
-        if (!claws) { Debug.LogError("PlayerStateMachine cannot find Claws component in children"); }
         if (!trajectoryRenderer) { Debug.LogError("PlayerStateMachine cannot find TrajectoryRenderer component in children!"); }
         if (!hitTracker) { Debug.LogError("PlayerStateMachine cannot find a Health component!"); }
         if (!heart) { Debug.LogWarning("Player does not have a heart set!"); }

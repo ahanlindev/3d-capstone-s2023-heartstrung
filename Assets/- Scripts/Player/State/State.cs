@@ -13,10 +13,6 @@ namespace Player
         public State(string name, PlayerStateMachine stateMachine) : base(name, stateMachine) { }
 
         #region Virtual Methods
-        
-        /// <summary>Event handler for when the player performs an attack input</summary>
-        /// <param name="_">input context for this action. Goes unused.</param>
-        protected virtual void OnPlayerAttackInput(CallbackContext _) { }
 
         /// <summary>Event handler for when the player performs a jump input</summary>
         /// <param name="_">input context for this action. Goes unused.</param>
@@ -167,14 +163,12 @@ namespace Player
         }
         
         private void SubscribeToInputEvents() {
-            _sm.attackInput.performed += OnPlayerAttackInput;
             _sm.jumpInput.performed += OnPlayerJumpInput;
             _sm.flingInput.performed += OnPlayerStartChargeInput;
             _sm.flingInput.canceled += OnPlayerFinishChargeInput;
         }
 
         private void UnsubscribeFromInputEvents() {
-            _sm.attackInput.performed -= OnPlayerAttackInput;
             _sm.jumpInput.performed -= OnPlayerJumpInput;
             _sm.flingInput.performed -= OnPlayerStartChargeInput;
             _sm.flingInput.canceled -= OnPlayerFinishChargeInput;

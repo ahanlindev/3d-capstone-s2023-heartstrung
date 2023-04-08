@@ -72,14 +72,7 @@ namespace Player
 
             UpdateFlingTrajectory();
         }
-
-        protected override void OnPlayerAttackInput(CallbackContext _)
-        {
-            // allow attack to cancel a charge
-            base.OnPlayerAttackInput(_);
-            _sm.ChangeState(_sm.idleState);
-        }
-
+        
         protected override void OnPlayerJumpInput(CallbackContext _)
         {
             // allow jump to cancel a charge
