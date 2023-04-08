@@ -9,14 +9,17 @@ public class Elevator : MonoBehaviour
 
 
     [Tooltip("Add/delete empty objects to the target list to set new waypoints.")]
-    [SerializeField] public Transform[] targets;
+    [SerializeField] private Transform[] targets;
 
     [Tooltip("Speed of movingpf, the duration is 1 / speed")]
-    [SerializeField] public float speed = 0.2f;
+    [SerializeField] private float speed = 0.2f;
 
     [Tooltip("Time for the platform waiting at one waypoint.")]
-    [SerializeField] public float hangTime = 3.0f;
+    [SerializeField] private float hangTime = 3.0f;
 
+    [Tooltip("If true, the platform will loop to the first waypoint even while active.")]
+    [SerializeField] private bool _loopWhileRiding = false;
+    
     public int triggeringObjNum = 2;
 
     private float _localTimer = 0;
@@ -46,7 +49,14 @@ public class Elevator : MonoBehaviour
     {
         if (transform.position == targets[_index].position)
         {
-            _index = Mathf.Min(_index + 1, targets.Length - 1);
+            if (_loopWhileRiding)
+            {
+                _index = (_index + 1) % targets.Length;
+            }
+            else
+            {
+                _index = Mathf.Min(_index + 1, targets.Length - 1);
+            }
         }
 
         if (_localTimer > 0)
