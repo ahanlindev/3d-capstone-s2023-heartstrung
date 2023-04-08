@@ -84,6 +84,7 @@ public class ConfigurableMPF : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         // If leaving object has a rigidbody and is attached to the socket, remove it
+        if (!_socket) { return; }
         Rigidbody rbody = collision.collider.attachedRigidbody;
         if (rbody && rbody.transform.IsChildOf(_socket))
         {
