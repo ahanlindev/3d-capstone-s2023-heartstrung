@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
 public class ConfigurableButton : MonoBehaviour
 {
-
-
+    
     [Tooltip("Disappear totally after being triggered")]
     [SerializeField] public bool disappear;
 

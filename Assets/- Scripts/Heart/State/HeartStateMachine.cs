@@ -1,27 +1,35 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Heart;
 using UnityEngine;
 
 /// <summary>Runs heart states and contains information required to maintain those states.</summary>
 public class HeartStateMachine : BaseStateMachine
 {
-    // Emitted events ----------------------------------
+    #region Public Events
 
     /// <summary>Notifies listeners when landing after being flung</summary>
-    public System.Action LandedEvent;
+    public Action LandedEvent;
 
     /// <summary>Used to inform current state about an entered collision</summary>
-    public event System.Action<Collision> CollisionEnterEvent;
+    public event Action<Collision> CollisionEnterEvent;
+    
+    #endregion
 
-    // Possible States ----------------------------------
-    public Heart.Idle idleState { get; private set; }
-    public Heart.Flung flungState { get; private set; }
-    public Heart.Falling fallingState { get; private set; }
-    public Heart.Hurt hurtState { get; private set; }
-    public Heart.Dead deadState { get; private set; }
+    #region Possible States
 
-    // Necessary properties ----------------------------------
+    public Idle idleState { get; private set; }
+    public Flung flungState { get; private set; }
+    public Falling fallingState { get; private set; }
+    public Hurt hurtState { get; private set; }
+    public Dead deadState { get; private set; }
+
+    #endregion
+
+    #region Public Properties
+
     public Rigidbody rbody { get; private set; }
     public Collider coll { get; private set; }
     public Health health { get; private set; }
@@ -35,15 +43,24 @@ public class HeartStateMachine : BaseStateMachine
     /// <summary>Used by states to determine whether the hurt state can be entered</summary>
     public bool isInvincible { get; private set; }
 
-    // Inspector-visible values
+    #endregion
+
+    #region Serialized Public Properties
+    
+    [Header("Kitty")]
+    
     [Tooltip("PlayerStateMachine instance for the player attached to this object")]
     [SerializeField] private PlayerStateMachine _player;
     public PlayerStateMachine player => _player;
 
+    [Header("Fling")]
+    
     [Tooltip("Speed along the arc that the heart will fly through the air in degrees per second")]
     [SerializeField] private float _flingSpeed = 180.0f;
     public float flingSpeed => _flingSpeed;
-
+    
+    [Header("Hurt")]
+    
     [Tooltip("Time in seconds that the heart will be in the hurt state when hurt")]
     [SerializeField] private float _hurtTime = 0.5f;
     public float hurtTime => _hurtTime;
@@ -55,18 +72,25 @@ public class HeartStateMachine : BaseStateMachine
     [Tooltip("Time in seconds that the heart can be in the falling state before the player is reset")]
     [SerializeField] private float _fallResetTime = 3.0f;
     public float fallResetTime => _fallResetTime;
+    
+    #endregion
 
-    // Private Fields --------------------------------------------
+    #region Private Fields
+
     private Animator _anim;
+
+    #endregion
+
+    #region MonoBehaviour Methods
 
     private void Awake()
     {
         // construct each state
-        idleState = new Heart.Idle(this);
-        flungState = new Heart.Flung(this);
-        fallingState = new Heart.Falling(this);
-        hurtState = new Heart.Hurt(this);
-        deadState = new Heart.Dead(this);
+        idleState = new Idle(this);
+        flungState = new Flung(this);
+        fallingState = new Falling(this);
+        hurtState = new Hurt(this);
+        deadState = new Dead(this);
 
         // initialize components
         rbody = GetComponent<Rigidbody>();
@@ -100,17 +124,10 @@ public class HeartStateMachine : BaseStateMachine
     {
         CollisionEnterEvent?.Invoke(other);
     }
+    
+    #endregion
 
-    protected override BaseState GetInitialState() => idleState;
-
-    // Event handlers ------------------------------------------
-
-    private void UpdateFlingPower(float value)
-    {
-        flingPower = value;
-    }
-
-    // Helper methods ------------------------------------------
+    #region Public Methods
 
     /// <summary>
     /// If an animator parameter of the desired name exists, sets it to value. 
@@ -129,9 +146,28 @@ public class HeartStateMachine : BaseStateMachine
             Debug.LogWarning($"State <color=blue>{paramName}</color> does not exist in Heart's animator controller");
         }
     }
-
+    
     /// <summary>Begins invincibility frames. Informs states that the hurt state should not be entered.</summary>
     public void StartInvincibility() => StartCoroutine(InvincibilityCoroutine());
+
+    #endregion
+    
+    #region Private Methods
+
+    /// <summary>
+    /// Initialization method used to set state on startup
+    /// </summary>
+    /// <returns>The state that this state machine should start in</returns>
+    protected override BaseState GetInitialState() => idleState;
+    
+    /// <summary>
+    /// Listener for Player's fling event. Set fling power to the provided value
+    /// </summary>
+    /// <param name="value">percentage value for fling power</param>
+    private void UpdateFlingPower(float value)
+    {
+        flingPower = value;
+    }
 
     /// <summary>
     /// Helper method to check whether the state machine's 
@@ -144,7 +180,7 @@ public class HeartStateMachine : BaseStateMachine
         return _anim.parameters.Any(param => param.name == paramName);
     }
 
-    /// <summary>Performs the invincibility frame flicker</summary>
+    /// <summary>Perform the invincibility frame flicker</summary>
     private IEnumerator InvincibilityCoroutine() {
         // get all active renderers
         var renderers = new List<Renderer>(GetComponentsInChildren<Renderer>());
@@ -169,5 +205,6 @@ public class HeartStateMachine : BaseStateMachine
         isInvincible = false;
         renderers.ForEach((r) => r.enabled = true);
     }
-
+   
+    #endregion
 }

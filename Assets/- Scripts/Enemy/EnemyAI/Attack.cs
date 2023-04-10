@@ -30,7 +30,7 @@ public class Attack : Node
         _attackCounter += Time.deltaTime;
         if (_attackCounter >= _attackTime) {
             //play attack animation
-            _enemyClaw.Claw(1.0f);
+            _enemyClaw.Claw(0.66f);
             _attackCounter = 0f;
         }
         state = NodeState.RUNNING;

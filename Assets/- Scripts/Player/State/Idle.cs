@@ -17,12 +17,6 @@ namespace Player
             }
         }
 
-        protected override void OnPlayerAttackInput(CallbackContext _)
-        {
-            base.OnPlayerAttackInput(_);
-            _sm.ChangeState(_sm.attackingState);
-        }
-
         protected override void OnPlayerJumpInput(CallbackContext _)
         {
             base.OnPlayerJumpInput(_);
@@ -44,20 +38,18 @@ namespace Player
         {
             base.HandlePlayerMoveInput(moveVector);
 
+            // Not trying to move, don't move
+            if (moveVector == Vector3.zero) { return; }
+
             // enter moving state if able to move
-            if (moveVector != Vector3.zero)
-            {
-                if (_sm.moveSpeed > 0) {
-                    _sm.ChangeState(_sm.movingState);
-                }
-                else {
-                    // allow player to rotate-in-place while immobilized
-                    var newRot = Quaternion.LookRotation(moveVector.normalized, _sm.transform.up);
-                    _sm.rbody.MoveRotation(newRot);
-                }
+            if (_sm.moveSpeed > 0) {
+                _sm.ChangeState(_sm.movingState);
+                return;
             }
-
+            
+            // allow player to rotate-in-place while immobilized
+            var newRot = Quaternion.LookRotation(moveVector.normalized, _sm.transform.up);
+            _sm.rbody.MoveRotation(newRot);
         }
-
     }
 }

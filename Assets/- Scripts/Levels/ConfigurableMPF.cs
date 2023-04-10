@@ -1,107 +1,164 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Animations;
 using UnityEngine;
+using UnityEngine.Serialization;
 using DG.Tweening;
 
 public class ConfigurableMPF : MonoBehaviour
 {
 
-    [Tooltip("Add/delete empty objects to the target list to set new waypoints.")]
-    [SerializeField] public Transform[] targets;
-
-    [Tooltip("Speed of movingpf, the duration is 1 / speed")]
-    [SerializeField] public float _speed = 0.2f;
-
-    [Tooltip("Time for the platform waiting at one waypoint.")]
-    [SerializeField] public float hangTime = 3.0f;
-
-    [Tooltip("If it stop after reach the final wp of the list")]
-    [SerializeField] public bool oneWay;
-
-    private int _index = 0;
-    private float _localTimer = 0;
-   
-    private Vector3 _lastPosition;
-    private HashSet<Rigidbody> _collidedBodies;
+    #region Serialized Fields
     
-    private bool _moved;
+    [FormerlySerializedAs("targets")]
+    [Tooltip("Add/delete empty objects to this target list to set new waypoints.")]
+    [SerializeField] private Transform[] _targets;
 
-    private ParentConstraint pc;
+    [Tooltip("Speed of the moving platform, the duration from one waypoint to another is 1 / speed")]
+    [SerializeField] private float _speed = 0.2f;
 
-    // Update is called once per frame
-    void FixedUpdate()
+    [FormerlySerializedAs("hangTime")]
+    [Tooltip("Time that the platform waits at a waypoint.")]
+    [SerializeField] private float _hangTime = 3.0f;
+
+    [FormerlySerializedAs("oneWay")]
+    [Tooltip("If true, the platform stops after reaching the final waypoint of the list")]
+    [SerializeField] private bool _oneWay;
+
+    [Tooltip("If true, skips the initial rumble animation when enabled")] 
+    [SerializeField] private bool _skipRumble;
+    
+    #endregion
+    
+    #region Private Fields & Properties
+    
+    /// <summary>
+    /// Time taken to move from one waypoint to another
+    /// </summary>
+    private float moveDuration => 1f / _speed;
+
+    /// <summary>
+    /// Index of current waypoint
+    /// </summary>
+    private int _index;
+    
+    /// <summary>
+    /// Timer that measures rest time and movement time between 2 waypoints
+    /// </summary>
+    private float _localTimer;
+
+    /// <summary>
+    /// Object at top level of scene with 1x1x1 scale, used to contain things that should move along with the platform
+    /// </summary>
+    private Transform _socket;
+    
+    /// <summary>
+    /// If true, platform will no longer move after reaching its current target waypoint
+    /// </summary>
+    private bool _oneWayFinished;
+    
+    #endregion
+    
+    #region MonoBehaviour Methods
+    
+    private void FixedUpdate()
     {   
-        moveTo();
-        UpdateAttachedBodies();
+        MoveTo();
+        UpdateSocket();
     }
 
-    private void Awake() {
-        if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
-    }
-    
     private void OnEnable() {
-        _lastPosition = transform.position;
-        if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
-        transform.DOMove(targets[_index].position, 1 / _speed);
+        CreateSocket();
+        StartMovement();
     }
 
     private void OnDisable() {
-        _collidedBodies = null;    
+        Destroy(_socket);
     }
-
-    void moveTo()
-    {
-        
-        if (_localTimer > 0)
-        {
-            _localTimer -= Time.fixedDeltaTime;
-        } else if (!_moved && transform.position == targets[_index].position)
-        {
-            _index = (_index + 1) % targets.Length;
-            transform.DOMove(targets[_index].position, 1 / _speed);
-            _localTimer = hangTime + 1 / _speed;
-
-            // the final target wp, change the flag and stop
-            if (_index == targets.Length - 1 && oneWay)
-            {
-                _moved = true;
-            }
-            
-        }        
-    }
-
-    private void UpdateAttachedBodies() 
-    {
-        if (_collidedBodies.Count != 0)
-        {
-            Vector3 offset = transform.position - _lastPosition;
-            foreach (Rigidbody attached in _collidedBodies)
-            {
-                attached.MovePosition(attached.transform.position + offset);
-            }
-        }
-        _lastPosition = transform.position;
-    }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
-        // Debug.Log(collision.gameObject.name + " enter");
-        if (_collidedBodies == null) _collidedBodies = new HashSet<Rigidbody>();
-        var temp = collision.collider.attachedRigidbody;
-        if (temp != null) _collidedBodies.Add(temp);
-        
-        Transform playerTransform = collision.gameObject.transform;
-        playerTransform.SetParent(transform.parent);
+        // If collided with a rigidbody, make it a child of the socket object
+        Rigidbody rbody = collision.collider.attachedRigidbody;
+        Transform playerTransform = rbody.gameObject.transform;
+        playerTransform.SetParent(_socket);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        // Debug.Log(collision.gameObject.name + " exit");
-
-        var temp = collision.collider.attachedRigidbody;
-        if (temp != null) _collidedBodies.Remove(temp);   
-        collision.gameObject.transform.SetParent(null);
-        collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        // If leaving object has a rigidbody and is attached to the socket, remove it
+        if (!_socket) { return; }
+        Rigidbody rbody = collision.collider.attachedRigidbody;
+        if (rbody && rbody.transform.IsChildOf(_socket))
+        {
+            collision.gameObject.transform.SetParent(null);
+        }
     }
+    
+    #endregion
+    
+    #region Private methods
+    
+    /// <summary>
+    /// Initialize socket. Create an empty game object at the root level of the scene.
+    /// </summary>
+    private void CreateSocket()
+    {
+        string socketName = $"{transform.parent.name}_MPFSocket";
+        var socketObj = new GameObject(name: socketName);
+        _socket = socketObj.transform;
+    }
+    
+    private void StartMovement()
+    {
+        if (_skipRumble)
+        {
+            transform.DOMove(_targets[_index].position, moveDuration);
+            return;
+        }
+
+        // Shake the platform to draw attention
+        transform.DOShakePosition(duration: 2.0f, strength: new Vector3(.2f, 0, .2f), vibrato: 20)
+            //Once shake finishes, begin movement
+            .OnComplete(() => transform.DOMove(_targets[_index].position, moveDuration));
+    }
+    
+    /// <summary>
+    /// Timing and logic for movement and rest. Called in FixedUpdate.
+    /// </summary>
+    private void MoveTo()
+    {
+        // Oneway platforms don't do anything after reaching their destination.
+        if (_oneWayFinished) { return; }
+
+        // If timer is active, platform is in-motion or resting. Update timer and return.
+        if (_localTimer > 0)
+        {
+            _localTimer -= Time.fixedDeltaTime;
+            return;
+        }
+        
+        // Prevent starting next stage if not at destination
+        if (transform.position != _targets[_index].position) { return; }
+        
+        // Increment target, reset timer, and start moving
+        _index = (_index + 1) % _targets.Length;
+        _localTimer = _hangTime + moveDuration;
+        transform.DOMove(_targets[_index].position, moveDuration);
+
+        // If this is a oneway going to the final waypoint, set the flag
+        if (_index == _targets.Length - 1 && _oneWay)
+        {
+            _oneWayFinished = true;
+        }
+    }
+    
+    /// <summary>
+    /// Make sure the socket object stays synced with this one
+    /// </summary>
+    private void UpdateSocket()
+    {
+        if (!_socket) { return; }
+
+        _socket.transform.position = transform.position;
+    }
+    
+    #endregion
 }

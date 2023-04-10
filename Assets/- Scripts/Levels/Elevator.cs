@@ -6,23 +6,28 @@ using DG.Tweening;
 public class Elevator : MonoBehaviour
 {
 
-    [Tooltip("Origininal elevator WP")]
-    [SerializeField] public Transform startWP;
-    [Tooltip("Target elevator WP")]
-    [SerializeField] public Transform targetWP;
+
+
+    [Tooltip("Add/delete empty objects to the target list to set new waypoints.")]
+    [SerializeField] private Transform[] targets;
 
     [Tooltip("Speed of movingpf, the duration is 1 / speed")]
-    [SerializeField] public float _speed = 0.2f;
+    [SerializeField] private float speed = 0.2f;
 
     [Tooltip("Time for the platform waiting at one waypoint.")]
-    [SerializeField] public float hangTime = 3.0f;
+    [SerializeField] private float hangTime = 3.0f;
 
+    [Tooltip("If true, the platform will loop to the first waypoint even while active.")]
+    [SerializeField] private bool _loopWhileRiding = false;
+    
+    public int triggeringObjNum = 2;
 
     private float _localTimer = 0;
 
     private Vector3 _lastPosition;
     private HashSet<Rigidbody> _collidedBodies;
     private bool _standOn;
+    private int _index = 0;
    
 
 
@@ -42,35 +47,34 @@ public class Elevator : MonoBehaviour
 
     void moveTo()
     {
+        if (transform.position == targets[_index].position)
+        {
+            if (_loopWhileRiding)
+            {
+                _index = (_index + 1) % targets.Length;
+            }
+            else
+            {
+                _index = Mathf.Min(_index + 1, targets.Length - 1);
+            }
+        }
 
         if (_localTimer > 0)
         {
             _localTimer -= Time.fixedDeltaTime;
         }
-        else if (_standOn && transform.position != targetWP.position)
+        else if (_standOn && transform.position != targets[_index].position)
         {
-            transform.DOMove(targetWP.position, 1 / _speed);
-            _localTimer = hangTime + 1 / _speed;
+            transform.DOMove(targets[_index].position, 1 / speed);
+            _localTimer = hangTime + 1 / speed;
 
-        } else if (!_standOn && transform.position != startWP.position)
+        } else if (!_standOn && transform.position != targets[0].position)
         {
-            transform.DOMove(startWP.position, 1 / _speed);
-            _localTimer = hangTime + 1 / _speed;
+            transform.DOMove(targets[0].position, 1 / speed);
+            _localTimer = hangTime + 1 / speed;
         }
     }
 
-    //private void UpdateAttachedBodies()
-    //{
-    //    if (_collidedBodies.Count != 0)
-    //    {
-    //        Vector3 offset = transform.position - _lastPosition;
-    //        foreach (Rigidbody attached in _collidedBodies)
-    //        {
-    //            attached.MovePosition(attached.transform.position + offset);
-    //        }
-    //    }
-    //    _lastPosition = transform.position;
-    //}
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -79,8 +83,7 @@ public class Elevator : MonoBehaviour
         var temp = collision.collider.attachedRigidbody;
         _collidedBodies.Add(temp);
         collision.gameObject.transform.SetParent(transform);
-        Debug.Log(_collidedBodies.Count);
-        if (_collidedBodies.Count == 2)
+        if (_collidedBodies.Count == triggeringObjNum)
             _standOn = true;
     }
 
@@ -90,7 +93,7 @@ public class Elevator : MonoBehaviour
         if (temp != null) _collidedBodies.Remove(temp);
         collision.gameObject.transform.SetParent(null);
         collision.gameObject.transform.localScale = new Vector3(1, 1, 1);
-        if (_collidedBodies.Count != 2)
+        if (_collidedBodies.Count != triggeringObjNum)
             _standOn = false;
     }
 }

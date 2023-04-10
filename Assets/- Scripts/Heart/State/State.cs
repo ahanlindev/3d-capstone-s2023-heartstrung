@@ -8,10 +8,11 @@ namespace Heart
     {
         // BaseState has _baseStateMachine, but this casts it correctly
         /// <summary>State machine for gathering information and operating on state</summary>
-        protected HeartStateMachine _sm { get => (HeartStateMachine)_baseStateMachine; }
-
+        protected HeartStateMachine _sm => (HeartStateMachine)_baseStateMachine;
         public State(string name, HeartStateMachine stateMachine) : base(name, stateMachine) { }
 
+        #region Virtual Methods
+        
         /// <summary>Event handler for when the player starts charging a fling. </summary>
         protected virtual void OnPlayerChargeFling() { }
 
@@ -33,39 +34,21 @@ namespace Heart
         /// <summary>Event handler for when the heart dies. Override to ignore or change base behavior. </summary>
         protected virtual void OnDie() { _sm.ChangeState(_sm.deadState); }
 
-        // TODO this seems like it could be brought down to the dead state. For alpha build, it'll work
-        /// <summary>Event handler for when the heart revives from the dead state. Override to ignore or change base behavior. </summary>
-        protected virtual void OnRevive() { _sm.ChangeState(_sm.idleState); }
-        
         /// <summary>Event handler to allow this component to react to collisions</summary>
         protected virtual void OnCollisionEnter(Collision other) { }
+        
+        #endregion
+        
+        #region Abstract Methods
 
         /// <summary>Check if the heart is in a flingable state. Used to update public StateMachine field. </summary>
         /// <returns>True if the heart is ready to fling. Otherwise false.</returns>
         protected abstract bool StateIsFlingable();
 
-        /// <summary>Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate.</summary>
-        /// <param name="newVal">new health total</param>
-        /// <param name="delta">change from previous health value</param>
-        private void OnChangeHealth(float newVal, float delta)
-        {
-            if (newVal <= 0)
-            {
-                // If health drops to zero, die
-                OnDie();
-            }
-            else if (delta < 0)
-            {
-                // If alive, get hurt if damage was taken
-                OnHurt();
-            } 
-            else if (delta > 0 && (newVal - delta <= 0))
-            {
-                // if dead, and health is added, revive
-                OnRevive();
-            }
-        }
-
+        #endregion
+        
+        #region Overridden Methods
+        
         public override void Enter()
         {
             base.Enter();
@@ -94,26 +77,29 @@ namespace Heart
             // update animator state
             _sm.SetAnimatorBool(name, false);
         }
-
-        // Helper Methods --------------------------------------------
+        
+        #endregion
+        
+        #region Protected Methods
 
         /// <summary>Check if the player is touching the ground</summary>
         /// <returns>True if player is grounded, false otherwise.</returns>
         protected bool IsGrounded()
         {
-            float distToGround = _sm.coll.bounds.extents.y;
-
-            Vector3 center = _sm.coll.bounds.center;
+            // Get starting point for ground check
+            Bounds bounds = _sm.coll.bounds;
+            float distToGround = bounds.extents.y;
+            Vector3 center = bounds.center;
             center.y -= (distToGround - 0.4f);
 
-            RaycastHit hitInfo;
+            // Cast to see if ground is being touched
             bool touchingGround = Physics.BoxCast(
                 center: center,
                 halfExtents: new Vector3(0.25f, 0.1f, 0.25f),
                 direction: -_sm.transform.up,
                 orientation: Quaternion.identity,
                 maxDistance: 0.4f,
-                hitInfo: out hitInfo
+                hitInfo: out RaycastHit hitInfo
             );
 
             // prevent trigger volumes from falsely grounding the player.
@@ -122,5 +108,28 @@ namespace Heart
             }
             return touchingGround;
         }
+
+        #endregion
+        
+        #region Private Methods
+
+        /// <summary>Event handler for health changes. Decides whether to fire off OnHurt or OnDie if appropriate.</summary>
+        /// <param name="newVal">new health total</param>
+        /// <param name="delta">change from previous health value</param>
+        private void OnChangeHealth(float newVal, float delta)
+        {
+            if (newVal <= 0)
+            {
+                // If health drops to zero, die
+                OnDie();
+            }
+            else if (delta < 0)
+            {
+                // If alive, get hurt if damage was taken
+                OnHurt();
+            }
+        }
+
+        #endregion
     }
 }

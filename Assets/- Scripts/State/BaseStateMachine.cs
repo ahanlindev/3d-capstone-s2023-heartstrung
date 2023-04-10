@@ -24,9 +24,16 @@ public abstract class BaseStateMachine : MonoBehaviour
         _currentState = null;
     }
 
-    /// <summary>Returns the desired initial state for the state machine.</summary>
+    /// <summary>
+    /// Initialization method used to set state on startup
+    /// </summary>
+    /// <returns>The state that this state machine should start in</returns>
     protected abstract BaseState GetInitialState();
-
+    
+    /// <summary>
+    /// Exit the current state and enter a new state
+    /// </summary>
+    /// <param name="newState">The desired state to transition into</param>
     public void ChangeState(BaseState newState)
     {
         _currentState.Exit();

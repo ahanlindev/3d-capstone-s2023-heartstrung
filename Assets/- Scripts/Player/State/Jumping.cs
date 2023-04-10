@@ -8,7 +8,7 @@ namespace Player
     public class Jumping : State
     {
         /// <summary> Used to prevent ground check from passing right after jump is pressed.</summary>
-        private bool _canLand = false;
+        private bool _canLand;
 
         public Jumping(PlayerStateMachine stateMachine) : base("Jumping", stateMachine) { }
 
@@ -37,24 +37,11 @@ namespace Player
             }
         }
 
-        protected override void OnPlayerAttackInput(CallbackContext _)
-        {
-            // TODO should the player be able to attack in midair?
-            base.OnPlayerAttackInput(_);
-        }
-
-        protected override void OnPlayerStartChargeInput(CallbackContext _)
-        {
-            // TODO should the player be able to fling in midair?
-            base.OnPlayerStartChargeInput(_);
-        }
-
         protected override void HandlePlayerMoveInput(Vector3 moveVector)
         {
             base.HandlePlayerMoveInput(moveVector);
 
             if (moveVector == Vector3.zero) { return; }
-
 
             // account for player move speed and tick rate
             moveVector *= _sm.moveSpeed * _sm.airborneMovementMult;
