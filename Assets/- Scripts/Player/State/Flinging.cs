@@ -8,7 +8,7 @@ namespace Player
     {
         public Flinging(PlayerStateMachine stateMachine) : base("Flinging", stateMachine) { }
 
-        private bool _heartHasLanded = false;
+        private bool _heartHasLanded;
 
         public override void Enter()
         {
@@ -31,10 +31,12 @@ namespace Player
             
             // rubber-band heart and player (hopefully) without launching them
             if (!_sm.heart) { return; }
-            Vector3 heartToPlayer = _sm.transform.position - _sm.heart.transform.position;
+
+            Vector3 heartPos = _sm.heart.transform.position;
+            Vector3 heartToPlayer = _sm.transform.position - heartPos;
             float distToHeart = heartToPlayer.magnitude;
             heartToPlayer = heartToPlayer.normalized * Mathf.Clamp(distToHeart, 0, _sm.maxTetherLength);
-            _sm.rbody.MovePosition(_sm.heart.transform.position + heartToPlayer);
+            _sm.rbody.MovePosition(heartPos + heartToPlayer);
 
             _sm.rbody.velocity = Vector3.zero;
             _sm.heart.rbody.velocity = Vector3.zero;

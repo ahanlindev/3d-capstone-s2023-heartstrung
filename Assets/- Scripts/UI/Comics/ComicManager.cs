@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 
 /// <summary>Controls displaying and hiding comic pages in sequence</summary>
@@ -28,13 +29,13 @@ public class ComicManager : MonoBehaviour
     [SerializeField] private GameObject skipButton;
     
     [Tooltip("If true, the Prev Button will be disabled when on the first panel")]
-    [SerializeField] private bool hidePrevAtStart = true;
-    [FormerlySerializedAs("hideNextAtEnd")]
+    [SerializeField] private bool _hidePrevAtStart = true;
+
     [Tooltip("If true, the Next Button will be disabled when on the last panel")]
     [SerializeField] private bool _hideNextAtEnd = false;
-    [FormerlySerializedAs("disableSkipInput")]
+    
     [Tooltip("If true, the player will not be able to skip")]
-    [SerializeField] private bool disableSkip = false;
+    [SerializeField] private bool _disableSkip = false;
 
     /// <summary>Index of current panel</summary>
     private int _index = 0;
@@ -55,7 +56,8 @@ public class ComicManager : MonoBehaviour
         // initialize input and input events after scene fades in
         _input = new PlayerInput();
         TransitionManager.FadeinFinishEvent += SetupInput;
-
+        TransitionManager.FadeoutFinishEvent += HideEverything;
+        
         // set all child canvases to be inactive
         foreach (Transform child in transform)
         {
@@ -221,18 +223,19 @@ public class ComicManager : MonoBehaviour
             fade.OnComplete(() => { image.gameObject.SetActive(false); });
         }
     }
-
+    
     /// <summary>
     /// Hides and shows the next and prev buttons as appropriate based on state
     /// </summary>
-    private void UpdateButtons()
+    /// <param name="hideAll">If true, overrides normal settings and hides all buttons</param>
+    private void UpdateButtons(bool hideAll = false)
     {
         bool atLastIdx = _index == transform.childCount - 1;
         
         // initialize conditions
-        bool showPrev = !(hidePrevAtStart && _index == 0);
-        bool showNext = !(_hideNextAtEnd && atLastIdx);
-        bool showSkip = !(disableSkip) && !atLastIdx;
+        bool showPrev = !(_hidePrevAtStart && _index == 0) && !hideAll;
+        bool showNext = !(_hideNextAtEnd && atLastIdx) && !hideAll;
+        bool showSkip = !(_disableSkip) && !atLastIdx && !hideAll;
         
         // handle button visuals
         if (prevButton) { prevButton.SetActive(showPrev); }
@@ -248,5 +251,20 @@ public class ComicManager : MonoBehaviour
 
         if (showSkip) { _input.Comic.Skip.Enable(); }
         else { _input.Comic.Skip.Disable(); }
+    }
+
+    /// <summary>
+    /// Hide all panels and disable all buttons. Used when leaving the scene.
+    /// </summary>
+    private void HideEverything()
+    {
+        // Hide Buttons
+        UpdateButtons(hideAll: true);
+        
+        // Hide panels
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 }

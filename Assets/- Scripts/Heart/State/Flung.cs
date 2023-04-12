@@ -14,7 +14,7 @@ namespace Heart
         private float _startRadius;
         private float _finalRadius;
         private float _totalAngleToDest;
-        private float _cumulativeAngle = 0f;
+        private float _cumulativeAngle;
 
         public override void Enter()
         {
@@ -44,8 +44,7 @@ namespace Heart
             // make sure radii cannot exceed max. (Can happen in some edge cases)
             _startRadius = Mathf.Clamp(_startRadius, 0f, _sm.player.maxTetherLength);
             _finalRadius = Mathf.Clamp(_finalRadius, 0f, _sm.player.maxTetherLength);
-
-            // Todo prove this covers all edge cases
+            
             // Gets total angle between position and destination. 
             _totalAngleToDest = Vector3.Angle(playerToMe, playerToDest);
             if (_tf.position.y < _destination.y)
@@ -108,7 +107,6 @@ namespace Heart
 
         protected override void OnCollisionEnter(Collision coll)
         {
-            // TODO this should probably have more conditional logic.
             // Handles hitting wall or floor. If IsGrounded fails, idle goes to falling
             _sm.ChangeState(_sm.idleState);
         }
@@ -121,11 +119,11 @@ namespace Heart
         /// <param name="ignoreCollision">if true, the player and heart will ignore each other. Otherwise they will not.</param>
         private void IgnorePlayerCollisions(bool ignoreCollision)
         {
-            foreach (Collider mycol in _tf.GetComponentsInChildren<Collider>())
+            foreach (Collider myCollider in _tf.GetComponentsInChildren<Collider>())
             {
-                foreach (Collider plycol in _playerTf.GetComponentsInChildren<Collider>())
+                foreach (Collider playerCollider in _playerTf.GetComponentsInChildren<Collider>())
                 {
-                    Physics.IgnoreCollision(mycol, plycol, ignoreCollision);
+                    Physics.IgnoreCollision(myCollider, playerCollider, ignoreCollision);
                 }
             }
         }

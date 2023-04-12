@@ -58,8 +58,8 @@ public class TutorialTrigger : MonoBehaviour
             countDown--;
             foreach (TutorialBubble tutorialBubble in tutorialBubbles)
             {
-                tutorialBubble.checktheBush(hintIndex);
-                tutorialBubble.cleanText();
+                tutorialBubble?.checktheBush(hintIndex);
+                tutorialBubble?.cleanText();
                 //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
             }
         }

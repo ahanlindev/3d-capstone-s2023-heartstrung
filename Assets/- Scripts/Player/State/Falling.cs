@@ -19,18 +19,6 @@ namespace Player
             }
         }
 
-        protected override void OnPlayerAttackInput(CallbackContext _)
-        {
-            // TODO should the player be able to attack in midair?
-            base.OnPlayerAttackInput(_);
-        }
-
-        protected override void OnPlayerStartChargeInput(CallbackContext _)
-        {
-            // TODO should the player be able to fling in midair?
-            base.OnPlayerStartChargeInput(_);
-        }
-
         protected override void HandlePlayerMoveInput(Vector3 moveVector)
         {
             base.HandlePlayerMoveInput(moveVector);
@@ -40,8 +28,8 @@ namespace Player
             moveVector *= Time.fixedDeltaTime;
 
             // find proper position and look rotation
-            var newPos = _sm.transform.position + moveVector;
-            var newRot = Quaternion.LookRotation(moveVector.normalized, _sm.transform.up);
+            Vector3 newPos = _sm.transform.position + moveVector;
+            Quaternion newRot = Quaternion.LookRotation(moveVector.normalized, _sm.transform.up);
 
             _sm.rbody.Move(newPos, newRot);
         }

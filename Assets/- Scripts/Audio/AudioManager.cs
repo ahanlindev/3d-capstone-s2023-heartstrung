@@ -11,6 +11,9 @@ public class AudioManager : MonoBehaviour
 {   
     private const int FLING_INDEX = 0;
     private const int MUSIC_INDEX = 1;
+    
+    [Tooltip("Modifies the music volume.")]
+    [SerializeField] private const float MUSIC_VOLUME_MODIFIER = .6f;
 
     public static AudioManager instance {get; private set;}
 
@@ -188,14 +191,14 @@ public class AudioManager : MonoBehaviour
         // Debug.Log("Music Started:" + name);
         _audioSources[MUSIC_INDEX].clip = _sounds[name].poolSound();
         _audioSources[MUSIC_INDEX].pitch = 1f;
-        _audioSources[MUSIC_INDEX].volume = musicVolume;
+        _audioSources[MUSIC_INDEX].volume = musicVolume * MUSIC_VOLUME_MODIFIER;
         _audioSources[MUSIC_INDEX].Play();
         musicPlaying = true;
     }
 
     public void updateMusicVolume() {
         Debug.Log("updating music volume");
-        _audioSources[MUSIC_INDEX].volume = musicVolume;
+        _audioSources[MUSIC_INDEX].volume = musicVolume * MUSIC_VOLUME_MODIFIER;
     }
 
     public void stopMusic() {
