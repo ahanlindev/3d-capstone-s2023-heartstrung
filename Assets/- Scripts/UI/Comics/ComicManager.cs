@@ -94,8 +94,12 @@ public class ComicManager : MonoBehaviour
     private void SetupInput() {
         _input.Comic.Next.performed += OnNextInput;
         _input.Comic.Prev.performed += OnPrevInput;
-        _input.Comic.Skip.performed += OnSkipStartInput;
-        _input.Comic.Skip.canceled += OnSkipCancelInput;
+
+        if (!_disableSkip)
+        {
+            _input.Comic.Skip.performed += OnSkipStartInput;
+            _input.Comic.Skip.canceled += OnSkipCancelInput;
+        }
 
         PauseMenuManager.PauseEvent += _input.Disable;        
         PauseMenuManager.UnpauseEvent += _input.Enable; 
@@ -106,8 +110,12 @@ public class ComicManager : MonoBehaviour
     private void TeardownInput() {
         _input.Comic.Next.performed -= OnNextInput;
         _input.Comic.Prev.performed -= OnPrevInput;
-        _input.Comic.Skip.performed -= OnSkipStartInput;
-        _input.Comic.Skip.canceled -= OnSkipCancelInput;
+
+        if (!_disableSkip)
+        {
+            _input.Comic.Skip.performed -= OnSkipStartInput;
+            _input.Comic.Skip.canceled -= OnSkipCancelInput;
+        }
 
         PauseMenuManager.PauseEvent -= _input.Disable;        
         PauseMenuManager.UnpauseEvent -= _input.Enable;
