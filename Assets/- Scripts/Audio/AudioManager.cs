@@ -134,6 +134,7 @@ public class AudioManager : MonoBehaviour
                 _musicPlaying = false;
             }
         );
+        fadeOut.SetUpdate(UpdateType.Normal, true); // play even though time is stopped
     }
 
     public void UnPauseMusic()
