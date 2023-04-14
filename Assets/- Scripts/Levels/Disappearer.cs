@@ -18,7 +18,7 @@ public class Disappearer : MonoBehaviour {
         }
 
         // make target disappear
-        AudioManager.instance.playSoundEvent("GroundRumble");
+        AudioManager.instance.PlaySoundEvent("GroundRumble");
         DisappearTween(_target);
     }
 

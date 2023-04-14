@@ -4,51 +4,60 @@ using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.Serialization;
 
-// Attach this script to the LevelManager.
-// 
+/// <summary>
+/// Singleton responsible for controlling music and sfx
+/// </summary>
 public class AudioManager : MonoBehaviour
 {   
+    public static AudioManager instance {get; private set;}
+
+    #region Private Fields
+    
     private const int FLING_INDEX = 0;
     private const int MUSIC_INDEX = 1;
     
-    [FormerlySerializedAs("MUSIC_VOLUME_MODIFIER")]
-    [Tooltip("Multiplier for the music volume.")]
-    [SerializeField] private float _musicVolumeModifier = .6f;
-
-    public static AudioManager instance {get; private set;}
-
-    [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
-    [SerializeField] private int _numAudioSources = 5;
-
     private Dictionary<string, AudioEvent> _sounds;
 
     // Specifies the music that should play in each scene.
     // No entry in this dict means no music will play.
-
     private Dictionary<SceneID, string> _perSceneMusic;
 
     private AudioSource[] _audioSources;
 
     private bool _soundDictInitialized;
 
-    public bool musicPlaying;
+    #endregion
 
+    #region Serialized Fields & Properties
+    
+    [FormerlySerializedAs("musicPlaying")] 
+    public bool _musicPlaying;
+    
+    [Tooltip("The number of AudioSources to instantiate. Roughly corresponds to the number of sound effects that can be played at once.")]
+    [SerializeField] private int _numAudioSources = 5;
+    
     [FormerlySerializedAs("soundVolume")]
     [Tooltip("Global game sound volume.")]
     [SerializeField] private float _soundVolume = .7f;
+    public float soundVolume { get => _soundVolume; set => _soundVolume = value; }
 
+    [FormerlySerializedAs("MUSIC_VOLUME_MODIFIER")]
+    [Tooltip("Multiplier for the music volume.")]
+    [SerializeField] private float _musicVolumeModifier = .6f;
+    
     [FormerlySerializedAs("musicVolume")]
     [Tooltip("Global game music volume.")]
     [SerializeField] private float _musicVolume = .7f;
-
-    public float soundVolume { get => _soundVolume; set => _soundVolume = value; }
     public float musicVolume
     {
         get => _musicVolume * _musicVolumeModifier;
         set => _musicVolume = value;
     }
-    
-    void Awake() {
+
+    #endregion
+
+    #region Monobehaviour Methods
+    private void Awake() {
         // Singleton logic
         if(instance != null && instance != this) {
             Destroy(gameObject);
@@ -82,7 +91,7 @@ public class AudioManager : MonoBehaviour
         // Debug.Log("Done loading sounds.");
     }
 
-    void Start() {
+    private void Start() {
         // Get the AudioEvents pre-defined as children of this gameObject
         AudioEvent[] audioEvents = GetComponentsInChildren<AudioEvent>();
 
@@ -91,51 +100,52 @@ public class AudioManager : MonoBehaviour
         foreach(AudioEvent audioEvent in audioEvents) {
             _sounds.Add(audioEvent.EventName, audioEvent);
         }
-        // Debug.Log("SoundDict initialized");
 
+        // Initialize fling charge clip
         _audioSources[FLING_INDEX].clip = _sounds["ChargeFling"].poolSound();
         _audioSources[FLING_INDEX].loop = true;
+        
+        // Initialize music
         _audioSources[MUSIC_INDEX].loop = true;
-
-        // // DEBUG: Print sounds dict to console
-        // foreach(KeyValuePair<string, AudioEvent> sound in sounds) {
-        //     Debug.Log("Key = " + sound.Key + ", Value = " + sound.Value);
-        // }
         _soundDictInitialized = true;
-        LoadSceneMusic(SceneManager.GetActiveScene());
+        StartSceneMusic(SceneManager.GetActiveScene());
     }
-
-    // called first
-    void OnEnable()
+    
+    private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    
+    #endregion
+    
+    #region Public Methods
+    public void UpdateMusicVolume() {
+        Debug.Log("updating music volume");
+        _audioSources[MUSIC_INDEX].volume = _musicVolume * _musicVolumeModifier;
+    }
 
-    // called second
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void PauseMusic()
     {
-        // Debug.Log("OnSceneLoaded: " + scene.name);
-        // Debug.Log(mode);
-        if(_soundDictInitialized) {
-            LoadSceneMusic(scene);
-        }
-    }
-
-    void LoadSceneMusic(Scene scene) {
-        if(_perSceneMusic.ContainsKey(scene.ToSceneID())) {
-            // Debug.Log("Loading music " + scene.ToSceneID());
-            string music = _perSceneMusic[scene.ToSceneID()];
-            if (!musicAlreadyPlaying(music)) {
-                startMusic(music);
+        Tween fadeOut = FadeMusicTween(musicVolume, 0f);
+        fadeOut.OnComplete(
+            () =>
+            {
+                _audioSources[MUSIC_INDEX].Pause();
+                _musicPlaying = false;
             }
-        } else {
-            stopMusic();
-        }
+        );
     }
 
+    public void UnPauseMusic()
+    {
+        _audioSources[MUSIC_INDEX].UnPause();
+        FadeMusicTween(0.0f, musicVolume);
+        _musicPlaying = true;
+    }
+    
     /// <summary>Attempts to play a sound from the specified AudioEvent.</summary>
     /// <param name="sound">The name of the AudioPool to pool from.</param>
-    public bool playSoundEvent(string sound) {
+    public bool PlaySoundEvent(string sound) {
         AudioClip soundToPlay = _sounds[sound].poolSound();
         if(soundToPlay == null) {
             // Debug.LogError(sound + " is not a sound event!");
@@ -163,86 +173,87 @@ public class AudioManager : MonoBehaviour
         // all AudioSources are taken; do not play the sound effect
         return false;
     }
-
+    
     ///<summary>Starts playing the audio fling sound effect.</summary>
-    public void startFlingSoundEffect(float power) {
+    public void StartFlingSoundEffect(float power) {
         // Debug.Log("Fling Started");
-        _audioSources[FLING_INDEX].pitch = convertFlingPowerToPitch(power);
+        _audioSources[FLING_INDEX].pitch = ConvertFlingPowerToPitch(power);
         _audioSources[FLING_INDEX].volume = _soundVolume / 10f;
         _audioSources[FLING_INDEX].Play();
     }
 
     ///<summary>Updates the pitch the audio fling sound effect.</summary>
-    public void continueFlingSoundEffect(float power) {
+    public void ContinueFlingSoundEffect(float power) {
         // Debug.Log("Fling Continuing...");
-        _audioSources[FLING_INDEX].pitch = convertFlingPowerToPitch(power);
+        _audioSources[FLING_INDEX].pitch = ConvertFlingPowerToPitch(power);
     }
 
     ///<summary>Disables the audio fling sound effect.</summary>
-    public void finishFlingSoundEffect() {
+    public void FinishFlingSoundEffect() {
         // Debug.Log("Fling Finished");
         _audioSources[FLING_INDEX].Stop();
     }
+    
+    #endregion
+    
+    #region Private Methods
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Debug.Log("OnSceneLoaded: " + scene.name);
+        // Debug.Log(mode);
+        if(_soundDictInitialized) {
+            StartSceneMusic(scene);
+        }
+    }
+
+    private void StartSceneMusic(Scene scene) {
+        if(_perSceneMusic.ContainsKey(scene.ToSceneID())) {
+            // Debug.Log("Loading music " + scene.ToSceneID());
+            string music = _perSceneMusic[scene.ToSceneID()];
+            if (!MusicAlreadyPlaying(music)) {
+                StartMusic(music);
+            }
+        } else {
+            StopMusic();
+        }
+    }
 
     ///<summary>Internal function that converts the fling power from the player into a pitch for the audioManager to use.</summary>
-    private float convertFlingPowerToPitch(float power) {
+    private static float ConvertFlingPowerToPitch(float power) {
         return power * 2 + 1f;
     }
 
     /// <summary>Return true if the music file with the given name is currently playing</summary>
-    private bool musicAlreadyPlaying(string name) {
-        // TODO fragile if we change names of clip or audio. Make an enum?
-        bool sameName = _audioSources[MUSIC_INDEX]?.clip?.name == name;
+    private bool MusicAlreadyPlaying(string songName) {
+        // fragile if we change names of clip or audio. Consider an enum?
+        bool sameName = _audioSources[MUSIC_INDEX]?.clip?.name == songName;
         bool currentlyPlaying = _audioSources[MUSIC_INDEX]?.isPlaying ?? false;
         return (sameName && currentlyPlaying);
     }
 
-    public void startMusic(string name) {
+    private void StartMusic(string songName) {
         // Debug.Log("Music Started:" + name);
-        _audioSources[MUSIC_INDEX].clip = _sounds[name].poolSound();
+        _audioSources[MUSIC_INDEX].clip = _sounds[songName].poolSound();
         _audioSources[MUSIC_INDEX].pitch = 1f;
         _audioSources[MUSIC_INDEX].Play();
-        musicPlaying = true;
+        _musicPlaying = true;
 
         FadeMusicTween(0.0f, musicVolume);
     }
 
-    public void updateMusicVolume() {
-        Debug.Log("updating music volume");
-        _audioSources[MUSIC_INDEX].volume = _musicVolume * _musicVolumeModifier;
-    }
-
-    public void stopMusic() {
+    private void StopMusic() {
         // Debug.Log("Music Stopped");
         Tween fadeOut = FadeMusicTween(musicVolume, 0f);
         fadeOut.OnComplete(
             () =>
             {
                 _audioSources[MUSIC_INDEX].Stop();
-                musicPlaying = false;
+                _musicPlaying = false;
             }
         );
     }
-
-    public void pauseMusic()
-    {
-        Tween fadeOut = FadeMusicTween(musicVolume, 0f);
-        fadeOut.OnComplete(
-            () =>
-            {
-                _audioSources[MUSIC_INDEX].Pause();
-                musicPlaying = false;
-            }
-        );
-    }
-
-    public void unPauseMusic()
-    {
-        _audioSources[MUSIC_INDEX].UnPause();
-        FadeMusicTween(0.0f, musicVolume);
-        musicPlaying = true;
-    }
-
+    
     /// <summary>
     /// Gradually fades the music in or out depending on parameter value
     /// </summary>
@@ -255,4 +266,6 @@ public class AudioManager : MonoBehaviour
         _audioSources[MUSIC_INDEX].volume = startVolume;
         return _audioSources[MUSIC_INDEX].DOFade(endVolume, 2f);
     }
+    
+    #endregion
 }

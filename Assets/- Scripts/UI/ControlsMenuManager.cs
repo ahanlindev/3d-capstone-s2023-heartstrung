@@ -62,7 +62,7 @@ public class ControlsMenuManager : MonoBehaviour
         // Closes the options menu
         controlsOpen = false;
         ControlsUI.SetActive(false);
-        AudioManager.instance.playSoundEvent("UIButtonPress");
+        AudioManager.instance.PlaySoundEvent("UIButtonPress");
         PauseMenuManager.instance.ShowPauseMenu();
     }
 }
