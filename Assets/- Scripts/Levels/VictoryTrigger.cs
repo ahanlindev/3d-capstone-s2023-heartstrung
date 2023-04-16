@@ -5,8 +5,16 @@ using UnityEngine;
 /// </summary>
 public class VictoryTrigger : MonoBehaviour
 {
+    private bool triggered;
     private void OnTriggerEnter(Collider coll)
     {
-        if (coll.gameObject.CompareTag("Player")) { TransitionManager.TransitionToNextScene(); }
+        if (triggered) { return; }
+
+        triggered = true;
+
+        if (coll.gameObject.tag is "Player" or "Heart")
+        {
+            TransitionManager.TransitionToNextScene();
+        }
     }
 }

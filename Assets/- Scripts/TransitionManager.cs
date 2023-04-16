@@ -135,8 +135,8 @@ public class TransitionManager : MonoBehaviour {
             .Append(_screenFadeOverlay.DOFade(endValue: 1, duration: fadeTime)
                 .OnComplete(() =>
                 {
-                    SceneManager.LoadSceneAsync(sceneName);
                     FadeoutFinishEvent?.Invoke();
+                    SceneManager.LoadSceneAsync(sceneName);
                 }))
             
             // wait a little bit
