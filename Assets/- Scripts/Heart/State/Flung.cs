@@ -115,17 +115,11 @@ namespace Heart
 
         // Helper methods
 
-        /// <summary>Makes all non-trigger colliders of the heart and the player either ignore each other or recognize each other</summary>
-        /// <param name="ignoreCollision">if true, the player and heart will ignore each other. Otherwise they will not.</param>
-        private void IgnorePlayerCollisions(bool ignoreCollision)
+        /// <summary>Decide whether to ignore player and enemy colliders</summary>
+        /// <param name="ignoreCollision">if true, this will ignore player and enemy colliders. Otherwise it will not.</param>
+        private void IgnoreActorCollisions(bool ignoreCollision)
         {
-            foreach (Collider myCollider in _tf.GetComponentsInChildren<Collider>())
-            {
-                foreach (Collider playerCollider in _playerTf.GetComponentsInChildren<Collider>())
-                {
-                    Physics.IgnoreCollision(myCollider, playerCollider, ignoreCollision);
-                }
-            }
+            _sm.rbody.excludeLayers = ignoreCollision ? LayerMask.GetMask("Enemy", "Player") : LayerMask.GetMask();
         }
 
         /// <summary>Manipulates the rotation of the heart so that it faces stem towards the player</summary>
