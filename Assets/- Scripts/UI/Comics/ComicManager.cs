@@ -83,6 +83,7 @@ public class ComicManager : MonoBehaviour
 
         // clean up event subscriptions
         TransitionManager.FadeinFinishEvent -= SetupInput;
+        TransitionManager.FadeoutFinishEvent -= HideEverything;
 
         // teardown input and input events
         TeardownInput();
