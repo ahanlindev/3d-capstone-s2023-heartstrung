@@ -16,6 +16,8 @@ namespace Heart
         private float _totalAngleToDest;
         private float _cumulativeAngle;
 
+        private Tween _colliderRadiusTween;
+        
         public override void Enter()
         {
             base.Enter();
@@ -24,7 +26,7 @@ namespace Heart
             _tf = _sm.transform;
 
             // temporarily ignore player collision and gravity
-            IgnorePlayerCollisions(true);
+            IgnoreActorCollisions(true);
             _sm.rbody.useGravity = false;
 
             // get player->me and player->dest vectors
@@ -40,7 +42,7 @@ namespace Heart
             _startRadius = playerToMe.magnitude;
             _finalRadius = playerToDest.magnitude;
             _cumulativeAngle = 0.0f;
-
+            
             // make sure radii cannot exceed max. (Can happen in some edge cases)
             _startRadius = Mathf.Clamp(_startRadius, 0f, _sm.player.maxTetherLength);
             _finalRadius = Mathf.Clamp(_finalRadius, 0f, _sm.player.maxTetherLength);
@@ -53,6 +55,8 @@ namespace Heart
                 // but if position is lower than dest, we need longer path
                 _totalAngleToDest = 360.0f - _totalAngleToDest;
             }
+
+            TweenColliderRadius();
         }
 
         public override void Exit()
@@ -70,8 +74,11 @@ namespace Heart
                 _sm.LandedEvent?.Invoke();
             }
 
+            // finish all tweens if incomplete
+            if (_colliderRadiusTween is {active: true}) { _colliderRadiusTween.Complete(); }
+            
             // allow player collisions again
-            IgnorePlayerCollisions(false);
+            IgnoreActorCollisions(false);
         }
 
         public override void UpdatePhysics()
@@ -135,6 +142,25 @@ namespace Heart
             Vector3.OrthoNormalize(ref upVec, ref fwdVec);
             Quaternion newRot = Quaternion.LookRotation(fwdVec, upVec);
             _tf.rotation = newRot;
+        }
+
+        private void TweenColliderRadius()
+        {
+            // get total time that the fling will take if uninterrupted
+            float flingTime = _totalAngleToDest / _sm.flingSpeed;
+            float tweenTime = flingTime / 3f;
+            float endRadius = _sm.coll.radius;
+            float startRadius = endRadius * 0.4f;
+
+            // Update radius until 
+            _colliderRadiusTween = DOVirtual.Float(
+                from: startRadius,
+                to: endRadius,
+                duration: tweenTime,
+                onVirtualUpdate: rad => _sm.coll.radius = rad
+            );
+
+            _colliderRadiusTween.SetTarget(_sm.coll);
         }
     }
 }
