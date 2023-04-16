@@ -154,7 +154,7 @@ public class ComicManager : MonoBehaviour
         if (_hideNextAtEnd && atLastIdx) { return; }
         
         // validated. Actually advance page
-        AudioManager.instance.playSoundEvent("ComicAdvance");
+        AudioManager.instance.PlaySoundEvent("ComicAdvance");
         if (atLastIdx)
         {
             TransitionManager.TransitionToNextScene();
@@ -180,7 +180,7 @@ public class ComicManager : MonoBehaviour
         
         if (_index > 0)
         {
-            AudioManager.instance.playSoundEvent("ComicAdvance");
+            AudioManager.instance.PlaySoundEvent("ComicAdvance");
             FadeCurrentPanel(fadeIn: false);
             _index--;
         }
@@ -194,7 +194,7 @@ public class ComicManager : MonoBehaviour
         if(_transitioning || PauseMenuManager.instance.paused) {
             return;
         }
-        AudioManager.instance.playSoundEvent("ComicAdvance");
+        AudioManager.instance.PlaySoundEvent("ComicAdvance");
         TransitionManager.TransitionToNextScene();
         _transitioning = true;
     }

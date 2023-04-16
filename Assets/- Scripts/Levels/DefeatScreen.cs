@@ -8,6 +8,6 @@ using UnityEngine;
     // Start is called before the first frame update
     void Start()
     {
-        AudioManager.instance?.playSoundEvent("Defeat");
+        AudioManager.instance?.PlaySoundEvent("Defeat");
     }
 }
