@@ -25468,6 +25468,7 @@ MonoBehaviour:
   VirtualCamera: {fileID: 931619242}
   hintSprites:
   - {fileID: 21300000, guid: a8387fb3ae03a468b8c13f02946f0846, type: 3}
+  - {fileID: 21300000, guid: a8387fb3ae03a468b8c13f02946f0846, type: 3}
   attackedBush: {fileID: 0}
 --- !u!4 &983904328
 Transform:
@@ -49563,10 +49564,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c077ba09ced9c48f4912e9af52124c89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hintIndex: 0
-  countDown: 0
-  tutorialBubbles:
+  _hintIndex: 0
+  _countDown: 0
+  _tutorialBubbles:
   - {fileID: 983904327}
+  _detectDodger: 1
 --- !u!65 &1874349837
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -49586,8 +49588,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.64062923, y: 0.8397308, z: 0.37941402}
+  m_Center: {x: 0.117186695, y: -0.080134146, z: 0.0126649}
 --- !u!23 &1874349838
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -49646,7 +49648,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1874349835}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.87, y: 13.38, z: -0.17}
+  m_LocalPosition: {x: 37.36, y: 14.3, z: 0.14}
   m_LocalScale: {x: 3.9060998, y: 1.90406, z: 4.8189497}
   m_ConstrainProportionsScale: 0
   m_Children: []
