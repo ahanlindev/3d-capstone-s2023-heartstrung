@@ -31,7 +31,7 @@ public class HeartStateMachine : BaseStateMachine
     #region Public Properties
 
     public Rigidbody rbody { get; private set; }
-    public Collider coll { get; private set; }
+    public SphereCollider coll { get; private set; }
     public Health health { get; private set; }
 
     /// <summary>Percentage power that the player has thrown the heart. Updated by the player. </summary>
@@ -94,7 +94,7 @@ public class HeartStateMachine : BaseStateMachine
 
         // initialize components
         rbody = GetComponent<Rigidbody>();
-        coll = GetComponent<Collider>();
+        coll = GetComponent<SphereCollider>();
         health = GetComponent<Health>();
 
         _anim = GetComponentInChildren<Animator>();
