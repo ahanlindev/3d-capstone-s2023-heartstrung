@@ -1,49 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+using UnityEngine.Serialization;
 
 public class TutorialTrigger : MonoBehaviour
 {
 
-    public int hintIndex;
+    [FormerlySerializedAs("hintIndex")] 
+    [SerializeField] private int _hintIndex;
 
+    [FormerlySerializedAs("countDown")]
     [Tooltip("The time kitty need to pass before triggering the bubble")]
-    public int countDown;
+    [SerializeField] private int _countDown;
 
+    [FormerlySerializedAs("tutorialBubbles")]
     [Tooltip("Targeted UI Bubbles, if empty, will search for name [ChatBubble]")]
-    [SerializeField] public TutorialBubble[] tutorialBubbles;
+    [SerializeField] public TutorialBubble[] _tutorialBubbles;
 
-
+    [Tooltip("If true, this tutorial will be triggered by Dodger instead of Kitty")]
+    [SerializeField] private bool _detectDodger;
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        if (tutorialBubbles.Length == 0)
+        if (_tutorialBubbles.Length == 0)
         {
             // get the only one by name
-            tutorialBubbles = GameObject.Find("ChatBubble").GetComponents<TutorialBubble>();
+            _tutorialBubbles = GameObject.Find("ChatBubble").GetComponents<TutorialBubble>();
         }
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        string triggerTag = (_detectDodger) ? "Heart" : "Player";
+        if (other.gameObject.tag == triggerTag)
         {
-            if (countDown == 0)
+            if (_countDown == 0)
             {
-                foreach (TutorialBubble tutorialBubble in tutorialBubbles)
+                foreach (TutorialBubble tutorialBubble in _tutorialBubbles)
                 {
                     //Debug.Log("11");
-                    tutorialBubble?.changeText(hintIndex);
+                    tutorialBubble?.changeText(_hintIndex);
                 }
             }     
         }
@@ -52,13 +49,13 @@ public class TutorialTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-    
-        if (other.gameObject.tag == "Player")
+        string triggerTag = (_detectDodger) ? "Heart" : "Player";
+        if (other.gameObject.tag == triggerTag)
         {
-            countDown--;
-            foreach (TutorialBubble tutorialBubble in tutorialBubbles)
+            _countDown--;
+            foreach (TutorialBubble tutorialBubble in _tutorialBubbles)
             {
-                tutorialBubble?.checktheBush(hintIndex);
+                tutorialBubble?.checktheBush(_hintIndex);
                 tutorialBubble?.cleanText();
                 //Tween lastcall = DOVirtual.DelayedCall(3f, () => tutorialBubble.cleanText(), false);
             }
