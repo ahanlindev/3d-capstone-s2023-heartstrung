@@ -35,7 +35,7 @@ public class DeathPitCollider : MonoBehaviour
         bool tagMatches = _playerTags.Any(target.CompareTag);
         if (!tagMatches) { return; }
         
-        AudioManager.instance.playSoundEvent("KittyFalls");
+        AudioManager.instance.PlaySoundEvent("KittyFalls");
         _checkpointManager.ResetToCheckpoint();
     }
 }

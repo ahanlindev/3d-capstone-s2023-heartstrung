@@ -41,6 +41,6 @@ public class Checkpoint : MonoBehaviour
         // if able, play fanfare
         sys1.Play();
         sys2.Play();
-        AudioManager.instance.playSoundEvent("Checkpoint");
+        AudioManager.instance.PlaySoundEvent("Checkpoint");
     }
 }

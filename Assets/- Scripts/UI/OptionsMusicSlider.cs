@@ -14,13 +14,13 @@ public class OptionsMusicSlider : MonoBehaviour
     void Slide() {
         if (!AudioManager.instance) { return; }
         AudioManager.instance.musicVolume = VolumeSlider.value;
-        AudioManager.instance.updateMusicVolume();
+        AudioManager.instance.UpdateMusicVolume();
         // If there is no music playing,
         // indicate the volume of the music via a sound effect
-        if(!AudioManager.instance.musicPlaying) {
+        if(!AudioManager.instance._musicPlaying) {
             float temp = AudioManager.instance.soundVolume;
             AudioManager.instance.soundVolume = VolumeSlider.value;
-            AudioManager.instance.playSoundEvent("KittyJump");
+            AudioManager.instance.PlaySoundEvent("KittyJump");
             AudioManager.instance.soundVolume = temp;
         }
     }
