@@ -5,15 +5,14 @@ using UnityEngine;
 /// </summary>
 public class VictoryTrigger : MonoBehaviour
 {
-    private bool triggered;
+    private bool triggered = false;
     private void OnTriggerEnter(Collider coll)
     {
         if (triggered) { return; }
 
-        triggered = true;
-
         if (coll.gameObject.tag is "Player" or "Heart")
         {
+            triggered = true;
             TransitionManager.TransitionToNextScene();
         }
     }
